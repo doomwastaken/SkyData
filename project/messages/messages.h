@@ -1,7 +1,3 @@
-//
-// Created by yaroslav on 11.11.2020.
-//
-
 #ifndef PROJECT_MESSAGES_H
 #define PROJECT_MESSAGES_H
 #include <iostream>
@@ -23,7 +19,7 @@ enum status_t {
     LOAD
 };
 
-struct message {
+struct Message {
     size_t version;
     status_t status;
     bool if_folder;
@@ -33,7 +29,7 @@ struct message {
     size_t file_size;
     std::string file_path;
     user_t user;
-} typedef message;
+} typedef Message;
 
 
 

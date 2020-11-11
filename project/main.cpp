@@ -1,7 +1,9 @@
 #include <iostream>
+#include "Local_Listener.h"
 
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    Local_Listener local;
+    local.list_local_machine();
     return 0;
 }
