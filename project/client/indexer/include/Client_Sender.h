@@ -11,6 +11,7 @@ public:
     int send(Message& message, int key);
 
 private:
+    //    Queue_API queue_api
     Internal_Data_Base_Worker internal_db;
     Cloud_Storage_Worker cloud_storage;
 };
