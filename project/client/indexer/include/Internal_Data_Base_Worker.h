@@ -1,7 +1,7 @@
 #ifndef PROJECT_INTERNAL_DATA_BASE_WORKER_H
 #define PROJECT_INTERNAL_DATA_BASE_WORKER_H
 
-#include "Internal_Data_Base.h"
+#include "Postgress_Internal_DB.h"
 #include "Message.h"
 
 class Internal_Data_Base_Worker {
@@ -10,7 +10,7 @@ public:
     int send_to_data_base(Message& message);
 
 private:
-    Internal_Data_Base data_base{};
+    Postgress_Internal_DB data_base{};
     Message message;
 };
 

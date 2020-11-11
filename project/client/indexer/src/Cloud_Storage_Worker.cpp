@@ -3,7 +3,7 @@
 #include "Message.h"
 #include "Cloud_Storage_Worker.h"
 
-Cloud_Storage_Worker::Cloud_Storage_Worker(Message message) : m_message(std::move(message)) {
+Cloud_Storage_Worker::Cloud_Storage_Worker(Message message) : message(std::move(message)) {
 
 }
 

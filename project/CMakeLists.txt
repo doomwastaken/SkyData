@@ -27,4 +27,18 @@ set (
         client/indexer/include/Internal_Data_Base_Worker.h
 )
 
-add_executable(project main.cpp ${INDEXER_SRC})
+set (
+        DB_SRC
+        data_bases/Cloud_Storage/src/Cloud_Storage_DB.cpp
+        data_bases/Internal_DB/src/Postgress_Internal_DB.cpp
+)
+
+set (
+        DB_INC
+        data_bases/Cloud_Storage/include/Cloud_Storage.h
+        data_bases/Cloud_Storage/include/Cloud_Storage_DB.h
+        data_bases/Internal_DB/include/Internal_Data_Base.h
+        data_bases/Internal_DB/include/Postgress_Internal_DB.h
+)
+
+add_executable(project main.cpp ${INDEXER_SRC} ${DB_SRC})
