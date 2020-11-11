@@ -1,0 +1,8 @@
+#ifndef PROJECT_INTERNAL_DATA_BASE_H
+#define PROJECT_INTERNAL_DATA_BASE_H
+
+class Internal_Data_Base {
+
+};
+
+#endif //PROJECT_INTERNAL_DATA_BASE_H

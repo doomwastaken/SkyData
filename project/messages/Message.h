@@ -2,20 +2,20 @@
 // Created by yaroslav on 11.11.2020.
 //
 
-#ifndef PROJECT_MESSAGES_H
-#define PROJECT_MESSAGES_H
+#ifndef PROJECT_MESSAGE_H
+#define PROJECT_MESSAGE_H
 #include <iostream>
 
 struct devise {
     std::string device_name;
     std::string sync_folder;
-} typedef devise;
+} typedef Devise;
 
 struct user_t {
     std::string user_name;
     std::string email;
     int quota_limit; // quotaUsed вместо int шо это?
-} typedef user;
+} typedef User;
 
 enum status_t {
     DELETE,
@@ -33,8 +33,8 @@ struct message {
     size_t file_size;
     std::string file_path;
     user_t user;
-} typedef message;
+} typedef Message;
 
 
 
-#endif //PROJECT_MESSAGES_H
+#endif //PROJECT_MESSAGE_H
