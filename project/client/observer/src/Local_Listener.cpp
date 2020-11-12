@@ -2,8 +2,8 @@
 #include "Local_Listener.h"
 
 
-void Local_Listener::list_local_machine() {
-    std:: cout << "priver\n";
+Message Local_Listener::list_local_machine() {
+    return message;
 }
 
 void Local_Listener::create_message() {

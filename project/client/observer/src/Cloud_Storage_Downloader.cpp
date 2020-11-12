@@ -4,6 +4,7 @@
 
 #include "Cloud_Storage_Downloader.h"
 
-void Cloud_Storage_Downloader::downloader_files_from_cloud() {
-
+template<class T>
+int Cloud_Storage_Downloader<T>::downloader_files_from_cloud(T storage) {
+    return 0;
 }

@@ -3,11 +3,13 @@
 #include <iostream>
 #include "Cloud_Storage_Downloader.h"
 
+template<class T>
 class Observer {
-    Cloud_Storage_Downloader cloud_storage_down;
+    Cloud_Storage_Downloader<T> cloud_storage_down;
+    //Queue_API реализация после мержа
 public:
     void update_client();
-    void load_to_machine();
+    int load_to_machine();
 
 };
 

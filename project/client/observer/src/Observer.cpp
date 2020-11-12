@@ -4,10 +4,12 @@
 
 #include "Observer.h"
 
-void Observer::load_to_machine() {
-
+template<class T>
+int Observer<T>::load_to_machine() {
+    return 0;
 }
 
-void Observer::update_client() {
+template<class T>
+void Observer<T>::update_client() {
 
 }

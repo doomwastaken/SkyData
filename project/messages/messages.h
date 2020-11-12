@@ -2,14 +2,15 @@
 #define PROJECT_MESSAGES_H
 #include <iostream>
 
-struct devise {
+struct devise_t {
     std::string device_name;
     std::string sync_folder;
-} typedef devise;
+} typedef devise_t;
 
 struct user_t {
     std::string user_name;
     std::string email;
+    devise_t devise;
     int quota_limit; // quotaUsed вместо int шо это?
 } typedef user;
 

@@ -8,7 +8,7 @@ class Message_Listener {
     void create_message();
 
 public:
-    void to_listen_message();
+    Message to_listen_message();
 };
 
 #endif //PROJECT_MESSAGE_LISTENER_H

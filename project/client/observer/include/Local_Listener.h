@@ -8,7 +8,7 @@ class Local_Listener{
 public:
      Local_Listener() = default;
     ~Local_Listener() = default;
-    void list_local_machine();
+    Message list_local_machine();
 
 
 private:

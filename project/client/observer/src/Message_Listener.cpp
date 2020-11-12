@@ -4,8 +4,8 @@
 
 #include "Message_Listener.h"
 
-void Message_Listener::to_listen_message() {
-
+Message Message_Listener::to_listen_message() {
+    return message;
 }
 
 void Message_Listener::create_message() {
