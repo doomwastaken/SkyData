@@ -3,7 +3,7 @@
 #include "utils.h"
 
 TEST(Cloud_Storage_Worker, ReturnedValue) {
-    Cloud_Storage_Worker cloud;
+    Cloud_Storage_Worker cloud{};
 
     Message message = create_message();
 

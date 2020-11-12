@@ -10,7 +10,7 @@ public:
     int send_to_data_base(Message& message);
 
 private:
-    Postgress_Internal_DB data_base{};
+    Internal_Data_Base *data_base;
 };
 
 #endif //PROJECT_INTERNAL_DATA_BASE_WORKER_H
