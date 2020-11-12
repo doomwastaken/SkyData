@@ -14,6 +14,6 @@ set (
 )
 
 
-add_executable(tests_gmock client/observer/tests_gmock.cpp client/observer/utils.cpp ${LIB_SOURCE_FILES} ${OBSERVER_SRC})
+add_executable(tests_gmock client/observer/tests_observer.cpp client/observer/utils.cpp ${LIB_SOURCE_FILES} ${OBSERVER_SRC})
 
 target_link_libraries(tests_gmock ${GTEST_LIBRARIES} pthread -lgmock)
