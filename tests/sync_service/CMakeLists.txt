@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.15)
+project(test)
+
+set(CMAKE_CXX_STANDARD 14)
+set(PROJECT_SOURCE_FILES
+        ../../project/data_bases/Metadata_DB/src/Postgress_DB.cpp sync_service_test.cpp ../../project/synchronization_service/src/Sync_Service.cpp)
+include_directories(../../project/data_bases/Metadata_DB/include)
+include_directories(../../project/messages)
+include_directories(../../project/synchronization_service/include)
+
+
+add_executable(tests tests.cpp ${PROJECT_SOURCE_FILES} metadata_db_test.cpp sync_service_test.cpp)
+
+target_link_libraries(tests ${GTEST_LIBRARIES} pthread)
+
