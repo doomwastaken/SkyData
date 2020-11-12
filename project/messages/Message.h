@@ -14,6 +14,7 @@ struct devise {
 struct user_t {
     std::string user_name;
     std::string email;
+    Devise devise;
     int quota_limit; // quotaUsed вместо int шо это?
 } typedef User;
 

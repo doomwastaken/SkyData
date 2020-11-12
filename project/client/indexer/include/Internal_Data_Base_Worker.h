@@ -6,12 +6,11 @@
 
 class Internal_Data_Base_Worker {
 public:
-    explicit Internal_Data_Base_Worker(Message &message);
+    explicit Internal_Data_Base_Worker();
     int send_to_data_base(Message& message);
 
 private:
     Postgress_Internal_DB data_base{};
-    Message message;
 };
 
 #endif //PROJECT_INTERNAL_DATA_BASE_WORKER_H

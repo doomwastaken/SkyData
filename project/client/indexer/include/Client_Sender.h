@@ -8,7 +8,7 @@
 class Client_Sender {
 public:
     Client_Sender() = default;
-    int send(Message& message, int key);
+    int send(Message& message);
 
 private:
     //    Queue_API queue_api
