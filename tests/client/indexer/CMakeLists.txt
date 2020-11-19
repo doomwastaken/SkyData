@@ -14,7 +14,7 @@ set (
         src/TestClientSender.cpp
         src/TestCloudStorageWorker.cpp
         src/TestInternalDataBaseWorker.cpp
-        include/TestCloudStorageWorker.h)
+)
 
 set (
         SRC
@@ -22,6 +22,7 @@ set (
         ../../../project/client/indexer/src/CloudStorageWorker.cpp
         ../../../project/client/indexer/src/InternalDataBaseWorker.cpp
 )
+
 add_executable(tests ${TEST_SRC} ${SRC})
 
 target_link_libraries(tests ${GTEST_LIBRARIES} pthread -lgmock)

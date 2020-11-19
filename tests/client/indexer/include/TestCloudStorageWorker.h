@@ -4,17 +4,17 @@
 #include <Message.h>
 #include "gmock/gmock.h"
 
-class MockTestClientSender {
+class MockTestCloudStorageWorker {
 public:
     MOCK_METHOD(int, send_to_cloud, (Message& message), ());
 };
 
 template<class Type>
-class MockClientSender {
+class MockCloudStorageWorker {
 public:
-    explicit MockClientSender(Type* val) : value(val) { }
+    explicit MockCloudStorageWorker(Type* val) : value(val) { }
 
-    void get_connection(Message &message) {
+    void send(Message &message) {
         value->send_to_cloud(message);
     }
 

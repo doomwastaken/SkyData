@@ -14,10 +14,10 @@ TEST(CloudStorageWorker, ReturnedValue) {
 }
 
 TEST(CloudStorageWorker, Gmock) {
-    MockTestClientSender mock;
+    MockTestCloudStorageWorker mock;
     Message message = create_message();
 
     EXPECT_CALL(mock, send_to_cloud(message)).Times(1);
-    MockClientSender<MockTestClientSender> user(&mock);
-    user.get_connection(message);
+    MockCloudStorageWorker<MockTestCloudStorageWorker> user(&mock);
+    user.send(message);
 }
