@@ -12,5 +12,5 @@ add_link_options("--coverage")
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
-add_subdirectory(project)
-#add_subdirectory(tests)
+add_subdirectory(tests/client/indexer)
+add_subdirectory(project/client)
