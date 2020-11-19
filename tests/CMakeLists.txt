@@ -6,11 +6,11 @@ include_directories(./project/client/observer)
 
 set (
         OBSERVER_SRC
-        ../project/client/observer/src/Local_Listener.cpp
+        ../project/client/observer/src/LocalListener.cpp
         ../project/client/observer/src/Observer.cpp
-        ../project/client/observer/src/Message_Listener.cpp
-        ../project/client/observer/src/Message_Updater.cpp
-        ../project/client/observer/src/Cloud_Storage_Downloader.cpp
+        ../project/client/observer/src/MessageListener.cpp
+        ../project/client/observer/src/MessageUpdater.cpp
+        ../project/client/observer/src/Downloader.cpp
 )
 
 

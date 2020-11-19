@@ -1,15 +1,16 @@
-//
-// Created by yaroslav on 11.11.2020.
-//
-
 #include "Observer.h"
 
-template<class T>
-int Observer<T>::load_to_machine() {
+
+void Observer::update_client() {
+
+}
+
+int Observer::watch_message_from_server() {
     return 0;
 }
 
-template<class T>
-void Observer<T>::update_client() {
-
+int Observer::watch_local() {
+    return 0;
 }
+
+

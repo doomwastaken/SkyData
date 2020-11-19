@@ -1,15 +1,21 @@
 #ifndef PROJECT_OBSERVER_H
 #define PROJECT_OBSERVER_H
 #include <iostream>
-#include "Cloud_Storage_Downloader.h"
+#include "Downloader.h"
+#include "EventEditor.h"
+#include "MessageUpdater.h"
 
-template<class T>
+
 class Observer {
-    Cloud_Storage_Downloader<T> cloud_storage_down;
-    //Queue_API реализация после мержа
+    EventEditor* event;
+    Downloader downloader;
+    MessageUpdater message_updater;
+
+    int watch_message_from_server();
+    int watch_local();
+
 public:
     void update_client();
-    int load_to_machine();
 
 };
 

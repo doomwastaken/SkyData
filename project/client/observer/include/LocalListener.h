@@ -2,18 +2,14 @@
 #define PROJECT_CLIENT_OBSERVER_LOCAL_LISTENER_H
 #include "iostream"
 #include "messages.h"
+#include "EventEditor.h"
 
 
-class Local_Listener{
-public:
-     Local_Listener() = default;
-    ~Local_Listener() = default;
-    Message list_local_machine();
-
-
-private:
-    Message message;
+class LocalListener : public EventEditor{
     void create_message();
+
+public:
+    int event() override;
 };
 
 
