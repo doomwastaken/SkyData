@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.8)
+cmake_minimum_required(VERSION 3.17)
 project(project)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -13,4 +13,5 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 add_subdirectory(tests/client/indexer)
-add_subdirectory(project/client)
+add_subdirectory(tests/client/observer)
+add_subdirectory(project)

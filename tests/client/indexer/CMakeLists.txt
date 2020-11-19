@@ -1,4 +1,4 @@
-project(tests)
+project(tests_indexer)
 
 include_directories(../../../project/client/indexer/include)
 include_directories(../../../project/messages)
@@ -23,6 +23,6 @@ set (
         ../../../project/client/indexer/src/InternalDataBaseWorker.cpp
 )
 
-add_executable(tests ${TEST_SRC} ${SRC})
+add_executable(tests_indexer ${TEST_SRC} ${SRC})
 
-target_link_libraries(tests ${GTEST_LIBRARIES} pthread -lgmock)
+target_link_libraries(tests_indexer ${GTEST_LIBRARIES} pthread -lgmock)

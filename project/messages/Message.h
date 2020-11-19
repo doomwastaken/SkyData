@@ -1,12 +1,9 @@
-//
-// Created by yaroslav on 11.11.2020.
-//
+#ifndef PROJECT_MESSAGES_H
+#define PROJECT_MESSAGES_H
 
-#ifndef PROJECT_MESSAGE_H
-#define PROJECT_MESSAGE_H
 #include <iostream>
 
-struct devise {
+struct devise_t {
     std::string device_name;
     std::string sync_folder;
 } typedef Devise;
@@ -24,7 +21,7 @@ enum status_t {
     LOAD
 };
 
-struct message {
+struct Message {
     size_t version;
     status_t status;
     bool if_folder;
