@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
-#include "Cloud_Storage_Worker.h"
+#include "CloudStorageWorker.h"
 #include "utils.h"
 
-TEST(Cloud_Storage_Worker, ReturnedValue) {
-    Cloud_Storage_Worker cloud{};
+TEST(CloudStorageWorker, ReturnedValue) {
+    CloudStorageWorker cloud{};
 
     Message message = create_message();
 

@@ -2,43 +2,48 @@ include_directories("indexer/include")
 include_directories("../data_bases/Cloud_Storage/include")
 include_directories("../data_bases/Internal_DB/include")
 include_directories("../messages")
-
-
-set (
-        OBSERBER_SRC
-        client/observer/src/local_listener.cpp
-        client/observer/src/observer.cpp
-        client/observer/src/message_listener.cpp
-        client/observer/src/message_updater.cpp
-        client/observer/src/cloud_storage_downloader.cpp
-)
+include_directories("commander/include")
 
 set (
         INDEXER_SRC
-        indexer/src/Client_Sender.cpp
-        indexer/src/Cloud_Storage_Worker.cpp
-        indexer/src/Internal_Data_Base_Worker.cpp
+        indexer/src/ClientSender.cpp
+        indexer/src/CloudStorageWorker.cpp
+        indexer/src/InternalDataBaseWorker.cpp
 )
 
 set (
         INDEXER_INC
-        indexer/include/Client_Sender.h
-        indexer/include/Cloud_Storage_Worker.h
-        indexer/include/Internal_Data_Base_Worker.h
+        indexer/include/ClientSender.h
+        indexer/include/CloudStorageWorker.h
+        indexer/include/InternalDataBaseWorker.h
 )
 
 set (
         DB_SRC
-        ../data_bases/Cloud_Storage/src/Cloud_Storage_DB.cpp
-        ../data_bases/Internal_DB/src/Postgress_Internal_DB.cpp
+        ../data_bases/Cloud_Storage/src/CloudStorageDB.cpp
+        ../data_bases/Internal_DB/src/PostgressInternalDB.cpp
 )
 
 set (
         DB_INC
-        ../data_bases/Cloud_Storage/include/Cloud_Storage.h
-        ../data_bases/Cloud_Storage/include/Cloud_Storage_DB.h
-        ../data_bases/Internal_DB/include/Internal_Data_Base.h
-        ../data_bases/Internal_DB/include/Postgress_Internal_DB.h
+        ../data_bases/Cloud_Storage/include/CloudStorage.h
+        ../data_bases/Cloud_Storage/include/CloudStorageDB.h
+        ../data_bases/Internal_DB/include/InternalDataBase.h
+        ../data_bases/Internal_DB/include/PostgressInternalDB.h
 )
 
-add_executable(project main.cpp ${INDEXER_SRC} ${DB_SRC})
+set (
+        COMMANDER_SRC
+        commander/src/ClientSocked.cpp
+        commander/src/PushCommand.cpp
+        commander/src/PopCommand.cpp
+)
+
+set (
+        COMMANDER_INC
+        commander/include/ClientCommand.h
+        commander/include/ClientSocked.h
+        commander/include/PushCommand.h
+        commander/include/PopCommand.h)
+
+add_executable(project main.cpp ${INDEXER_SRC} ${DB_SRC} ${COMMANDER_SRC} ${COMMANDER_INC})
