@@ -1,10 +1,15 @@
 #include <iostream>
 #include "LocalListener.h"
-#include "gmock/gmock.h"
-#include "gmock/gmock-actions.h"
+#include "Downloader.h"
+#include "EventEditor.h"
+#include "Observer.h"
+#include "MessageUpdater.h"
+#include "MessageListener.h"
 
 int main() {
     LocalListener local;
-    local.list_local_machine();
+    local.event();
+    Observer observer;
+    observer.update_client();
     return 0;
 }
