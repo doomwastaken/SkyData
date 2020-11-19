@@ -1,16 +1,24 @@
-include_directories("client/observer/inc")
+include_directories(client/observer/include)
 include_directories("messages")
+include_directories("data_bases/Cloud_Storage/include")
+include_directories("data_bases/Internal_DB/include")
 
 
 set (
-        OBSERBER_SRC
-        client/observer/src/local_listener.cpp
-        client/observer/src/observer.cpp
-        client/observer/src/message_listener.cpp
-        client/observer/src/message_updater.cpp
-        client/observer/src/cloud_storage_downloader.cpp
+        OBSERVER_SRC
+        client/observer/src/LocalListener.cpp
+        client/observer/src/Observer.cpp
+        client/observer/src/MessageListener.cpp
+        client/observer/src/MessageUpdater.cpp
+        client/observer/src/Downloader.cpp
+        client/observer/src/EventEditor.cpp
+)
+
+set (
+        DATABASE_SRC
+        data_bases/Cloud_Storage/src/CloudStorageDB.cpp
+        data_bases/Internal_DB/src/PostgressInternalDB.cpp
 )
 
 
-
-add_executable(project main.cpp ${OBSERVER_SRC})
+add_executable(project main.cpp ${OBSERVER_SRC} ${DATABASE_SRC})

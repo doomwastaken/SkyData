@@ -1,7 +1,15 @@
 #include <iostream>
-
+#include "LocalListener.h"
+#include "Downloader.h"
+#include "EventEditor.h"
+#include "Observer.h"
+#include "MessageUpdater.h"
+#include "MessageListener.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    LocalListener local;
+    local.event();
+    Observer observer;
+    observer.update_client();
     return 0;
 }
