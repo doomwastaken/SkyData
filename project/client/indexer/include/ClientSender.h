@@ -9,7 +9,8 @@
 class ClientSender {
 public:
     ClientSender() = default;
-    int send(Message& message);
+
+    int send(Message &message);
 
 private:
     InternalDataBaseWorker internal_db;
