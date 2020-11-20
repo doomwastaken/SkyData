@@ -1,16 +1,16 @@
-#ifndef PROJECT_POSTGRESS_DB_H
-#define PROJECT_POSTGRESS_DB_H
+#ifndef PROJECT_POSTGRESSDB_H
+#define PROJECT_POSTGRESSDB_H
 
 #include <vector>
 
 #include "Message.h"
-#include "Data_Base.h"
+#include "DataBase.h"
 
-class Postgress_DB: public Data_Base {
+class PostgressDB: public DataBase {
 public:
-    Postgress_DB();
+    PostgressDB();
 
-    ~Postgress_DB();
+    ~PostgressDB();
 
     virtual bool update(Message &send_message, std::vector<Message> &receive_messages) override;
 
@@ -21,4 +21,4 @@ private:
 };
 
 
-#endif //PROJECT_POSTGRESS_DB_H
+#endif //PROJECT_POSTGRESSDB_H

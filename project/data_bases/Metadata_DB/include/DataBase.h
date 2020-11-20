@@ -1,15 +1,15 @@
-#ifndef PROJECT_DATA_BASE_H
-#define PROJECT_DATA_BASE_H
+#ifndef PROJECT_DATABASE_H
+#define PROJECT_DATABASE_H
 
 #include <vector>
 
 #include "Message.h"
 
-class Data_Base {
+class DataBase {
 public:
-    Data_Base() = default;
+    DataBase() = default;
 
-    ~Data_Base() = default;
+    ~DataBase() = default;
 
     virtual bool update(Message &send_message, std::vector<Message> &receive_messages) = 0;
 
@@ -19,4 +19,4 @@ protected:
 };
 
 
-#endif //PROJECT_DATA_BASE_H
+#endif //PROJECT_DATABASE_H
