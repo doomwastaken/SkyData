@@ -1,4 +1,6 @@
 include_directories(messages)
 include_directories(data_bases/Metadata_DB/include)
+include_directories(common)
+include_directories(libserver/include)
 
 add_subdirectory(synchronization_service)
