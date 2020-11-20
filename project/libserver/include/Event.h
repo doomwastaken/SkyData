@@ -10,7 +10,7 @@
 #include "Message.h"
 
 struct Event {
-    explicit Event(Socket client, Message &message) : client(client), buffer(message) {}
+    explicit Event(Socket client, Message &message) : client(client), buffer(message) { }
 
     Socket client;
 

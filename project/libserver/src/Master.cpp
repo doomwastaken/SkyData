@@ -12,6 +12,6 @@ void Master::listen() {
 
 }
 
-void Master::create_connection(Socket socket, EventLoop event_loop) {
+void Master::create_connection(Socket socket, EventLoop& event_loop) {
 
 }

@@ -17,7 +17,6 @@ public:
 
 private:
     std::queue<Event> m_clients_have_work;
-
     std::shared_ptr<std::mutex> m_have_work_mutex;
 
 };
