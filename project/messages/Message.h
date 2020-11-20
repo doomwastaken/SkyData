@@ -1,19 +1,18 @@
-#ifndef PROJECT_MESSAGES_H
-#define PROJECT_MESSAGES_H
-
+#ifndef PROJECT_MESSAGE_H
+#define PROJECT_MESSAGE_H
 #include <iostream>
 
 struct devise_t {
     std::string device_name;
     std::string sync_folder;
-} typedef Devise;
+} typedef devise_t;
 
 struct user_t {
     std::string user_name;
     std::string email;
-    Devise devise;
-    int quota_limit; // quotaUsed вместо int шо это?
-} typedef User;
+    devise_t devise;
+    int quota_limit;
+} typedef user_t;
 
 enum status_t {
     DELETE,
