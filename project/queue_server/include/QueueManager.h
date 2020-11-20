@@ -17,7 +17,9 @@ class QueueManager {
 private:
     Queue* sync_service_queue;
     std::map<size_t, Queue*> clients_queues;
-    QueueManager() : sync_service_queue(nullptr) {}
+    QueueManager() : sync_service_queue(nullptr),
+                     sync_service_queue_type(STD_QUEUE),
+                     client_queues_type(STD_QUEUE) { }
     engine_types sync_service_queue_type;
     engine_types client_queues_type;
     Queue* createNewQueue(engine_types type);

@@ -19,10 +19,7 @@ private:
 
     void create_connection(Socket socket,  EventLoop &event_loop);
 
-    //Socket server_socket;
-
     int timeout;
-
     int listener;
 };
 

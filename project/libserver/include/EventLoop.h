@@ -14,7 +14,7 @@
 class EventLoop {
 private:
     std::vector<Event> m_clients_want_work;
-    std::vector<Event> m_clients_have_work;
+    std::queue<Event> m_clients_have_work;
     std::shared_ptr<std::mutex> m_have_work_mutex;
     std::shared_ptr<std::mutex> m_want_work_mutex;
 
@@ -33,6 +33,8 @@ public:
     void async_write(Socket, Message, std::function<void(int)> cb);
 
     void delete_client();
+
+    std::queue<Event>& get_m_clients_have_work() { return m_clients_have_work; };
 };
 
 

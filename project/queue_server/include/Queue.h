@@ -5,7 +5,7 @@
 #include "Message.h"
 
 class Queue {
-private:
+protected:
     size_t size;
 public:
     virtual void push_to_queue(Message message) = 0;

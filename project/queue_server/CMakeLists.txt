@@ -16,7 +16,6 @@ set (SERVER_SRC
         ../libserver/src/Connection.cpp
         ../libserver/src/EventLoop.cpp
         ../libserver/src/Master.cpp
-        ../libserver/src/Worker.cpp
         )
 
 add_executable(queue_server main.cpp ${QUEUE_SRC} ${SERVER_SRC})
