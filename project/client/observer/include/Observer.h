@@ -5,10 +5,10 @@
 #include "EventEditor.h"
 #include "MessageUpdater.h"
 
-template<class T>
+
 class Observer {
     EventEditor* event;
-    Downloader<T> downloader;
+    Downloader downloader;
     MessageUpdater message_updater;
 
     int watch_message_from_server();
