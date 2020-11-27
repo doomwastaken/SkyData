@@ -54,6 +54,9 @@ set (
         DATABASE_SRC
         ../data_bases/Cloud_Storage/src/CloudStorageDB.cpp
         ../data_bases/Internal_DB/src/PostgressInternalDB.cpp
-        ../queue_server/main.cpp)
+)
 
-add_executable(project main.cpp ${INDEXER_SRC} ${DB_SRC} ${COMMANDER_SRC} ${COMMANDER_INC} ${OBSERVER_SRC} ${DATABASE_SRC})
+add_executable(client main.cpp ${INDEXER_SRC} ${DB_SRC} ${COMMANDER_SRC} ${COMMANDER_INC} ${OBSERVER_SRC} ${DATABASE_SRC})
+
+find_package(Boost REQUIRED COMPONENTS system log)
+target_link_libraries(client ${Boost_SYSTEM_LIBRARY} ${Boost_LOG_LIBRARY})
