@@ -1,15 +1,20 @@
 #ifndef PROJECT_PUSHCOMMAND_H
 #define PROJECT_PUSHCOMMAND_H
 
-#include <vector>
+#include <queue>
 #include "ClientCommand.h"
+
 
 class PushCommand : public ClientCommand {
 public:
     void command() override;
+    std::shared_ptr<Message> proverka(const std::shared_ptr<Message>& message);
+    void push_message(const std::shared_ptr<Message>& message);
 
 private:
-    std::vector<Message> messages;
+    std::queue<std::shared_ptr<Message>> messages;
+
+    //std::vector<Message> messages;
 };
 
 #endif //PROJECT_PUSHCOMMAND_H

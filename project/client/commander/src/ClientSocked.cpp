@@ -71,3 +71,10 @@ std::shared_ptr<Message> ClientSocked::deserialize() {
 
     return new_message;
 }
+
+ClientSocked::ClientSocked() :
+        m_socket(m_io_service),
+        m_host("127.0.0.1"),
+        m_port(7777),
+        m_timeout(0)
+        {}

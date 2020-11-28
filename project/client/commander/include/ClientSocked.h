@@ -12,6 +12,7 @@ namespace as = boost::asio;
 class ClientSocked {
 public:
     ClientSocked(std::string &host, int post);
+    ClientSocked();
     ~ClientSocked();
 
     int connection();
