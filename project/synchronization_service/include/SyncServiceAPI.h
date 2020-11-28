@@ -12,7 +12,7 @@ class SyncServiceAPI {
 
     int send_message(Message message);
 
-    Message &receive_message();
+//    Message &receive_message();
 
 };
 

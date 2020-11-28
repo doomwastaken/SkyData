@@ -59,4 +59,4 @@ set (
 add_executable(client main.cpp ${INDEXER_SRC} ${DB_SRC} ${COMMANDER_SRC} ${COMMANDER_INC} ${OBSERVER_SRC} ${DATABASE_SRC})
 
 find_package(Boost REQUIRED COMPONENTS system log)
-target_link_libraries(client ${Boost_SYSTEM_LIBRARY} ${Boost_LOG_LIBRARY})
+target_link_libraries(client ${Boost_SYSTEM_LIBRARY} ${Boost_LOG_LIBRARY} -lboost_serialization)

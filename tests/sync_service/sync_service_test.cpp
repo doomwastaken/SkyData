@@ -16,35 +16,55 @@ using ::testing::DoAll;
 using ::testing::Return;
 using ::testing::SetArgReferee;
 
-class MockDatabaseWorker: public DataBaseWorker {
+class MockDatabaseWorker {
+public:
     MOCK_METHOD(void, run, (), ());
     MOCK_METHOD(void, take_task, (), ());
     MOCK_METHOD(void, do_task, (), ());
 };
 
+template<class Type>
+class MockDatabase {
+public:
+    explicit MockDatabase(Type* val) : value(val) { }
+
+    void run_test() {
+        value->run();
+    }
+    void take_task_test() {
+        value->take_task();
+    }
+    void do_task_test() {
+        value->do_task();
+    }
+
+private:
+    Type* value;
+};
+
 TEST(test_worker, test1) {
-    PostgressDB data_base;
-    std::queue<Event> m_clients_have_work;
-    std::shared_ptr<std::mutex> m_have_work_mutex;
-    MockDatabaseWorker worker(data_base, m_clients_have_work, m_have_work_mutex);
-    EXPECT_CALL(worker, run())
-            .Times(1);
+    MockDatabaseWorker worker;
+
+    EXPECT_CALL(worker, run()).Times(1);
+
+    MockDatabase<MockDatabaseWorker> data(&worker);
+    data.run_test();
 }
 
 TEST(test_worker, test2) {
-    PostgressDB data_base;
-    std::queue<Event> m_clients_have_work;
-    std::shared_ptr<std::mutex> m_have_work_mutex;
-    MockDatabaseWorker worker(data_base, m_clients_have_work, m_have_work_mutex);
-    EXPECT_CALL(worker, take_task())
-            .Times(1);
+    MockDatabaseWorker worker;
+
+    EXPECT_CALL(worker, take_task()).Times(1);
+
+    MockDatabase<MockDatabaseWorker> data(&worker);
+    data.take_task_test();
 }
 
 TEST(test_worker, test3) {
-    PostgressDB data_base;
-    std::queue<Event> m_clients_have_work;
-    std::shared_ptr<std::mutex> m_have_work_mutex;
-    MockDatabaseWorker worker(data_base, m_clients_have_work, m_have_work_mutex);
-    EXPECT_CALL(worker, do_task())
-            .Times(1);
+    MockDatabaseWorker worker;
+
+    EXPECT_CALL(worker, do_task()).Times(1);
+
+    MockDatabase<MockDatabaseWorker> data(&worker);
+    data.do_task_test();
 }

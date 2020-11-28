@@ -51,5 +51,5 @@ set (TEST_SRC
         src/queue_api_tests.cpp
         )
 
-add_executable(tests_gmock main.cpp ${SOCKET_SRC} ${QUEUE_SRC} ${SERVER_SRC} ${LIB_SOURCE_FILES})
-target_link_libraries(tests_gmock  ${GTEST_LIBRARIES} pthread -lgtest -lgmock)
+add_executable(tests_queue main.cpp ${SOCKET_SRC} ${QUEUE_SRC} ${SERVER_SRC} ${LIB_SOURCE_FILES})
+target_link_libraries(tests_queue  ${GTEST_LIBRARIES} pthread -lgtest -lgmock)

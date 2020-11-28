@@ -1,18 +1,39 @@
 #ifndef PROJECT_MESSAGE_H
 #define PROJECT_MESSAGE_H
 #include <iostream>
+#include <boost/serialization/access.hpp>
 
 struct devise_t {
     std::string device_name;
     std::string sync_folder;
-} typedef devise_t;
+
+private:
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int vers)
+    {
+        ar & device_name;
+        ar & sync_folder;
+    }
+} typedef Devise;
 
 struct user_t {
     std::string user_name;
     std::string email;
     devise_t devise;
     int quota_limit;
-} typedef user_t;
+
+private:
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int vers)
+    {
+        ar & user_name;
+        ar & email;
+        ar & devise;
+        ar & quota_limit;
+    }
+} typedef User;
 
 enum status_t {
     DELETE,
@@ -30,6 +51,22 @@ struct Message {
     size_t file_size;
     std::string file_path;
     user_t user;
+
+private:
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int vers)
+    {
+        ar & version;
+        ar & status;
+        ar & if_folder;
+        ar & times_modified;
+        ar & file_name;
+        ar & file_extension;
+        ar & file_size;
+        ar & file_path;
+        ar & user;
+    }
 } typedef Message;
 
 

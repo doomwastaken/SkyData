@@ -1,1 +1,2 @@
 add_subdirectory(sync_service)
+add_subdirectory(queue_server)

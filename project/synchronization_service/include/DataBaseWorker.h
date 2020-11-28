@@ -10,6 +10,7 @@ public:
     DataBaseWorker(DataBase &data_base,
                    std::queue<Event> &m_clients_have_work,
                    std::shared_ptr<std::mutex> &m_have_work_mutex) :
+    Worker(m_clients_have_work, m_have_work_mutex),
     m_clients_have_work(m_clients_have_work),
     m_have_work_mutex(m_have_work_mutex),
     data_base(data_base)
