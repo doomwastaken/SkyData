@@ -7,8 +7,8 @@
 
 class PushCommand : public ClientCommand {
 public:
-    void command() override;
-    std::shared_ptr<Message> proverka(const std::shared_ptr<Message>& message);
+    int command() override;
+//    std::shared_ptr<Message> proverka(const std::shared_ptr<Message>& message);
     void push_message(const std::shared_ptr<Message>& message);
 
 private:

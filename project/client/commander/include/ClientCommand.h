@@ -9,7 +9,7 @@ public:
     virtual ~ClientCommand() = default;
 
 private:
-    virtual void command() = 0;
+    virtual int command() = 0;
 };
 
 #endif //PROJECT_CLIENTCOMMAND_H

@@ -55,14 +55,14 @@ void ClientSocked::close() const {
 
 }
 
-void ClientSocked::serialize(Message &message) {
+void ClientSocked::serialize(const std::shared_ptr<Message>& message) {
     std::stringstream stream;
     boost::archive::text_oarchive oarchive(stream);
-    oarchive << message;
+    oarchive << *message;
     buf_send = stream.str();
 }
 
-std::shared_ptr<Message> ClientSocked::deserialize() {
+std::shared_ptr<Message> ClientSocked::deserialize() const {
     auto new_message = std::make_shared<Message>();
     std::stringstream stream;
     stream << buf_pop;

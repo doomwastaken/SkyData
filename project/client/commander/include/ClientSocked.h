@@ -20,8 +20,8 @@ public:
     int pop();
     void close() const;
 
-    void serialize(Message &message);
-    std::shared_ptr<Message> deserialize();
+    void serialize(const std::shared_ptr<Message>& message);
+    std::shared_ptr<Message> deserialize() const;
 
 //protected:
     std::string buf_send;

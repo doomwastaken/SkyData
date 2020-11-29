@@ -6,7 +6,7 @@
 
 class PopCommand : public ClientCommand {
 public:
-    void command() override;
+    int command() override;
     std::shared_ptr<Message> get_message();
 
 

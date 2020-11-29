@@ -1,12 +1,12 @@
 #include <PopCommand.h>
 
 
-void PopCommand::command() {
+int PopCommand::command() {
     if (client_socked.pop() < 0) {
-        return;
+        return EXIT_FAILURE;
     }
     messages.push(client_socked.deserialize());
-    return;
+    return EXIT_SUCCESS;
 }
 
 std::shared_ptr<Message> PopCommand::get_message() {
