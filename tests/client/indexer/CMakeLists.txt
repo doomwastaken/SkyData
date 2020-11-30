@@ -21,6 +21,7 @@ set (
         ../../../project/client/indexer/src/ClientSender.cpp
         ../../../project/client/indexer/src/CloudStorageWorker.cpp
         ../../../project/client/indexer/src/InternalDataBaseWorker.cpp
+
 )
 
 add_executable(tests_indexer ${TEST_SRC} ${SRC})

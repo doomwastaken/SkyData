@@ -13,3 +13,4 @@ include_directories(libserver/include)
 add_subdirectory(synchronization_service)
 add_subdirectory(client)
 add_subdirectory(queue_server)
+
