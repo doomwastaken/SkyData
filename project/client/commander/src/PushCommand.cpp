@@ -13,6 +13,10 @@ void PushCommand::push_message(const std::shared_ptr<Message>& message) {
     messages.push(message);
 }
 
+bool PushCommand::is_empty() {
+    return messages.empty();
+}
+
 //std::shared_ptr<Message> PushCommand::proverka(const std::shared_ptr<Message>& message) {
 //    messages.push(message);
 //

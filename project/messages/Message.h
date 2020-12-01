@@ -46,10 +46,10 @@ struct Message {
     status_t status;
     bool if_folder;
     size_t times_modified;
-    std::string file_name;
-    std::string file_extension;
+    std::string file_name;  // "file"
+    std::string file_extension;  // ".png"
     size_t file_size;
-    std::string file_path;
+    std::string file_path;  // "./dir/dir1/"
     user_t user;
 
 private:

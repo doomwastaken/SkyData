@@ -17,4 +17,8 @@ std::shared_ptr<Message> PopCommand::get_message() {
     return mes;
 }
 
+bool PopCommand::is_empty() {
+    return messages.empty();
+}
+
 

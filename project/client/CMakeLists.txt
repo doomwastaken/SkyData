@@ -15,7 +15,6 @@ set (
 set (
         DB_SRC
         ../data_bases/Cloud_Storage/src/CloudStorageDB.cpp
-        ../data_bases/Cloud_Storage/src/CloudStorageAPI.cpp
         ../data_bases/Internal_DB/src/PostgressInternalDB.cpp
 )
 
@@ -32,6 +31,8 @@ set (
         commander/src/ClientSocked.cpp
         commander/src/PushCommand.cpp
         commander/src/PopCommand.cpp
+        commander/src/CloudStoragePopCommand.cpp
+        commander/src/CloudStoragePushCommand.cpp
 )
 
 set (
@@ -39,7 +40,10 @@ set (
         commander/include/ClientCommand.h
         commander/include/ClientSocked.h
         commander/include/PushCommand.h
-        commander/include/PopCommand.h)
+        commander/include/PopCommand.h
+        commander/include/CloudStoragePopCommand.h
+        commander/include/CloudStoragePushCommand.h
+)
 
 set (
         OBSERVER_SRC
@@ -60,4 +64,4 @@ set (
 add_executable(client main.cpp ${INDEXER_SRC} ${DB_SRC} ${COMMANDER_SRC} ${COMMANDER_INC} ${OBSERVER_SRC} ${DATABASE_SRC} )
 
 find_package(Boost REQUIRED COMPONENTS system log)
-target_link_libraries(client ${Boost_SYSTEM_LIBRARY} ${Boost_LOG_LIBRARY} -lboost_serialization -lpqxx -lpq)
+target_link_libraries(client ${Boost_SYSTEM_LIBRARY} ${Boost_LOG_LIBRARY} -lboost_serialization) # -lpqxx -lpq ключи для постгреса
