@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.17)
+project(queue_server)
+
 include_directories(../messages)
 include_directories(../libserver/include)
 include_directories(../common)
