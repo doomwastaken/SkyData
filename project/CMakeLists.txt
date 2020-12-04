@@ -1,15 +1,11 @@
-include_directories(data_bases/Cloud_Storage/include)
-include_directories(data_bases/Internal_DB/include)
+cmake_minimum_required(VERSION 3.17)
+project(async_client_queue_server)
 
-include_directories(client/commander/include)
-include_directories(client/observer/include)
-include_directories(client/indexer/include)
+set(CMAKE_CXX_STANDARD 14)
 
-include_directories(messages)
-include_directories(data_bases/Metadata_DB/include)
 include_directories(common)
-include_directories(libserver/include)
+include_directories(server)
 
-add_subdirectory(synchronization_service)
-add_subdirectory(client)
-add_subdirectory(queue_server)
+add_subdirectory(Example/Client)
+add_subdirectory(Example/Middle)
+add_subdirectory(Example/Backend)

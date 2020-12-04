@@ -36,12 +36,15 @@ public:
 
     virtual void on_readed_message(char* msg) = 0;
 
+    virtual ~abstract_server() = 0;
+
 protected:
     boost::asio::io_context& io_context_;
     boost::asio::ip::tcp::acceptor acceptor_;
     std::set<boost::shared_ptr<server_connection>> connections;
     std::deque<std::string> messages_to_send;
 };
+inline abstract_server::~abstract_server() = default;
 #define ASYNC_CLIENT_QUEUE_SERVER_ABSTRACT_SERVER_H
 
 #endif //ASYNC_CLIENT_QUEUE_SERVER_ABSTRACT_SERVER_H

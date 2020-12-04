@@ -16,6 +16,7 @@ public:
 
     virtual void on_readed_message(char* msg) override;
 
+
 private:
     virtual void deliver_for_all(char* msg) override;
 };

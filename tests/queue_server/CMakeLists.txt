@@ -39,9 +39,6 @@ set (QUEUE_SRC
         )
 
 set (SERVER_SRC
-        ../../project/libserver/src/Connection.cpp
-        ../../project/libserver/src/EventLoop.cpp
-        ../../project/libserver/src/Master.cpp
         src/queue_api_tests.cpp src/queue_tests.cpp include/master_mock.h src/master_test.cpp)
 
 set (SOCKET_SRC

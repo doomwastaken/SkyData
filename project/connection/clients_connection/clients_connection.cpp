@@ -7,7 +7,7 @@
 clients_connection::clients_connection(
         boost::asio::io_context& io_context,
         const tcp::resolver::results_type& endpoints)
-        : io_context_(io_context), AbstractConnection(io_context) {
+        : AbstractConnection(io_context), io_context_(io_context) {
     boost::asio::async_connect(socket_, endpoints,
                                boost::bind(&clients_connection::handle_connect, this,
                                            boost::asio::placeholders::error));
