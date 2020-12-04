@@ -14,7 +14,8 @@ void BackendServer::start_accept() {
                             boost::bind(
                                         &BackendServer::handle_accept,
                                         this,
-                                        new_connect,boost::asio::placeholders::error));
+                                        new_connect,
+                                        boost::asio::placeholders::error));
 }
 
 void BackendServer::deliver_for_all(char* msg) {
