@@ -1,11 +1,8 @@
-//
-// Created by denis on 03.12.2020.
-//
-
-#include "../../connection/clients_connection/clients_connection.h"
-#include "../../common/Message.h"
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
+
+#include "ClientsConnection.h"
+#include "Message.h"
 
 int main() {
     devise_t device{"HomePC", "/home/denis/Desktop/Folder"};
@@ -24,7 +21,7 @@ int main() {
     tcp::resolver resolver(io_context);
     tcp::resolver::results_type endpoints = resolver.resolve("127.0.0.1", "7777");
 
-    clients_connection c(io_context, endpoints);
+    ClientsConnection c(io_context, endpoints);
 
     boost::thread t(boost::bind(&boost::asio::io_context::run, &io_context));
 

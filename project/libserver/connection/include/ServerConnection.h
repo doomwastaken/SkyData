@@ -1,29 +1,30 @@
-//
-// Created by denis on 03.12.2020.
-//
-
 #ifndef ASYNC_CLIENT_QUEUE_SERVER_SERVER_CONNECTION_H
 #define ASYNC_CLIENT_QUEUE_SERVER_SERVER_CONNECTION_H
 
 
-#include "../abstract_connection.h"
+#include "AbstractConnection.h"
 
-class abstract_server;
+class AbstractServer;
 
-class server_connection : public AbstractConnection, public boost::enable_shared_from_this<server_connection> {
+class ServerConnection : public AbstractConnection, public boost::enable_shared_from_this<ServerConnection> {
 public:
-    server_connection(boost::asio::io_context& io_context, std::shared_ptr<abstract_server> srvr);
+    ServerConnection(boost::asio::io_context& io_context, std::shared_ptr<AbstractServer> srvr);
 
     boost::asio::ip::tcp::socket& socket();
 
 //    'write' 'close' 'handle_connect' 'do_write'
     void start();
+
     void handle_read(const boost::system::error_code& error) override;
+
     void deliver(char* msg);
+
     void handle_write(const boost::system::error_code& error) override;
 
+    virtual ~ServerConnection() = default;
+
 private:
-    std::shared_ptr<abstract_server> server_ptr;
+    std::shared_ptr<AbstractServer> m_server_ptr;
 };
 
 
