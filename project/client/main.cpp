@@ -3,15 +3,17 @@
 #include "ClientCommand.h"
 #include "PushCommand.h"
 #include "PopCommand.h"
+#include "PostgressInternalDB.h"
+#include "InternalDataBase.h"
 
-//Message create_message() {
-//    Devise devise = {"Android", "folder"};
-//    user_t user = {"NoName", "dog@cat", devise, 5};
-//    Message message = {100, MODIFIED, 0, 2, "NiceFile",
-//                       "txt", 100, "/www/tesla/", user};
-//
-//    return message;
-//}
+Message create_message() {
+    Devise devise = {"Android", "folder"};
+    user_t user = {"NoName", "dog@cat", devise, 5};
+    Message message = {100, MODIFIED, 0, 2, "NiceFile",
+                       "txt", 100, "/www/tesla/", user};
+
+    return message;
+}
 //
 //bool operator==(const User &usr1, const User &usr2) {
 //    if (usr1.user_name == usr2.user_name)
@@ -38,14 +40,18 @@
 //}
 
 int main() {
-    PushCommand pusher;
-//    auto new_message = std::make_shared<Message>();
-//    *new_message = create_message();
+    std::string str = "dbname = postgres user = postgres password = Bars \
+      hostaddr = 127.0.0.1 port = 5432";
+   // PostgressInternalDB db1(str);
+    //db1.
+    InternalDataBase* db = new PostgressInternalDB();
+    db->open(str);
+    db->create_users_table();
+    Message message = create_message();
+    db->update(message);
 
-    //pusher.push(new_message);
-
-//    std:: cout << new_message->version;
 
 
-    return  0;
+
+    return 0;
 }
