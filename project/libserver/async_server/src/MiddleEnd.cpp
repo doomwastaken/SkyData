@@ -1,14 +1,16 @@
 #include "MiddleEnd.h"
 
+#include <utility>
+
 MiddleEnd::MiddleEnd(boost::asio::io_context& io_context,
                      const boost::asio::ip::tcp::endpoint& endpoint)
 : AbstractServer(io_context, endpoint) {
-    // TODO: Start accept in main code!
+    // NOTE: Start accept in main code!
     // start_accept();
 }
 
 void MiddleEnd::set_client_for_backend(std::shared_ptr<ToBackendConnection> client) {
-    m_backend = client;
+    m_backend = std::move(client);
 }
 
 void MiddleEnd::start_accept() {

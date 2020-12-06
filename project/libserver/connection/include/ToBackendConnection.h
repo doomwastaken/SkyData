@@ -8,7 +8,7 @@ class MiddleEnd;
 
 class ToBackendConnection : public AbstractConnection{
 public:
-    ToBackendConnection(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoints);
+    ToBackendConnection(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoint);
 
     void write(std::string msg);
 
@@ -30,6 +30,7 @@ private:
 private:
     boost::asio::io_context& m_io_context;
     std::shared_ptr<MiddleEnd> m_server;
+    tcp::resolver::results_type endpoint;
 };
 
 

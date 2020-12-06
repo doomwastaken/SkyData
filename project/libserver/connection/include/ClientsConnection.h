@@ -5,7 +5,7 @@
 
 class ClientsConnection : public AbstractConnection {
 public:
-    ClientsConnection(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoints);
+    ClientsConnection(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoint);
 
     void write(const std::string& msg);
 
@@ -23,6 +23,7 @@ private:
 
 private:
     boost::asio::io_context& m_io_context;
+    tcp::resolver::results_type endpoint;
 };
 
 

@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <deque>
 #include <iostream>
+#include <chrono>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
@@ -16,8 +17,7 @@ typedef std::deque<std::string> chat_message_queue;
 class AbstractConnection
 {
 public:
-    AbstractConnection(boost::asio::io_context& io_context) : m_socket(io_context)
-    {}
+    AbstractConnection(boost::asio::io_context& io_context) : m_socket(io_context) { ; }
 
 //    virtual void write(const std::string& msg) = 0;
 

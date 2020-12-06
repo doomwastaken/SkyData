@@ -2,10 +2,10 @@
 
 ClientsConnection::ClientsConnection(
         boost::asio::io_context& io_context,
-        const tcp::resolver::results_type& endpoints):
+        const tcp::resolver::results_type& endpoint):
             AbstractConnection(io_context),
-            m_io_context(io_context) {
-    boost::asio::async_connect(m_socket, endpoints,
+            m_io_context(io_context), endpoint(endpoint) {
+    boost::asio::async_connect(m_socket, endpoint,
                                boost::bind(
                                             &ClientsConnection::handle_connect,
                                             this,
@@ -31,6 +31,15 @@ void ClientsConnection::handle_connect(const boost::system::error_code &error) {
                                 boost::bind(&ClientsConnection::handle_read,
                                                     this,
                                                     boost::asio::placeholders::error));
+    } else {
+        std::cerr << "ERROR: ClientsConnection::handle_connect" << std::endl;
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(1000ms);
+        boost::asio::async_connect(m_socket, endpoint,
+                                   boost::bind(
+                                           &ClientsConnection::handle_connect,
+                                           this,
+                                           boost::asio::placeholders::error));
     }
 }
 
