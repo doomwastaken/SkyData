@@ -13,9 +13,7 @@ int main() {
                 100, "/home/denis/Desktop/Folder", user};
 
     boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 8001);
-    std::stringstream str;
-    boost::archive::text_oarchive oarch(str);
-    oarch << msg;
+
 
     boost::asio::io_context io_context;
     tcp::resolver resolver(io_context);
@@ -28,9 +26,7 @@ int main() {
     char line[1024];
     while (std::cin.getline(line, 1024))
     {
-        std::string msg_ = str.str();
-        msg_ += "\n";
-        c.write(msg_);
+        c.write(msg);
     }
 
     c.close();

@@ -21,6 +21,11 @@ set(HEADER_FILES
         connection/include/ServerConnection.h
         connection/include/ToBackendConnection.h)
 
+
+find_package(Boost COMPONENTS thread system serialization REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+
 add_library(libserver STATIC ${HEADER_FILES} ${SOURCE_FILES})
+target_link_libraries(libserver ${Boost_LIBRARIES})
 
 target_include_directories(libserver PUBLIC connection async_server)

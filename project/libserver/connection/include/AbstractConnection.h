@@ -8,6 +8,8 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
 #include "Message.h"
 
@@ -17,7 +19,7 @@ typedef std::deque<std::string> chat_message_queue;
 class AbstractConnection
 {
 public:
-    AbstractConnection(boost::asio::io_context& io_context) : m_socket(io_context) { ; }
+    AbstractConnection(boost::asio::io_context& io_context) : m_socket(io_context), operation(READ) { ; }
 
 //    virtual void write(const std::string& msg) = 0;
 
@@ -35,10 +37,16 @@ protected:
 
 //    virtual void do_write(std::string msg) = 0;
 
+    enum last_unsuccess_operation {
+        READ,
+        WRITE,
+    };
+
 protected:
     boost::asio::ip::tcp::socket m_socket;
     char m_read_msg[1024];
     std::deque<std::string> m_write_msgs;
+    last_unsuccess_operation operation;
 };
 
 

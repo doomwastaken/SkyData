@@ -7,7 +7,7 @@ class ClientsConnection : public AbstractConnection {
 public:
     ClientsConnection(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoint);
 
-    void write(const std::string& msg);
+    void write(const Message& msg);
 
     void close();
 
@@ -17,7 +17,7 @@ private:
 
     void handle_read(const boost::system::error_code& error) override;
 
-    void do_write(std::string msg);
+    void do_write(const Message& msg, bool continue_writing = false);
 
     void handle_write(const boost::system::error_code& error) override;
 
