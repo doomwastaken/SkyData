@@ -1,17 +1,16 @@
-#include <ClientSocked.h>
 #include <iostream>
-#include "ClientCommand.h"
-#include "PushCommand.h"
-#include "PopCommand.h"
+#include "InternalDataBase.h"
+#include "SQLite.h"
 
-//Message create_message() {
-//    Devise devise = {"Android", "folder"};
-//    user_t user = {"NoName", "dog@cat", devise, 5};
-//    Message message = {100, MODIFIED, 0, 2, "NiceFile",
-//                       "txt", 100, "/www/tesla/", user};
-//
-//    return message;
-//}
+Message create_message() {
+    Devise devise = {"Android", "folder"};
+    user_t user = {"NoName", "dog@cat", devise, 5};
+    Message message = {100, MODIFIED, 0, 2, "NiceFile",
+                       "txt", 100, "/www/tesla/", user};
+
+    return message;
+}
+
 //
 //bool operator==(const User &usr1, const User &usr2) {
 //    if (usr1.user_name == usr2.user_name)
@@ -24,7 +23,7 @@
 //}
 //
 //bool operator==(const Message &mes1, const Message &mes2) {
-//    if (mes1.if_folder == mes2.if_folder)
+//    if (mes1.is_folder == mes2.is_folder)
 //        if (mes1.status == mes2.status)
 //            if (mes1.file_extension == mes2.file_extension)
 //                if (mes1.file_name == mes2.file_name)
@@ -38,13 +37,13 @@
 //}
 
 int main() {
-    PushCommand pusher;
-//    auto new_message = std::make_shared<Message>();
-//    *new_message = create_message();
+    Message m = create_message();
+    SQLite db;
+    db.open();
+    db.update(m);
+    m.status = DELETE;
+    db.update(m);
 
-    //pusher.push(new_message);
-
-//    std:: cout << new_message->version;
 
 
     return  0;

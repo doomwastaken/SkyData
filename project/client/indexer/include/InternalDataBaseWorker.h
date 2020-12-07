@@ -2,7 +2,7 @@
 #define PROJECT_INTERNALDATABASEWORKER_H
 
 #include <vector>
-#include "PostgressInternalDB.h"
+#include "SQLite.h"
 #include "Message.h"
 
 class InternalDataBaseWorker {
