@@ -12,6 +12,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Werror")
 
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
+find_package(Boost COMPONENTS thread system serialization REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
 
 add_subdirectory(tests/client/indexer)
 add_subdirectory(tests/client/observer)

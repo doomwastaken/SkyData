@@ -7,12 +7,12 @@ int Downloader<T>::downloader_files_from_cloud(Message message) {
 
 template<class T>
 Message Downloader<T>::push() {
-
+    return messages[0];
 }
 
 template<class T>
 Message Downloader<T>::pop() {
-
+    return messages[0];
 }
 
 

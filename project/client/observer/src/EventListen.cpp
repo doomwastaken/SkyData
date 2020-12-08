@@ -1,8 +1,8 @@
-#include "EventEditor.h"
+#include "EventListen.h"
 #include "../include/EventListen.h"
 
 
-Message EventEditor::get_message() {
+Message EventListen::get_message() {
     return message;
 
 }
