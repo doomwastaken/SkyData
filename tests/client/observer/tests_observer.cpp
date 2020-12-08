@@ -10,7 +10,7 @@
 #include <random>
 #include "utils.h"
 #include "gmock/gmock.h"
-#include "EventEditor.h"
+#include "EventListen.h"
 #include <cstdlib>
 
 
@@ -60,7 +60,7 @@ using ::testing::SetArgReferee;
 //}
 
 
-class MockEventEditor : public EventEditor {
+class MockEventEditor : public EventListen {
 public:
 
     MOCK_METHOD0(event, int());

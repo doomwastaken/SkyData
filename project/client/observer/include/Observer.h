@@ -2,14 +2,16 @@
 #define PROJECT_OBSERVER_H
 #include <iostream>
 #include "Downloader.h"
-#include "EventEditor.h"
+#include "EventListen.h"
 #include "MessageUpdater.h"
+#include <queue>
 
 template<class T>
 class Observer {
-    EventEditor* event;
+    EventListen* event;
     Downloader<T> downloader;
     MessageUpdater message_updater;
+    std::queue<Message> packet;
 
     int watch_message_from_server();
     int watch_local();

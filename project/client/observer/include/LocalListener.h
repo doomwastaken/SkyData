@@ -2,10 +2,10 @@
 #define PROJECT_CLIENT_OBSERVER_LOCAL_LISTENER_H
 #include "iostream"
 #include "Message.h"
-#include "EventEditor.h"
+#include "EventListen.h"
 
 
-class LocalListener : public EventEditor{
+class LocalListener : public EventListen{
     void create_message();
 
 public:

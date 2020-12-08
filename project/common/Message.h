@@ -7,6 +7,7 @@
 #include <iostream>
 #include <boost/serialization/access.hpp>
 
+
 struct devise_t {
     std::string device_name;
     std::string sync_folder;
@@ -56,6 +57,15 @@ struct Message {
     std::string file_path;  // "./dir/dir1/"
     user_t user;
 
+    friend std::ostream& operator << (std::ostream &out, const Message &message) {
+        out << "Message(" << message.version << ", " << message.status << ", " << message.if_folder << ", "
+            << message.times_modified << ", " << message.file_name << ", " << message.file_extension << ", "
+            << message.file_size << ", " << message.file_path << ", "
+            << message.user.email << ", " << message.user.user_name << ")";
+
+        return out;
+    }
+
 private:
     friend class boost::serialization::access;
     template<class Archive>
@@ -72,6 +82,9 @@ private:
         ar & user;
     }
 } typedef Message;
+
+
+
 
 #define ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
 

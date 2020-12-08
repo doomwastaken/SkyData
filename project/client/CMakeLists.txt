@@ -47,7 +47,7 @@ set (
         observer/src/MessageListener.cpp
         observer/src/MessageUpdater.cpp
         observer/src/Downloader.cpp
-        observer/src/EventEditor.cpp
+        observer/src/EventListen.cpp
 )
 
 set (

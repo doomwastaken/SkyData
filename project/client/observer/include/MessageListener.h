@@ -2,9 +2,9 @@
 #define PROJECT_MESSAGELISTENER_H
 #include "iostream"
 #include "Message.h"
-#include "EventEditor.h"
+#include "EventListen.h"
 
-class MessageListener : public EventEditor{
+class MessageListener : public EventListen{
     Message message;
     Message to_listen_message();
 
