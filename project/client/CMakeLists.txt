@@ -1,18 +1,9 @@
-
-
 set (
-        COMMANDER_SRC
-        commander/src/ClientSocked.cpp
-        commander/src/PushCommand.cpp
-        commander/src/PopCommand.cpp
+        INDEXER_SRC
+        indexer/src/ClientSender.cpp
+        indexer/src/CloudStorageWorker.cpp
+        indexer/src/InternalDataBaseWorker.cpp
 )
-
-set (
-        COMMANDER_INC
-        commander/include/ClientCommand.h
-        commander/include/ClientSocked.h
-        commander/include/PushCommand.h
-        commander/include/PopCommand.h)
 
 set (
         OBSERVER_SRC
@@ -24,11 +15,5 @@ set (
         observer/src/EventListen.cpp
 )
 
-set (
-        DATABASE_SRC
-        ../data_bases/Cloud_Storage/src/CloudStorageDB.cpp
-        ../data_bases/Internal_DB/src/PostgressInternalDB.cpp
-        ../queue_server/main.cpp)
-
-add_executable(client_nash main.cpp ${INDEXER_SRC} ${DB_SRC} ${COMMANDER_SRC} ${COMMANDER_INC} ${OBSERVER_SRC} ${DATABASE_SRC})
+add_executable(client_nash main.cpp ${INDEXER_SRC} ${OBSERVER_SRC} ${DATABASE_SRC})
 target_link_libraries(client_nash ${Boost_LIBRARIES} libserver)
