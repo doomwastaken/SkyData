@@ -15,6 +15,7 @@ ClientsConnection::ClientsConnection(
 void ClientsConnection::write(const Message& msg) {
     boost::asio::post(m_io_context,
                       boost::bind(&ClientsConnection::do_write, this, msg, false));
+
 }
 
 void ClientsConnection::close() {
