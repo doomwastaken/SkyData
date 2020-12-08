@@ -79,9 +79,9 @@ bool SQLite::insert(Message &message) {
 bool SQLite::del(Message &message) {
 //    Todo: Проверять наличие этой запис
     std::string comma = ",";
-    std::string quotes = "'";
+    //std::string quotes = " ";
     std::string sql = (std::string)"DELETE FROM MESSAGES WHERE file_name="
-            + quotes + message.file_path + quotes + (std::string)";";
+            + '"' + message.file_name + '"' + (std::string)";";
 
     int rc = sqlite3_exec(m_data_base, sql.c_str(), callback, nullptr, nullptr);
     if( rc != SQLITE_OK ) {

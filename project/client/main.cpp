@@ -11,6 +11,24 @@ Message create_message() {
     return message;
 }
 
+Message create_message1() {
+    Devise devise = {"Android", "folder"};
+    user_t user = {"NoName", "dog@cat", devise, 51};
+    Message message = {100, MODIFIED, 0, 2, "NiceFile11",
+                       "txt", 100, "/www/tesla/", user};
+
+    return message;
+}
+
+Message create_message2() {
+    Devise devise = {"Android", "folder"};
+    user_t user = {"NoName", "dog@cat", devise, 51};
+    Message message = {100, MODIFIED, 0, 2, "NiceFile2222",
+                       "txt", 100, "/www/tesla/", user};
+
+    return message;
+}
+
 //
 //bool operator==(const User &usr1, const User &usr2) {
 //    if (usr1.user_name == usr2.user_name)
@@ -38,11 +56,17 @@ Message create_message() {
 
 int main() {
     Message m = create_message();
+    Message a = create_message1();
+    Message b = create_message2();
     SQLite db;
     db.open();
     db.update(m);
+    db.update(a);
+    db.update(b);
     m.status = DELETE;
+    b.status = DELETE;
     db.update(m);
+    db.update(b);
 
 
 
