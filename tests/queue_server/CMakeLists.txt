@@ -39,13 +39,10 @@ set (QUEUE_SRC
         )
 
 set (SERVER_SRC
-        ../../project/libserver/src/Connection.cpp
-        ../../project/libserver/src/EventLoop.cpp
-        ../../project/libserver/src/Master.cpp
         src/queue_api_tests.cpp src/queue_tests.cpp include/master_mock.h src/master_test.cpp)
 
 set (SOCKET_SRC
-        ../../project/common/Socket.cpp src/queue_manager_tests.cpp include/event_loop_mock.h)
+        src/queue_manager_tests.cpp include/event_loop_mock.h)
 
 set (TEST_SRC
         src/queue_api_tests.cpp
