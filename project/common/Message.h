@@ -1,5 +1,9 @@
-#ifndef PROJECT_MESSAGE_H
-#define PROJECT_MESSAGE_H
+//
+// Created by denis on 03.12.2020.
+//
+
+#ifndef ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
+
 #include <iostream>
 #include <boost/serialization/access.hpp>
 
@@ -46,10 +50,10 @@ struct Message {
     status_t status;
     bool if_folder;
     size_t times_modified;
-    std::string file_name;
-    std::string file_extension;
+    std::string file_name;  // "file"
+    std::string file_extension;  // ".png"
     size_t file_size;
-    std::string file_path;
+    std::string file_path;  // "./dir/dir1/"
     user_t user;
 
 private:
@@ -69,6 +73,6 @@ private:
     }
 } typedef Message;
 
+#define ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
 
-
-#endif //PROJECT_MESSAGE_H
+#endif //ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
