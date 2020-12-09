@@ -3,10 +3,11 @@
 #include "iostream"
 #include "Message.h"
 #include "EventEditor.h"
+#include "ClientCommand.h"
 
 class MessageListener : public EventEditor{
-    Message message;
-    Message to_listen_message();
+ //   ClientCommand client_command;
+    void to_listen_message();
 
 
 public:

@@ -3,6 +3,7 @@
 #include "iostream"
 #include "Message.h"
 
+Message create_message();
 unsigned long my_random(unsigned int begin, unsigned int end);
 std::string random_str_gen(int length);
 bool operator==(const User &usr1, const User &usr2);

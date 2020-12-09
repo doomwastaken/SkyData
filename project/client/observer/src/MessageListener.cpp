@@ -1,7 +1,7 @@
 #include "MessageListener.h"
 
-Message MessageListener::to_listen_message() {
-    return message;
+void MessageListener::to_listen_message() {
+
 }
 
 int MessageListener::event() {
