@@ -2,18 +2,18 @@
 #include "MessageUpdater.h"
 
 ClientsConnection::ClientsConnection(
-        boost::asio::io_context& io_context,
-        const tcp::resolver::results_type& endpoint):
-            AbstractConnection(io_context),
-            m_io_context(io_context), endpoint(endpoint) {
+        boost::asio::io_context &io_context,
+        const tcp::resolver::results_type &endpoint) :
+        AbstractConnection(io_context),
+        m_io_context(io_context), endpoint(endpoint) {
     boost::asio::async_connect(m_socket, endpoint,
                                boost::bind(
-                                            &ClientsConnection::handle_connect,
-                                            this,
-                                            boost::asio::placeholders::error));
+                                       &ClientsConnection::handle_connect,
+                                       this,
+                                       boost::asio::placeholders::error));
 }
 
-void ClientsConnection::write(const Message& msg) {
+void ClientsConnection::write(const Message &msg) {
     std::cout << msg << std::endl;
     boost::asio::post(m_io_context,
                       boost::bind(&ClientsConnection::do_write, this, msg, false));
@@ -38,7 +38,7 @@ void ClientsConnection::handle_connect(const boost::system::error_code &error) {
                                                 this,
                                                 boost::asio::placeholders::error));
         }
-        // This case will happen only if if will get in error while async_write!
+            // This case will happen only if if will get in error while async_write!
         else if (operation == AbstractConnection::last_unsuccess_operation::WRITE) {
             // Just trying to write the same message before the failure in async_write
             do_write(Message{}, true);
@@ -58,28 +58,26 @@ void ClientsConnection::handle_connect(const boost::system::error_code &error) {
 
 // TODO: Implement logic of file refresh!
 void ClientsConnection::handle_read(const boost::system::error_code &error) {
-    std::shared_ptr<Message> mes = nullptr;
-    MessageUpdater::push(mes);
     if (!error) {
-        for (char i : m_read_msg) {
-            if (i == '\n') { break ;}
-            std::cout << i;
-        }
-        std::cout << std::endl;
+        int i = 0;
+        for (; m_read_msg[i] != '\n'; ++i);
+
         //  здесь десериализую, потом пушу в очередь
+        std::shared_ptr<Message> mes = deserialize(std::string(m_read_msg, i));
+        MessageUpdater::push(mes);
         boost::asio::async_read(m_socket,
                                 boost::asio::buffer(m_read_msg),
-                                [&] (const boost::system::error_code & err, size_t bytes)
-                                { return std::find(m_read_msg, m_read_msg + bytes, '\n') < m_read_msg + bytes; },
+                                [&](const boost::system::error_code &err, size_t bytes) {
+                                    return std::find(m_read_msg, m_read_msg + bytes, '\n') < m_read_msg + bytes;
+                                },
                                 boost::bind(
-                                            &ClientsConnection::handle_read,
-                                            this,
-                                            boost::asio::placeholders::error));
-    }
-    else { do_close(); }
+                                        &ClientsConnection::handle_read,
+                                        this,
+                                        boost::asio::placeholders::error));
+    } else { do_close(); }
 }
 
-void ClientsConnection::do_write(const Message& msg, bool continue_writing) {
+void ClientsConnection::do_write(const Message &msg, bool continue_writing) {
     bool write_in_progress = !m_write_msgs.empty();
     // Serialize our Message struct to string
     if (!continue_writing) {
@@ -107,8 +105,7 @@ void ClientsConnection::handle_write(const boost::system::error_code &error) {
                                      boost::bind(&ClientsConnection::handle_write, this,
                                                  boost::asio::placeholders::error));
         }
-    }
-    else {
+    } else {
         std::cerr << "ERROR: ClientsConnection::handle_write" << std::endl;
         std::cerr << "Trying to reconnect!" << std::endl;
         operation = AbstractConnection::last_unsuccess_operation::WRITE;

@@ -8,7 +8,7 @@
 #include "Downloader.h"
 #include "Message.h"
 #include <random>
-#include "utils.h"
+#include "Message.h"
 #include "gmock/gmock.h"
 #include "EventListen.h"
 #include <cstdlib>

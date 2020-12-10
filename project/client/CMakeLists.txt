@@ -21,5 +21,5 @@ set (
         ../data_bases/Internal_DB/src/SQLite.cpp
         ../queue_server/main.cpp)
 
-add_executable(client_nash main.cpp ${INDEXER_SRC} ${DB_SRC} ${OBSERVER_SRC} ${DATABASE_SRC} ../common/utils.cpp)
+add_executable(client_nash main.cpp ${INDEXER_SRC} ${DB_SRC} ${OBSERVER_SRC} ${DATABASE_SRC} ../common/Message.cpp)
 target_link_libraries(client_nash ${Boost_LIBRARIES} libserver sqlite3)
