@@ -34,7 +34,7 @@ bool QueueManager::is_syncserv_queue_empty() {
     return sync_service_queue->is_empty();
 }
 
-bool QueueManager::is_user_queue_empty(std::string id) {
+bool QueueManager::is_user_queue_empty(const std::string& id) {
     return clients_queues[id]->is_empty();
 }
 
@@ -49,4 +49,8 @@ Queue *QueueManager::createNewQueue(engine_types type) {
 
 int QueueManager::get_client_messages_amount(const std::string &id) {
     return clients_queues[id]->get_size();
+}
+
+bool QueueManager::is_user_queue_exists(const std::string &id) {
+    return clients_queues.find(id) != clients_queues.end();
 }

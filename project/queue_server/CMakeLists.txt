@@ -10,9 +10,7 @@ set (QUEUE_SRC
         src/StdQueue.cpp
         src/OnDiskSaverQueue.cpp
         src/QueueManager.cpp
-        src/QueueWorker.cpp
-        src/QueueAPI.cpp
-)
+        )
 
 add_executable(queue_server main.cpp ${QUEUE_SRC} ${SERVER_SRC})
 
