@@ -3,21 +3,22 @@
 #include <iostream>
 #include "Downloader.h"
 #include "EventListen.h"
+#include "MessageListener.h"
 #include "MessageUpdater.h"
-#include <queue>
+#include "LocalListener.h"
 
-template<class T>
+
+
 class Observer {
-    EventListen* event;
-    Downloader<T> downloader;
+    //MessageListener mes_list;
+    //Downloader<T> downloader;
     MessageUpdater message_updater;
-    std::queue<Message> packet;
 
-    int watch_message_from_server();
+   // void watch_message_from_server(const std::string& host, const size_t& port);
     int watch_local();
 
 public:
-    void update_client();
+    void update_client(const std::string& host, const std::string& port);
 
 };
 

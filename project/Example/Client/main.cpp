@@ -12,7 +12,7 @@ int main() {
                 2, "main", "c",
                 100, "/home/denis/Desktop/Folder", user};
 
-    boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 8001);
+  //  boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 8001);
 
 
     boost::asio::io_context io_context;

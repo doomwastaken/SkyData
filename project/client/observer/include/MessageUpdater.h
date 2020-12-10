@@ -2,15 +2,19 @@
 #define PROJECT_MESSAGEUPDATER_H
 #include <iostream>
 #include "Message.h"
-#include "vector"
+#include "queue"
+#include <memory>
+#include "ClientSender.h"
 
 
 class MessageUpdater {
-    std::vector<Message> processed_messages;
-    //Client_Sender sender;
+public:
+    static std::queue<std::shared_ptr<Message>> processed_messages;
+    ClientSender sender;
+    MessageUpdater();
 public:
     void to_client_send();
-    void push();
+    static void push(const std::shared_ptr<Message>& message);
 };
 
 #endif //PROJECT_MESSAGEUPDATER_H

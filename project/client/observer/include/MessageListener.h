@@ -2,15 +2,17 @@
 #define PROJECT_MESSAGELISTENER_H
 #include "iostream"
 #include "Message.h"
-#include "EventListen.h"
 
-class MessageListener : public EventListen{
-    Message message;
-    Message to_listen_message();
+#include "ClientsConnection.h"
+
+class MessageListener {
+    ClientsConnection cl_con;
+
 
 
 public:
-    int event() override;
+    MessageListener(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoint);
+
 };
 
 #endif //PROJECT_MESSAGELISTENER_H

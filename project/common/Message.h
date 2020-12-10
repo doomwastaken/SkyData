@@ -49,7 +49,7 @@ enum status_t {
 struct Message {
     size_t version;
     status_t status;
-    bool if_folder;
+    bool is_folder;
     size_t times_modified;
     std::string file_name;  // "file"
     std::string file_extension;  // ".png"
@@ -58,7 +58,7 @@ struct Message {
     user_t user;
 
     friend std::ostream& operator << (std::ostream &out, const Message &message) {
-        out << "Message(" << message.version << ", " << message.status << ", " << message.if_folder << ", "
+        out << "Message(" << message.version << ", " << message.status << ", " << message.is_folder << ", "
             << message.times_modified << ", " << message.file_name << ", " << message.file_extension << ", "
             << message.file_size << ", " << message.file_path << ", "
             << message.user.email << ", " << message.user.user_name << ")";
@@ -73,7 +73,7 @@ private:
     {
         ar & version;
         ar & status;
-        ar & if_folder;
+        ar & is_folder;
         ar & times_modified;
         ar & file_name;
         ar & file_extension;

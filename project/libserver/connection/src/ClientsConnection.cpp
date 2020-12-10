@@ -1,4 +1,5 @@
 #include "ClientsConnection.h"
+#include "MessageUpdater.h"
 
 ClientsConnection::ClientsConnection(
         boost::asio::io_context& io_context,
@@ -57,12 +58,15 @@ void ClientsConnection::handle_connect(const boost::system::error_code &error) {
 
 // TODO: Implement logic of file refresh!
 void ClientsConnection::handle_read(const boost::system::error_code &error) {
+    std::shared_ptr<Message> mes = nullptr;
+    MessageUpdater::push(mes);
     if (!error) {
         for (char i : m_read_msg) {
             if (i == '\n') { break ;}
             std::cout << i;
         }
         std::cout << std::endl;
+        //  здесь десериализую, потом пушу в очередь
         boost::asio::async_read(m_socket,
                                 boost::asio::buffer(m_read_msg),
                                 [&] (const boost::system::error_code & err, size_t bytes)

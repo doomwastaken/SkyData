@@ -1,21 +1,21 @@
 #ifndef PROJECT_CLIENTSENDER_H
 #define PROJECT_CLIENTSENDER_H
 
+#include <queue>
+
 #include "CloudStorageWorker.h"
 #include "InternalDataBaseWorker.h"
 #include "Message.h"
-#include "ClientCommand.h"
 
 class ClientSender {
 public:
     ClientSender() = default;
 
-    int send(Message &message);
+    int send(std::shared_ptr<Message> &message);
 
 private:
-    InternalDataBaseWorker internal_db;
-    CloudStorageWorker cloud_storage;
-    ClientCommand *commander;
+    InternalDataBaseWorker m_internal_db;
+    CloudStorageWorker m_cloud_storage;
 };
 
 #endif //PROJECT_CLIENTSENDER_H

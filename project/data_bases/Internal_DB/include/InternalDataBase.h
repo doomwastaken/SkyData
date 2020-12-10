@@ -1,3 +1,4 @@
+
 #ifndef PROJECT_INTERNALDATABASE_H
 #define PROJECT_INTERNALDATABASE_H
 
@@ -6,12 +7,11 @@
 class InternalDataBase {
 public:
     InternalDataBase() = default;
-    ~InternalDataBase() = default;
+    virtual ~InternalDataBase() = default;
 
-    virtual void update(Message &message) = 0;
+    virtual bool update(Message &message) = 0;
 
-protected:
-    virtual void open() = 0;
+    virtual int open() = 0;
     virtual void close() = 0;
 };
 
