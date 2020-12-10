@@ -42,7 +42,8 @@ public:
     std::string pop_from_syncserv_queue();
     std::string pop_from_client_queue(const std::string& id);
     bool is_syncserv_queue_empty();
-    bool is_user_queue_empty(std::string id);
+    bool is_user_queue_empty(const std::string& id);
+    bool is_user_queue_exists(const std::string& id);
 
 };
 

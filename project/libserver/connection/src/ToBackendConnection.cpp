@@ -50,7 +50,7 @@ void ToBackendConnection::handle_connect(const boost::system::error_code& error)
             boost::asio::async_read(m_socket,
                                     boost::asio::buffer(m_read_msg),
                                     [&](const boost::system::error_code &err, size_t bytes) {
-                                        return std::find(m_read_msg, m_read_msg + bytes, '\n') < m_read_msg + bytes;
+                                        return std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes;
                                     },
                                     boost::bind(&ToBackendConnection::handle_read,
                                                 this,
@@ -73,34 +73,33 @@ void ToBackendConnection::handle_connect(const boost::system::error_code& error)
 void ToBackendConnection::handle_read(const boost::system::error_code& error) {
     if (!error) {
         int i = 0;
-        for (; i < 1024; i++) {
-            if (m_read_msg[i] == '\n') { break ;}
-//            std::cout << m_read_msg[i];
-        }
-//        std::cout << std::endl;
+        for (; m_read_msg[i] != '\b'; i++) { ; }
 
-        //TODO: IMPLEMENT QUEUE LOGIC
-
+        //DONE: IMPLEMENTATION OF QUEUE LOGIC
         // Firstly deserialize message
         std::stringstream str(std::string(m_read_msg, i));
-//        std::cout << str.str() << std::endl;
         boost::archive::text_iarchive iarch(str);
         Message msg;
         iarch >> msg;
-//        std::cout << msg.user.devise.sync_folder << std::endl;
 
         // Secondly push message to the users queue
-        QueueManager::queue_manager().push_to_client_queue(std::string(m_read_msg), std::string(msg.user.user_name + msg.user.devise.device_name));
-        std::cout << "IN ToBackendConnection::handle_read:: Messages amount for " << std::string(msg.user.user_name + msg.user.devise.device_name) << ": " << QueueManager::queue_manager().get_client_messages_amount(std::string(msg.user.user_name + msg.user.devise.device_name)) << std::endl << std::endl;
+        QueueManager::queue_manager().push_to_client_queue(std::string(m_read_msg),
+                                                           std::string(msg.user.user_name
+                                                           + msg.user.devise.device_name));
+        std::cout << "IN ToBackendConnection::handle_read:: Messages amount for "
+                  << std::string(msg.user.user_name + msg.user.devise.device_name)
+                  << ": " << QueueManager::queue_manager().get_client_messages_amount(std::string(msg.user.user_name
+                                                                                      + msg.user.devise.device_name))
+                                                                                      << std::endl << std::endl;
 
         // Then call the send method to server.
         m_server->send_message_if_connected(std::string(msg.user.user_name + msg.user.devise.device_name));
 
-//        m_server->deliver_for_all(m_read_msg);
+        // Continue async_reading
         boost::asio::async_read(m_socket,
                                 boost::asio::buffer(m_read_msg),
                                 [&] (const boost::system::error_code & err, size_t bytes)
-                                { return std::find(m_read_msg, m_read_msg + bytes, '\n') < m_read_msg + bytes; },
+                                { return std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes; },
                                 boost::bind(
                                             &ToBackendConnection::handle_read,
                                             this,

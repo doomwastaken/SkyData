@@ -13,7 +13,6 @@ public:
 
     boost::asio::ip::tcp::socket& socket();
 
-//    'write' 'close' 'handle_connect' 'do_write'
     void start();
 
     void handle_read(const boost::system::error_code& error) override;
