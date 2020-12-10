@@ -3,6 +3,7 @@
 
 #include "AbstractConnection.h"
 #include "MiddleEnd.h"
+#include "QueueManager.h"
 
 class MiddleEnd;
 
@@ -10,7 +11,9 @@ class ToBackendConnection : public AbstractConnection{
 public:
     ToBackendConnection(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoint);
 
-    void write(std::string msg);
+    void write(const std::string& msg = "");
+
+    void reconnect();
 
     void set_owner_server(std::shared_ptr<MiddleEnd> serv);
 
@@ -23,7 +26,7 @@ private:
 
     virtual void handle_read(const boost::system::error_code& error) override;
 
-    void do_write(std::string msg);
+    void do_write(const std::string& msg = "");
 
     virtual void handle_write(const boost::system::error_code& error) override;
 

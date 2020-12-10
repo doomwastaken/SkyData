@@ -5,12 +5,22 @@
 #include "Message.h"
 
 int main() {
-    devise_t device{"HomePC", "/home/denis/Desktop/Folder"};
-    user_t user{"Denis", "email@ml.com", device, 10};
 
-    Message msg{10, status_t::MODIFIED, false,
+    devise_t device1{"HomePC", "/home/denis/Desktop/Folder"};
+    user_t user1{"Denis", "email@ml.com", device1, 10};
+
+    Message msg1{10, status_t::MODIFIED, false,
                 2, "main", "c",
-                100, "/home/denis/Desktop/Folder", user};
+                100, "/home/denis/Desktop/Folder", user1};
+
+
+    devise_t device2{"HomePC", "/home/denis/Desktop/Folder"};
+    user_t user2{"Denisqwe", "email@ml.com", device2, 10};
+
+    Message msg2{10, status_t::MODIFIED, false,
+                 2, "main", "c",
+                 100, "/home/denis/Desktop/Folder", user2};
+
 
     boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 8001);
 
@@ -26,8 +36,18 @@ int main() {
     char line[1024];
     while (std::cin.getline(line, 1024))
     {
-        c.write(msg);
+
+        if (strcmp(line, "q") == 0) { break; }
+        if (strcmp(line, "1") == 0) { c.write(msg1); }
+        if (strcmp(line, "2") == 0) { c.write(msg2); }
     }
+
+    using namespace std::chrono_literals;
+//    std::this_thread::sleep_for(1000ms);
+//    c.write(msg);
+//    std::this_thread::sleep_for(1000ms);
+//    c.write(msg);
+//    std::this_thread::sleep_for(1000ms);
 
     c.close();
     t.join();

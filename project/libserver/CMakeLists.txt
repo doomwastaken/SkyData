@@ -8,17 +8,21 @@ include_directories(async_server/include)
 set(SOURCE_FILES
         async_server/src/BackendServer.cpp
         async_server/src/MiddleEnd.cpp
+        async_server/src/StorageServer.cpp
         connection/src/ClientsConnection.cpp
         connection/src/ServerConnection.cpp
+        connection/src/ClientToStorageConnection.cpp
         connection/src/ToBackendConnection.cpp)
-
+        
 set(HEADER_FILES
         async_server/include/BackendServer.h
         async_server/include/MiddleEnd.h
         async_server/include/AbstractServer.h
+        async_server/include/StorageServer.h
         connection/include/AbstractConnection.h
         connection/include/ClientsConnection.h
         connection/include/ServerConnection.h
+        connection/include/ClientToStorageConnection.h
         connection/include/ToBackendConnection.h)
 
 

@@ -33,8 +33,18 @@ void MiddleEnd::write_to_backend(char* msg) {
     m_backend->write(msg);
 }
 
-// TODO: create logic
 void MiddleEnd::on_readed_message(char* msg) {
     write_to_backend(msg);
 }
 
+void MiddleEnd::send_message_if_connected(const std::string &connectionID) {
+    // TODO: Implement more efficient method (std::map?)
+    for(auto& connection: m_connections) {
+        std::cout << "Messages amount for " << connection->id << ": " << QueueManager::queue_manager().get_client_messages_amount(connection->id) << std::endl << std::endl;
+        if (connection->id == connectionID) {
+            std::string msg = QueueManager::queue_manager().pop_from_client_queue(connectionID);
+            boost::bind(&ServerConnection::deliver, _1, msg)(connection);
+            break;
+        }
+    }
+}

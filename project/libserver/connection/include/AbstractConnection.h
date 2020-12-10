@@ -19,11 +19,15 @@ typedef std::deque<std::string> chat_message_queue;
 class AbstractConnection
 {
 public:
-    AbstractConnection(boost::asio::io_context& io_context) : m_socket(io_context), operation(READ) { ; }
+    AbstractConnection(boost::asio::io_context& io_context) : m_socket(io_context), operation(READ), id("") { ; }
 
 //    virtual void write(const std::string& msg) = 0;
 
 //    virtual void close() = 0;
+
+    std::string id;
+
+    std::string last_success_message_sended;
 
 protected:
 
@@ -31,11 +35,16 @@ protected:
 
     virtual void handle_write(const boost::system::error_code& error) = 0;
 
-    virtual void do_close() { m_socket.close(); };
+    virtual void do_close() {
+        boost::system::error_code err;
+        m_socket.close(err);
+    };
 
 //    virtual void handle_connect(const boost::system::error_code& error) = 0;
 
 //    virtual void do_write(std::string msg) = 0;
+
+    // Identifier for message sending
 
     enum last_unsuccess_operation {
         READ,
@@ -44,9 +53,10 @@ protected:
 
 protected:
     boost::asio::ip::tcp::socket m_socket;
-    char m_read_msg[1024];
+    char m_read_msg[32784];
     std::deque<std::string> m_write_msgs;
     last_unsuccess_operation operation;
+    bool isConnected;
 };
 
 

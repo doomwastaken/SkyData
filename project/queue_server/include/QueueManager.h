@@ -16,13 +16,14 @@ enum engine_types {
 class QueueManager {
 private:
     Queue* sync_service_queue;
-    std::map<size_t, Queue*> clients_queues;
+    std::map<std::string, Queue*> clients_queues;
     QueueManager() : sync_service_queue(nullptr),
                      sync_service_queue_type(STD_QUEUE),
                      client_queues_type(STD_QUEUE) { }
+
     engine_types sync_service_queue_type;
     engine_types client_queues_type;
-    Queue* createNewQueue(engine_types type);
+    static Queue* createNewQueue(engine_types type);
 
 public:
     static QueueManager &queue_manager() {
@@ -35,12 +36,14 @@ public:
 
     void set_sync_queue_type(engine_types type);
     void set_client_queue_type(engine_types type);
-    void push_to_syncserv_queue(Message msh);
-    void push_to_client_queue(Message msh, size_t id);
-    Message pop_from_syncserv_queue();
-    Message pop_from_client_queue(size_t id);
+    void push_to_syncserv_queue(std::string msg);
+    int get_client_messages_amount(const std::string& id);
+    void push_to_client_queue(const std::string& msg, const std::string& id);
+    std::string pop_from_syncserv_queue();
+    std::string pop_from_client_queue(const std::string& id);
     bool is_syncserv_queue_empty();
-    bool is_user_queue_empty(size_t id);
+    bool is_user_queue_empty(const std::string& id);
+    bool is_user_queue_exists(const std::string& id);
 
 };
 

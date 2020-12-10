@@ -7,6 +7,15 @@
 #include "random"
 #include "iostream"
 
+Message create_message() {
+    Devise devise = {"Android", "folder"};
+    user_t user = {"NoName", "dog@cat", devise, 5};
+    Message message = {100, MODIFIED, 0, 2, "NiceFile",
+                       "txt", 100, "/www/tesla/", user};
+
+    return message;
+}
+
 unsigned long my_random(unsigned int begin, unsigned int end) {
     std::random_device rd;
     std::mt19937 gener(rd());

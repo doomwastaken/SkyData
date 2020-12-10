@@ -1,13 +1,17 @@
 #include "StdQueue.h"
 
-void StdQueue::push_to_queue(Message message) {
+void StdQueue::push_to_queue(std::string message) {
+    mtx.lock();
     messages.push(message);
     size++;
+    mtx.unlock();
 }
 
-Message StdQueue::pop_from_queue() {
-    Message msg = messages.front();
+std::string StdQueue::pop_from_queue() {
+    mtx.lock();
+    std::string msg = messages.front();
     messages.pop();
     size--;
+    mtx.unlock();
     return msg;
 }

@@ -67,24 +67,110 @@ public:
 
 };
 
-class MockDownloader {
+
+
+class MockTestownloader {
+public:
     MOCK_METHOD(int, downloader_files_from_cloud, (Message message), ());
     MOCK_METHOD(Message, push, (), ());
     MOCK_METHOD(Message, pop, (), ());
 };
 
-TEST(Downloader, test_download) {
-    MockDownloader mock_downloader;
+template<class Type>
+class Mockownloader {
+private:
+    Type* MyDataBase;
+    Message message;
 
+public:
+    explicit Mockownloader(Type* val) : MyDataBase(val) { }
+
+    Message pop() {
+        return MyDataBase->pop();
+    }
+
+    Message push() {
+        return MyDataBase->push();
+    }
+
+    int downloader(Message message1) {
+        return MyDataBase->downloader_files_from_cloud(message1);
+    }
+
+};
+
+
+class MockTestMessageUpdate {
+public:
+    MOCK_METHOD(void, MessageUpdater, (), ());
+    MOCK_METHOD(void, push, (), ());
+};
+
+template<class Type>
+class MockMessageUpdate {
+private:
+    Type* MyClient;
+    Message message;
+
+public:
+    explicit MockMessageUpdate(Type* val) : MyClient(val) { }
+
+
+    void push() {
+        return MyClient->push();
+    }
+
+    void update(Message message1) {
+        return MyClient->MessageUpdater();
+    }
+
+};
+
+
+
+TEST(MockDownloader, Gmock) {
+    MockTestownloader mock;
+    Message message = create_message();
+
+    EXPECT_CALL(mock, downloader_files_from_cloud(message)).Times(1);
+    EXPECT_CALL(mock, pop()).Times(1);
+    EXPECT_CALL(mock, push()).Times(1);
+    Mockownloader<MockTestownloader> mocky(&mock);
+    mocky.downloader(message);
+    mocky.push();
+    mocky.pop();
+}
+
+TEST(MockMessageUpdate, Gmock) {
+    MockTestMessageUpdate mock;
+    Message message = create_message();
+
+    EXPECT_CALL(mock, MessageUpdater).Times(1);
+    EXPECT_CALL(mock, push()).Times(1);
+    MockMessageUpdate<MockTestMessageUpdate> mocky(&mock);
+    mocky.update(message);
+    mocky.push();
+}
+
+TEST(LocalListenerTest, test_on_listen) {
+    LocalListener message_listener;
+
+    EXPECT_TRUE(message_listener.event() == 0);
 }
 
 
-TEST(EventEditor, create_event) {
-    MockEventEditor mock_event;
-    //status_t load = LOAD;
+TEST(MessageListener, test_on_listen_queue) {
+    MessageListener message_listener;
 
-   // EXPECT_CALL(mock_event, event()).WillOnce(DoAll(SetArgReferee<1>(0), Return(LOAD)));
+    EXPECT_TRUE(message_listener.event() == 0);
 }
+
+TEST(MessageUpdater, test_on_update) {
+    MessageListener message_listener;
+
+    EXPECT_TRUE(message_listener.event() == 0);
+}
+
 
 
 int main() {

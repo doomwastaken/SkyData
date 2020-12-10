@@ -10,8 +10,8 @@ class OnDiskSaverQueue : public Queue {
 
 public:
     OnDiskSaverQueue(std::string dir);
-    void push_to_queue(Message message) override;
-    Message pop_from_queue() override;
+    void push_to_queue(std::string message) override;
+    std::string pop_from_queue() override;
 };
 
 

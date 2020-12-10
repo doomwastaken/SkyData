@@ -9,7 +9,7 @@ TEST(connection_test, test1) {
     std::ofstream cerr_file("CERR_LOG.txt");
     std::cerr.rdbuf(cerr_file.rdbuf());
 
-    Postgress_DB postgress_db;
+    PostgressDB postgress_db;
     cerr_file.close();
 
     std::ifstream cerr_file_read("CERR_LOG.txt");

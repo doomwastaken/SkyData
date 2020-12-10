@@ -1,10 +1,14 @@
-#ifndef ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
-#define ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
+//
+// Created by denis on 10.12.2020.
+//
+
+#ifndef ASYNC_CLIENT_QUEUE_SERVER_MESSAGESTORAGE_H
+#define ASYNC_CLIENT_QUEUE_SERVER_MESSAGESTORAGE_H
 
 #include <iostream>
 #include <boost/serialization/access.hpp>
 
-struct devise_t {
+struct storage_devise_t {
     std::string device_name;
     std::string sync_folder;
 
@@ -16,14 +20,12 @@ private:
         ar & device_name;
         ar & sync_folder;
     }
+} typedef StorageDevise;
 
-} typedef devise_t;
-
-
-struct user_t {
+struct storage_user_t {
     std::string user_name;
     std::string email;
-    devise_t devise;
+    storage_devise_t devise;
     int quota_limit;
 
 private:
@@ -36,26 +38,24 @@ private:
         ar & devise;
         ar & quota_limit;
     }
-} typedef User;
+} typedef StorageUser;
 
-enum status_t {
-
-    CREATE,     // новый файл
-    DELETE,     // файл удален
-    MODIFIED,   // файл изменен
-    GET_ALL     // новый девайс, отдать все файлы
-
+enum storage_status_t {
+    PUSH_FILE,
+    DOWNLOAD_FILE,
 };
 
-struct Message {
+struct MessageStorage {
     size_t version;
-    status_t status;
+    storage_status_t status;
+    bool if_folder;
     size_t times_modified;
     std::string file_name;  // "file"
     std::string file_extension;  // ".png"
     size_t file_size;
     std::string file_path;  // "./dir/dir1/"
-    user_t user;
+    storage_user_t user;
+    std::string RAW_BYTES;  // RAW_BYTES of data
 
 private:
     friend class boost::serialization::access;
@@ -64,13 +64,15 @@ private:
     {
         ar & version;
         ar & status;
+        ar & if_folder;
         ar & times_modified;
         ar & file_name;
         ar & file_extension;
         ar & file_size;
         ar & file_path;
         ar & user;
+        ar & RAW_BYTES;
     }
-} typedef Message;
+} typedef MessageStorage;
 
-#endif //ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
+#endif //ASYNC_CLIENT_QUEUE_SERVER_MESSAGESTORAGE_H

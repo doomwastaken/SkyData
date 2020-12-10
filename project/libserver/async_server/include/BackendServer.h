@@ -11,6 +11,7 @@ public:
                   const boost::asio::ip::tcp::endpoint& endpoint,
                   std::shared_ptr<DataBase> data_base);
 
+
     virtual void start_accept() override;
 
     virtual void on_readed_message(char* msg) override;
@@ -25,6 +26,7 @@ private:
     virtual void deliver_for_all(char* msg) override;
 
     std::shared_ptr<DataBase> m_data_base;
+
 };
 
 

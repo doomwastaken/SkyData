@@ -9,7 +9,8 @@ BackendServer::BackendServer(boost::asio::io_context& io_context,
                              const boost::asio::ip::tcp::endpoint& endpoint,
                              std::shared_ptr<DataBase> data_base):
                                 AbstractServer(io_context, endpoint),
-                                m_data_base(data_base){
+                                m_data_base(data_base) {
+
     // TODO: Start accept in main code!
     // start_accept();
 }
@@ -58,3 +59,5 @@ std::string BackendServer::serialize(Message &message) {
     return stream.str();
 }
 
+    deliver_for_all(msg);
+}

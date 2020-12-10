@@ -3,12 +3,18 @@ project(server_backend)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(server_backend main.cpp)
 
+set (QUEUE_SRC
+        ../../queue_server/src/StdQueue.cpp
+        ../../queue_server/src/OnDiskSaverQueue.cpp
+        ../../queue_server/src/QueueManager.cpp
+        )
 
-find_library(PQXX_LIB pqxx)
-find_library(PQ_LIB pq)
+add_executable(server_backend main.cpp ${QUEUE_SRC})
+
 find_package(Boost COMPONENTS thread system serialization REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
+include_directories(../../queue_server/include)
 
-target_link_libraries(server_backend ${PQXX_LIB} ${PQ_LIB} ${Boost_LIBRARIES} libserver)
+target_link_libraries(server_backend ${Boost_LIBRARIES} libserver)
+

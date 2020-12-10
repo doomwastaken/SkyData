@@ -3,13 +3,13 @@
 #include <iostream>
 #include <vector>
 #include <Message.h>
-//#include "CloudStorage.h"
-//#include "CloudStorageDB.h"
+#include <CloudStorageDB.h>
+#include "CloudStorage.h"
 
-template<class T>
+
 class Downloader {
     std::vector<Message> messages;
-    T cloud_storage;
+    CloudStorageDB cloud_storage;
 
 public:
      int downloader_files_from_cloud(Message message);

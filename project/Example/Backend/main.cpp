@@ -1,6 +1,5 @@
 #include "BackendServer.h"
-#include "PostgressDB.h"
-#include <pqxx/pqxx>
+
 
 void run_context(boost::asio::io_context& io_context) {
     io_context.run();
@@ -16,7 +15,9 @@ int main() {
 //    middle_end_connection connection(io_context, std::shared_ptr<AbstractServer>(&m_server));
 //    abstract_connection connection(io_context, endpoint);
 //    ClientsConnection clientsConnection(io_context, endpoint);
-    BackendServer server(io_context, endpoint, std::shared_ptr<PostgressDB>());
+
+    BackendServer server(io_context, endpoint);
+
     server.start_accept();
 
     boost::thread_group tg;
