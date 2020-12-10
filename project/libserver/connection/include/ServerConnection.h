@@ -20,6 +20,7 @@ public:
     void deliver(std::string msg);
 
     void find_file_and_send(MessageStorage msg);
+  
     void change_file_on_server(MessageStorage msg);
 
     void handle_write(const boost::system::error_code& error) override;

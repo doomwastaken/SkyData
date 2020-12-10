@@ -44,7 +44,6 @@ protected:
 
 //    virtual void do_write(std::string msg) = 0;
 
-
     // Identifier for message sending
 
     enum last_unsuccess_operation {

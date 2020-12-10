@@ -17,6 +17,7 @@ void ServerConnection::start() {
     boost::asio::async_read(m_socket,
                             boost::asio::buffer(m_read_msg),
                             [&] (const boost::system::error_code & err, size_t bytes)
+
                             { return (std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes ||
                                       std::find(m_read_msg, m_read_msg + bytes, EOF) < m_read_msg + bytes); },
                             boost::bind(
@@ -51,7 +52,7 @@ void ServerConnection::handle_read(const boost::system::error_code& error) {
                                 [&] (const boost::system::error_code & err, size_t bytes)
                                 {
                                     return (std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes); },// ||
-//                                            std::find(m_read_msg, m_read_msg + bytes, EOF) < m_read_msg + bytes); },
+//                                           std::find(m_read_msg, m_read_msg + bytes, EOF) < m_read_msg + bytes); },
                                 boost::bind(
                                             &ServerConnection::handle_read,
                                             shared_from_this(),
@@ -60,6 +61,7 @@ void ServerConnection::handle_read(const boost::system::error_code& error) {
         std::cerr << "Fault";
     }
 }
+
 
 void ServerConnection::deliver(std::string msg) {
     bool write_in_progress = !m_write_msgs.empty();

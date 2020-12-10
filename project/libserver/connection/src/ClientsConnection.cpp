@@ -20,6 +20,7 @@ void ClientsConnection::write(const Message& msg) {
 void ClientsConnection::close() {
     boost::asio::post(m_io_context,
                       boost::bind(&ClientsConnection::do_close, this));
+
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(2000ms);
     m_io_context.stop();

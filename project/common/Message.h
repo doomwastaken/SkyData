@@ -1,8 +1,5 @@
-//
-// Created by denis on 03.12.2020.
-//
-
 #ifndef ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
+#define ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
 
 #include <iostream>
 #include <boost/serialization/access.hpp>
@@ -19,7 +16,9 @@ private:
         ar & device_name;
         ar & sync_folder;
     }
-} typedef Devise;
+
+} typedef devise_t;
+
 
 struct user_t {
     std::string user_name;
@@ -40,15 +39,17 @@ private:
 } typedef User;
 
 enum status_t {
-    DELETE,
-    MODIFIED,
-    LOAD
+
+    CREATE,     // новый файл
+    DELETE,     // файл удален
+    MODIFIED,   // файл изменен
+    GET_ALL     // новый девайс, отдать все файлы
+
 };
 
 struct Message {
     size_t version;
     status_t status;
-    bool if_folder;
     size_t times_modified;
     std::string file_name;  // "file"
     std::string file_extension;  // ".png"
@@ -63,7 +64,6 @@ private:
     {
         ar & version;
         ar & status;
-        ar & if_folder;
         ar & times_modified;
         ar & file_name;
         ar & file_extension;
@@ -72,7 +72,5 @@ private:
         ar & user;
     }
 } typedef Message;
-
-#define ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
 
 #endif //ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H

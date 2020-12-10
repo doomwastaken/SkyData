@@ -33,7 +33,6 @@ void MiddleEnd::write_to_backend(char* msg) {
     m_backend->write(msg);
 }
 
-
 void MiddleEnd::on_readed_message(char* msg) {
     write_to_backend(msg);
 }
@@ -49,4 +48,3 @@ void MiddleEnd::send_message_if_connected(const std::string &connectionID) {
         }
     }
 }
-

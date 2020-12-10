@@ -3,6 +3,7 @@ project(server_backend)
 
 set(CMAKE_CXX_STANDARD 17)
 
+
 set (QUEUE_SRC
         ../../queue_server/src/StdQueue.cpp
         ../../queue_server/src/OnDiskSaverQueue.cpp
@@ -16,3 +17,4 @@ include_directories(${Boost_INCLUDE_DIR})
 include_directories(../../queue_server/include)
 
 target_link_libraries(server_backend ${Boost_LIBRARIES} libserver)
+

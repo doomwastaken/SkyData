@@ -1,6 +1,5 @@
 #include "ToBackendConnection.h"
 
-// TODO: RECONNECT TO BACKEND SERVER!
 ToBackendConnection::ToBackendConnection(boost::asio::io_context& io_context,
                                        const tcp::resolver::results_type& endpoint):
                                             AbstractConnection(io_context),
@@ -15,6 +14,7 @@ ToBackendConnection::ToBackendConnection(boost::asio::io_context& io_context,
 void ToBackendConnection::set_owner_server(std::shared_ptr<MiddleEnd> serv) {
     m_server = serv;
 }
+
 
 void ToBackendConnection::write(const std::string& msg) {
     boost::asio::post(m_io_context,

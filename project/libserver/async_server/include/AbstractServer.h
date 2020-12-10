@@ -7,7 +7,6 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
-
 #include "Message.h"
 #include "ServerConnection.h"
 #include "QueueManager.h"
@@ -17,7 +16,8 @@ public:
     AbstractServer(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& endpoint):
         m_io_context(io_context),
         m_acceptor(io_context, endpoint)
-        { ; }
+        {}
+
 
     virtual void start_accept() = 0;
 

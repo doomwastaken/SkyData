@@ -13,8 +13,7 @@ set(SOURCE_FILES
         connection/src/ServerConnection.cpp
         connection/src/ClientToStorageConnection.cpp
         connection/src/ToBackendConnection.cpp)
-
-
+        
 set(HEADER_FILES
         async_server/include/BackendServer.h
         async_server/include/MiddleEnd.h
