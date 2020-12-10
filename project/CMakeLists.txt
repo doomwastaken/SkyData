@@ -14,7 +14,7 @@ include_directories(data_bases/Metadata_DB/include)
 include_directories(client/commander/include)
 include_directories(client/observer/include)
 include_directories(client/indexer/include)
-include_directories(messages)
+include_directories(common)
 
 add_subdirectory(Example/Client)
 add_subdirectory(client)

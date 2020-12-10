@@ -12,7 +12,7 @@ public:
     int send_meta_data(std::shared_ptr<Message> &message);
 
 private:
-    std::unique_ptr<InternalDataBase> data_base;
+    std::shared_ptr<InternalDataBase> data_base;
 };
 
 #endif //PROJECT_INTERNALDATABASEWORKER_H

@@ -3,9 +3,13 @@
 //
 
 #ifndef ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
+#define ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
 
 #include <iostream>
+#include <string>
 #include <boost/serialization/access.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
 
 struct devise_t {
@@ -82,10 +86,5 @@ private:
         ar & user;
     }
 } typedef Message;
-
-
-
-
-#define ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
 
 #endif //ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H

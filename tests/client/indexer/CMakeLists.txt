@@ -1,7 +1,7 @@
 project(tests_indexer)
 
 include_directories(../../../project/client/indexer/include)
-include_directories(../../../project/messages)
+include_directories(../../../project/common)
 include_directories(../../../project/data_bases/Cloud_Storage/include)
 include_directories(../../../project/data_bases/Internal_DB/include)
 include_directories(../../../project/client/commander/include)

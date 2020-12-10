@@ -1,19 +1,3 @@
-
-
-set (
-        COMMANDER_SRC
-        commander/src/ClientSocked.cpp
-        commander/src/PushCommand.cpp
-        commander/src/PopCommand.cpp
-)
-
-set (
-        COMMANDER_INC
-        commander/include/ClientCommand.h
-        commander/include/ClientSocked.h
-        commander/include/PushCommand.h
-        commander/include/PopCommand.h)
-
 set (
         OBSERVER_SRC
         observer/src/LocalListener.cpp
@@ -37,5 +21,5 @@ set (
         ../data_bases/Internal_DB/src/SQLite.cpp
         ../queue_server/main.cpp)
 
-add_executable(client_nash main.cpp ${INDEXER_SRC} ${DB_SRC} ${COMMANDER_SRC} ${COMMANDER_INC} ${OBSERVER_SRC} ${DATABASE_SRC})
+add_executable(client_nash main.cpp ${INDEXER_SRC} ${DB_SRC} ${OBSERVER_SRC} ${DATABASE_SRC} ../common/utils.cpp)
 target_link_libraries(client_nash ${Boost_LIBRARIES} libserver sqlite3)

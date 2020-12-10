@@ -1,5 +1,5 @@
 include_directories(../../../project/client/observer/include)
-include_directories("../../../project/messages")
+include_directories("../../../project/common")
 include_directories(./project/client/observer)
 
 
