@@ -1,5 +1,7 @@
+#include <fstream>
 #include "ServerConnection.h"
 #include "AbstractServer.h"
+#include "MessageStorage.h"
 
 ServerConnection::ServerConnection(boost::asio::io_context& io_context,
                                    std::shared_ptr<AbstractServer> srvr):
@@ -100,4 +102,72 @@ void ServerConnection::handle_write(const boost::system::error_code& error) {
                                              boost::asio::placeholders::error));
         }
     }
+}
+
+void ServerConnection::find_file_and_send(MessageStorage msg) {;
+    std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
+//    while (file.good()) {
+//        std::cout << file.get() << " ";
+//    }
+//    std::cout << std::endl;
+    MessageStorage msg_to_send;
+
+    msg_to_send.version = msg.version;
+    msg_to_send.status = msg.status;
+    msg_to_send.if_folder = msg.if_folder;
+    msg_to_send.times_modified = msg.times_modified;
+    msg_to_send.file_name = msg.file_name;  // "file"
+    msg_to_send.file_extension = msg.file_extension;  // ".png"
+    msg_to_send.file_size = msg.file_size;
+    msg_to_send.file_path = msg.file_path;  // "./dir/dir1/"
+    msg_to_send.user = msg.user;
+
+
+    file.close();
+    file.open(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
+//
+    char c = file.get();
+    while (file.good()) {
+        msg_to_send.RAW_BYTES += c;
+        c = file.get();
+    }
+    file.close();
+    std::cout << "SIZE: " << msg_to_send.RAW_BYTES.size() << std::endl;
+    std::cout <<  "RAW BYTES: " << msg_to_send.RAW_BYTES << std::endl;
+
+    std::stringstream str;
+    boost::archive::text_oarchive oarch(str);
+    oarch << msg_to_send;
+    // The "\b" is a SEPARATOR FOR MESSAGES!
+
+
+    std::fstream file_check(msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+    file_check << msg_to_send.RAW_BYTES;
+    file_check.close();
+
+    std::cout << str.str() << std::endl;
+    boost::asio::write(m_socket,
+                             boost::asio::buffer(str.str(),
+                                                 str.str().size()));
+
+//    std::size_t size = file.rdbuf()->pubseekoff(0, file.end, file.in);
+//    boost::asio::write(m_socket,
+//                       boost::asio::buffer(file.rdbuf(),
+//                                           size),
+//                       [&] (const boost::system::error_code & err, size_t bytes) { return !file.good(); });
+
+    std::string backB = "\b";
+    boost::asio::write(m_socket,
+                       boost::asio::buffer(backB,
+                                           backB.size()));
+}
+
+void ServerConnection::change_file_on_server(MessageStorage msg) {
+//    std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
+////
+//
+//    for (const auto& chr : msg.RAW_BYTES) {
+//        file << chr;
+//    }
+//    file.close();
 }
