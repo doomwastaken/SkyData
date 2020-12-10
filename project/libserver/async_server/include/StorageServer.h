@@ -13,7 +13,7 @@ public:
                   const boost::asio::ip::tcp::endpoint& endpoint);
 
     void start_accept() override;
-    void deliver_for_all(char* msg) override;
+    void deliver_for_all(std::string msg) override;
     void on_readed_message(char* msg) override;
 };
 

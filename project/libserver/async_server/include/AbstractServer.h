@@ -11,6 +11,13 @@
 #include "ServerConnection.h"
 #include "QueueManager.h"
 
+#if !defined(SOL_TCP) && defined(IPPROTO_TCP)
+#define SOL_TCP IPPROTO_TCP
+#endif
+#if !defined(TCP_KEEPIDLE) && defined(TCP_KEEPALIVE)
+#define TCP_KEEPIDLE TCP_KEEPALIVE
+#endif
+
 class AbstractServer{
 public:
     AbstractServer(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& endpoint):
@@ -35,7 +42,7 @@ public:
             setsockopt(accept_server_socket, SOL_TCP, TCP_KEEPIDLE, &timeout, sizeof(timeout));
             setsockopt(accept_server_socket, SOL_TCP, TCP_KEEPCNT, &cnt, sizeof(cnt));
             setsockopt(accept_server_socket, SOL_TCP, TCP_KEEPINTVL, &intverval, sizeof(intverval));
-            setsockopt(accept_server_socket, SOL_TCP, TCP_USER_TIMEOUT, &tcp_user_timeout, sizeof(tcp_user_timeout));
+//            setsockopt(accept_server_socket, SOL_TCP, TCP_USER_TIMEOUT, &tcp_user_timeout, sizeof(tcp_user_timeout));
 
             m_connections.insert(session);
             session->start();
@@ -44,7 +51,7 @@ public:
         start_accept();
     }
 
-    virtual void deliver_for_all(char* msg) = 0;
+    virtual void deliver_for_all(std::string msg) = 0;
 
     virtual void on_readed_message(char* msg) = 0;
 

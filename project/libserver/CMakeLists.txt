@@ -13,7 +13,13 @@ set(SOURCE_FILES
         connection/src/ServerConnection.cpp
         connection/src/ClientToStorageConnection.cpp
         connection/src/ToBackendConnection.cpp)
-        
+
+set (QUEUE_SRC
+        ../queue_server/src/StdQueue.cpp
+        ../queue_server/src/OnDiskSaverQueue.cpp
+        ../queue_server/src/QueueManager.cpp
+        )
+
 set(HEADER_FILES
         async_server/include/BackendServer.h
         async_server/include/MiddleEnd.h
@@ -29,7 +35,7 @@ set(HEADER_FILES
 find_package(Boost COMPONENTS thread system serialization REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
-add_library(libserver STATIC ${HEADER_FILES} ${SOURCE_FILES})
+add_library(libserver STATIC ${HEADER_FILES} ${SOURCE_FILES} ${QUEUE_SRC})
 target_link_libraries(libserver ${Boost_LIBRARIES})
 
 target_include_directories(libserver PUBLIC connection async_server)

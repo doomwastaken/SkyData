@@ -18,7 +18,7 @@ void StorageServer::start_accept() {
 }
 
 
-void StorageServer::deliver_for_all(char* msg) {
+void StorageServer::deliver_for_all(std::string msg) {
     std::for_each(m_connections.begin(), m_connections.end(),
                   boost::bind(&ServerConnection::deliver, _1, boost::ref(msg)));
 }

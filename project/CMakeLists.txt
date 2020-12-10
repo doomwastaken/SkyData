@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(common)
 include_directories(libserver/async_server/include)
 include_directories(libserver/connection/include)
+include_directories(queue_server/include)
 
 include_directories(data_bases/MetadataDB/include)
 

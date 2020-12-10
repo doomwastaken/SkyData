@@ -26,7 +26,7 @@ void BackendServer::start_accept() {
                                         boost::asio::placeholders::error));
 }
 
-void BackendServer::deliver_for_all(char* msg) {
+void BackendServer::deliver_for_all(std::string msg) {
     std::for_each(m_connections.begin(), m_connections.end(),
                   boost::bind(&ServerConnection::deliver, _1, boost::ref(msg)));
 }
@@ -38,7 +38,7 @@ void BackendServer::on_readed_message(char* msg) {
     std::vector<Message> messages = m_data_base->update(*message);
 
     std::for_each(messages.begin(), messages.end(), [&](Message &mes) {
-        deliver_for_all(const_cast<char *>(serialize(mes).c_str()));
+        deliver_for_all(serialize(mes));
     });
 }
 
@@ -59,5 +59,3 @@ std::string BackendServer::serialize(Message &message) {
     return stream.str();
 }
 
-    deliver_for_all(msg);
-}
