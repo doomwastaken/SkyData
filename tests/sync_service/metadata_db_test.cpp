@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "gtest/gtest.h"
-#include "Postgress_DB.h"
+#include "PostgressDB.h"
 
 
 TEST(connection_test, test1) {
