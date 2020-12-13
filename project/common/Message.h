@@ -39,10 +39,12 @@ private:
 } typedef User;
 
 enum status_t {
+    NEW_USER,
     CREATE,     // новый файл
     DELETE,     // файл удален
     MODIFIED,   // файл изменен
-    GET_ALL     // новый девайс, отдать все файлы
+    NEW_DEVISE,
+    RETURN_MES
 };
 
 struct Message {

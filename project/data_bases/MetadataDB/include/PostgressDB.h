@@ -27,6 +27,8 @@ public:
 
     void close();
 
+    void erase(Message &message);
+
 private:
     std::shared_ptr<pqxx::connection> m_connect;
 

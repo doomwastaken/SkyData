@@ -37,9 +37,14 @@ void BackendServer::on_readed_message(char* msg) {
     message = deserialize(msg);
     std::vector<Message> messages = m_data_base->update(*message);
 
-    std::for_each(messages.begin(), messages.end(), [&](Message &mes) {
-        deliver_for_all(serialize(mes));
-    });
+    if (!messages.empty()) {
+        std::for_each(messages.begin(), messages.end(), [&](Message &mes) {
+            std::cout << mes.user.devise.device_name << std::endl;
+            std::string ser_mes = serialize(mes);
+            ser_mes += "\b";
+            deliver_for_all(ser_mes);
+        });
+    }
 }
 
 std::shared_ptr<Message> BackendServer::deserialize(std::string_view buf) {

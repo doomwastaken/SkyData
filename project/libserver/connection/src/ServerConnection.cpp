@@ -3,6 +3,22 @@
 #include "AbstractServer.h"
 #include "MessageStorage.h"
 
+// FIXME: remove this
+void print_mes_serv(Message &message) {
+    std::cout << "user name: " << message.user.user_name << std::endl;
+    std::cout << "user email: " << message.user.email << std::endl;
+    std::cout << "version: " << message.version << std::endl;
+    std::cout << "times modified: " << message.times_modified << std::endl;
+    std::cout << "file name: " << message.file_name << std::endl;
+    std::cout << "file extention: " << message.file_extension<< std::endl;
+    std::cout << "file size: " << message.file_size << std::endl;
+    std::cout << "file path: " << message.file_path << std::endl;
+    std::cout << "devise name: " << message.user.devise.device_name << std::endl;
+    std::cout << "sync folder: " << message.user.devise.sync_folder << std::endl;
+    std::cout << "quota limit: " << message.user.quota_limit << std::endl;
+    std::cout << "status: " << message.status << std::endl;
+}
+
 ServerConnection::ServerConnection(boost::asio::io_context& io_context,
                                    std::shared_ptr<AbstractServer> srvr):
     AbstractConnection(io_context),
@@ -29,13 +45,21 @@ void ServerConnection::start() {
 void ServerConnection::handle_read(const boost::system::error_code& error) {
     if (!error) {
         int i = 0;
-        for (; m_read_msg[i] != '\b'; i++) { ; }
+        for (; m_read_msg[i] != '\b'; i++) {
+            std::cout << m_read_msg[i]; }
+        std::cout << std::endl;
 
-        std::stringstream str;
-        str << std::string(m_read_msg, i);
+
+        std::string str_mes = m_read_msg;
+        std::stringstream str(str_mes);
         boost::archive::text_iarchive iarch(str);
         Message msg;
         iarch >> msg;
+
+        std::cout << "Server: " << std::endl;
+
+        print_mes_serv(msg);
+
         if (this->id.empty()) {
             this->id = msg.user.user_name + msg.user.devise.device_name;
             // Do we have messages for user in queue?

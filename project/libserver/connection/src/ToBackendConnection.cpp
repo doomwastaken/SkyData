@@ -1,5 +1,20 @@
 #include "ToBackendConnection.h"
 
+// FIXME: remove this
+void print_mes_mid(Message &message) {
+    std::cout << "user name: " << message.user.user_name << std::endl;
+    std::cout << "user email: " << message.user.email << std::endl;
+    std::cout << "version: " << message.version << std::endl;
+    std::cout << "times modified: " << message.times_modified << std::endl;
+    std::cout << "file name: " << message.file_name << std::endl;
+    std::cout << "file extention: " << message.file_extension<< std::endl;
+    std::cout << "file size: " << message.file_size << std::endl;
+    std::cout << "file path: " << message.file_path << std::endl;
+    std::cout << "devise name: " << message.user.devise.device_name << std::endl;
+    std::cout << "sync folder: " << message.user.devise.sync_folder << std::endl;
+    std::cout << "quota limit: " << message.user.quota_limit << std::endl;
+}
+
 ToBackendConnection::ToBackendConnection(boost::asio::io_context& io_context,
                                        const tcp::resolver::results_type& endpoint):
                                             AbstractConnection(io_context),
@@ -72,38 +87,53 @@ void ToBackendConnection::handle_connect(const boost::system::error_code& error)
 //TODO: OPTIMIZATION
 void ToBackendConnection::handle_read(const boost::system::error_code& error) {
     if (!error) {
-        int i = 0;
-        for (; m_read_msg[i] != '\b'; i++) { ; }
+        try {
+            int i = 0;
+            for (; m_read_msg[i] != '\b'; i++) { ; }
 
-        //DONE: IMPLEMENTATION OF QUEUE LOGIC
-        // Firstly deserialize message
-        std::stringstream str(std::string(m_read_msg, i));
-        boost::archive::text_iarchive iarch(str);
-        Message msg;
-        iarch >> msg;
+            //DONE: IMPLEMENTATION OF QUEUE LOGIC
+            // Firstly deserialize message
+            std::string str_mes = m_read_msg;
+            std::stringstream str(str_mes);
+            boost::archive::text_iarchive iarch(str);
+            Message msg;
+            iarch >> msg;
 
-        // Secondly push message to the users queue
-        QueueManager::queue_manager().push_to_client_queue(std::string(m_read_msg),
-                                                           std::string(msg.user.user_name
-                                                           + msg.user.devise.device_name));
-        std::cout << "IN ToBackendConnection::handle_read:: Messages amount for "
-                  << std::string(msg.user.user_name + msg.user.devise.device_name)
-                  << ": " << QueueManager::queue_manager().get_client_messages_amount(std::string(msg.user.user_name
-                                                                                      + msg.user.devise.device_name))
-                                                                                      << std::endl << std::endl;
+            std::cout << "Middle: " << std::endl;
+            print_mes_mid(msg);
 
-        // Then call the send method to server.
-        m_server->send_message_if_connected(std::string(msg.user.user_name + msg.user.devise.device_name));
+            // Secondly push message to the users queue
+            QueueManager::queue_manager().push_to_client_queue(std::string(m_read_msg),
+                                                               std::string(msg.user.user_name
+                                                                           + msg.user.devise.device_name));
+            std::cout << "IN ToBackendConnection::handle_read:: Messages amount for "
+                      << std::string(msg.user.user_name + msg.user.devise.device_name)
+                      << ": " << QueueManager::queue_manager().get_client_messages_amount(std::string(msg.user.user_name
+                                                                                                      +
+                                                                                                      msg.user.devise.device_name))
+                      << std::endl << std::endl;
 
-        // Continue async_reading
-        boost::asio::async_read(m_socket,
-                                boost::asio::buffer(m_read_msg),
-                                [&] (const boost::system::error_code & err, size_t bytes)
-                                { return std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes; },
-                                boost::bind(
+            // Then call the send method to server.
+            std::cout << msg.user.user_name << " " << msg.user.devise.device_name << std::endl;
+            try {
+                m_server->send_message_if_connected(std::string(msg.user.user_name + msg.user.devise.device_name));
+            } catch (std::exception &err) {
+                std::cout << err.what();
+            }
+            std::cout << "send " << std::endl;
+            // Continue async_reading
+            boost::asio::async_read(m_socket,
+                                    boost::asio::buffer(m_read_msg),
+                                    [&](const boost::system::error_code &err, size_t bytes) {
+                                        return std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes;
+                                    },
+                                    boost::bind(
                                             &ToBackendConnection::handle_read,
                                             this,
                                             boost::asio::placeholders::error));
+        } catch (std::exception& err) {
+            std::cerr << err.what();
+        }
     }
     else {
         isConnected = false;
