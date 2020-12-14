@@ -20,7 +20,7 @@ void print_mes_db(Message &message) {
 PostgressDB::PostgressDB()= default;;
 
 PostgressDB::~PostgressDB() {
-    m_connect->close();
+    m_connect->disconnect();
 }
 
 bool PostgressDB::open(std::string& config) {
@@ -29,7 +29,7 @@ bool PostgressDB::open(std::string& config) {
 }
 
 void PostgressDB::close() {
-    m_connect->close();
+    m_connect->disconnect();
 }
 
 void PostgressDB::insert(Message &message) {
@@ -85,6 +85,11 @@ bool PostgressDB::create_users_table() {
 //            return false;
 //        }
 
+
+/* Create SQL statement */
+        sql = "DROP TABLE IF EXISTS USERS_INFO;";
+        commit_sql_query(sql);
+
         /* Create SQL statement */
         sql = "CREATE TABLE USERS_INFO(" \
         "NAME           TEXT    NOT NULL," \
@@ -109,7 +114,7 @@ bool PostgressDB::create_users_table() {
     return true;
 }
 
-pqxx::result PostgressDB::select(std::string_view sql_select) {
+pqxx::result PostgressDB::select(const std::string& sql_select) {
     pqxx::nontransaction nontransaction(*m_connect);
 
     pqxx::result pq_result (nontransaction.exec(sql_select));
@@ -117,7 +122,7 @@ pqxx::result PostgressDB::select(std::string_view sql_select) {
     return pq_result;
 }
 
-bool PostgressDB::commit_sql_query(std::string_view sql_query) {
+bool PostgressDB::commit_sql_query(const std::string& sql_query) {
     try {
         pqxx::work work(*m_connect);
         work.exec(sql_query);

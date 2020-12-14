@@ -62,6 +62,7 @@ void ServerConnection::handle_read(const boost::system::error_code& error) {
 
         if (this->id.empty()) {
             this->id = msg.user.user_name + msg.user.devise.device_name;
+            QueueManager::queue_manager().create_queue_if_not_exists(this->id);
             // Do we have messages for user in queue?
             while (QueueManager::queue_manager().is_user_queue_exists(this->id) &&
                   !QueueManager::queue_manager().is_user_queue_empty(this->id)) {

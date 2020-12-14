@@ -22,6 +22,13 @@ void QueueManager::push_to_client_queue(const std::string& msg, const std::strin
     clients_queues[id]->push_to_queue(msg);
 }
 
+void QueueManager::create_queue_if_not_exists(const std::string& id) {
+    if (clients_queues.find(id) == clients_queues.end()) {
+        clients_queues[id] = createNewQueue(client_queues_type);
+    }
+}
+
+
 std::string QueueManager::pop_from_syncserv_queue() {
     return sync_service_queue->pop_from_queue();
 }

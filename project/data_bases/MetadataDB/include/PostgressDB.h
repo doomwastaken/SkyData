@@ -17,9 +17,9 @@ public:
 
     void insert(Message &message);
 
-    pqxx::result select(std::string_view sql_select);
+    pqxx::result select(const std::string& sql_select);
 
-    bool commit_sql_query(std::string_view sql_query);
+    bool commit_sql_query(const std::string& sql_query);
 
     bool open(std::string& config);
 
