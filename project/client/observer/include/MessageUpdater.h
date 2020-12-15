@@ -17,9 +17,9 @@ public:
     ClientSender sender;
     MessageUpdater();
 public:
-    static std::queue<std::shared_ptr<Message>> processed_messages;
+    static std::queue<std::pair<std::shared_ptr<Message>, bool>> processed_messages;
     void to_client_send(ClientsConnection &cl_con);
-    static void push(const std::shared_ptr<Message>& message);
+    static void push(const std::shared_ptr<Message>& message, bool is_from_queue = false);
 };
 
 #endif //PROJECT_MESSAGEUPDATER_H

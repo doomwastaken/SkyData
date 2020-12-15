@@ -13,9 +13,10 @@ using namespace std;
 
 
 
-std::queue<std::shared_ptr<Message>> MessageUpdater::processed_messages = std::queue<std::shared_ptr<Message>> ();
+//std::queue<std::shared_ptr<Message>> MessageUpdater::processed_messages = std::queue<std::shared_ptr<Message>> ();
+std::queue<std::pair<std::shared_ptr<Message>, bool>> MessageUpdater::processed_messages = std::queue<std::pair<std::shared_ptr<Message>, bool>> ();
 std::mutex MessageUpdater::mtx_stat;
-
+//std::queue<std::pair<std::shared_ptr<Message>, bool>> processed_messages;
 
 //Observer::Observer(std::string user_name, std::string email, std::string sync_folder)
 

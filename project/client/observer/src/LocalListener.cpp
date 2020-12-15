@@ -77,7 +77,7 @@ void NotificationReceiver::OnFilePathChanged(const gogo::FilePath &path, bool er
     path.string();
     std::shared_ptr<Message> mes = LocalListener::create_message(path.string(), event);
     if (mes != nullptr) {
-        MessageUpdater::push(mes);
+        MessageUpdater::push(mes, true);
     }
     std::cout << path << " PATH\n";
 
