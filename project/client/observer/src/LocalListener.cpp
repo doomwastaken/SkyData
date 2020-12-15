@@ -2,11 +2,11 @@
 
 
 void LocalListener::create_message() {
-
 }
 
 int LocalListener::event() {
-    return 0;
+
+    return EXIT_SUCCESS;
 }
 
 
