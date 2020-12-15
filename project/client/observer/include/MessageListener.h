@@ -6,12 +6,13 @@
 #include "ClientsConnection.h"
 
 class MessageListener {
-    ClientsConnection cl_con;
+
 
 
 
 public:
     MessageListener(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoint);
+    ClientsConnection cl_con;
 
 };
 

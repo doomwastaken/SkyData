@@ -12,7 +12,7 @@ namespace gogo {
 #define HANDLE_EINTR(x) ({ \
   decltype(x) eintr_wrapper_result; \
   do {                     \
-  std::cout << "HANDLE_EINTR SET\n";\
+  \
     eintr_wrapper_result = (x); \
   } while (eintr_wrapper_result == -1 && errno == EINTR); \
   eintr_wrapper_result; \

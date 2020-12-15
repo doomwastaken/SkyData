@@ -22,4 +22,4 @@ set (
         ../queue_server/main.cpp)
 
 add_executable(client_nash main.cpp ${INDEXER_SRC} ${DB_SRC} ${OBSERVER_SRC} ${DATABASE_SRC} ../common/Message.cpp)
-target_link_libraries(client_nash ${Boost_LIBRARIES} libserver sqlite3)
+target_link_libraries(client_nash ${Boost_LIBRARIES} libserver sqlite3 liblistener)

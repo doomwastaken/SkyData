@@ -8,7 +8,7 @@
 
 class SQLite: public InternalDataBase {
 public:
-    SQLite() = default;
+    SQLite();
     ~SQLite() override;
 
     bool update(Message &message) override;

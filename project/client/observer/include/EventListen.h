@@ -6,14 +6,10 @@
 class EventListen {
 protected:
     Message message;
-    enum event {
-        local_detele,
-        local_download,
-        queue_mes_came
-    };
+
 
 public:
-    virtual int event() = 0;
+    virtual int event_listen(const std::string& path_str) = 0;
     Message get_message();
 };
 
