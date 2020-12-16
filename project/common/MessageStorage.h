@@ -1,13 +1,16 @@
-#ifndef ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
-#define ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
+//
+// Created by denis on 10.12.2020.
+//
+
+#ifndef ASYNC_CLIENT_QUEUE_SERVER_MESSAGESTORAGE_H
+#define ASYNC_CLIENT_QUEUE_SERVER_MESSAGESTORAGE_H
 
 #include <iostream>
-#include <string>
+#include <vector>
 #include <boost/serialization/access.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/vector.hpp>
 
-struct devise_t {
+struct storage_devise_t {
     std::string device_name;
     std::string sync_folder;
 
@@ -19,14 +22,12 @@ private:
         ar & device_name;
         ar & sync_folder;
     }
+} typedef StorageDevise;
 
-} typedef devise_t;
-
-
-struct user_t {
+struct storage_user_t {
     std::string user_name;
     std::string email;
-    devise_t devise;
+    storage_devise_t devise;
     int quota_limit;
 
 private:
@@ -39,33 +40,24 @@ private:
         ar & devise;
         ar & quota_limit;
     }
-} typedef User;
+} typedef StorageUser;
 
-enum status_t {
-    LOGIN,
-    CREATE,     // новый файл
-    DELETE,     // файл удален
-    MODIFIED,   // файл изменен
+enum storage_status_t {
+    PUSH_FILE,
+    DOWNLOAD_FILE,
 };
 
-struct Message {
+struct MessageStorage {
     size_t version;
-    status_t status;
+    storage_status_t status;
+    bool if_folder;
     size_t times_modified;
     std::string file_name;  // "file"
     std::string file_extension;  // ".png"
     size_t file_size;
     std::string file_path;  // "./dir/dir1/"
-    user_t user;
-
-    friend std::ostream& operator << (std::ostream &out, const Message &message) {
-        out << "Message(" << message.version << ", " << message.status << ", "
-            << message.times_modified << ", " << message.file_name << ", " << message.file_extension << ", "
-            << message.file_size << ", " << message.file_path << ", "
-            << message.user.email << ", " << message.user.user_name << ")";
-
-        return out;
-    }
+    storage_user_t user;
+    std::vector<char> RAW_BYTES;  // RAW_BYTES of data
 
 private:
     friend class boost::serialization::access;
@@ -74,15 +66,15 @@ private:
     {
         ar & version;
         ar & status;
+        ar & if_folder;
         ar & times_modified;
         ar & file_name;
         ar & file_extension;
         ar & file_size;
         ar & file_path;
         ar & user;
+        ar & RAW_BYTES;
     }
-} typedef Message;
+} typedef MessageStorage;
 
-std::string serialize(Message &message);
-std::shared_ptr<Message> deserialize(const std::string &buf);
-#endif //ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
+#endif //ASYNC_CLIENT_QUEUE_SERVER_MESSAGESTORAGE_H

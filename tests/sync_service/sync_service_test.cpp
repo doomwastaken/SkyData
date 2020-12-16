@@ -7,8 +7,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "PostgressDB.h"
-#include "DataBaseWorker.h"
-#include "Event.h"
+#include "Sync_Service.h"
 
 using ::testing::_;
 using ::testing::AtLeast;

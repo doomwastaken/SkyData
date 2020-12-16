@@ -5,7 +5,7 @@
 #include "Message.h"
 
 int main() {
-<<<<<<< HEAD
+
     devise_t device{"HomePC", "/home/denis/Desktop/Folder"};
     user_t user{"Denis", "email@ml.com", device, 10};
 
@@ -14,24 +14,93 @@ int main() {
                 100, "/home/denis/Desktop/Folder", user};
 
   //  boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 8001);
-=======
+
     devise_t device1{"HomePC", "/home/denis/Desktop/Folder"};
     user_t user1{"Denis", "email@ml.com", device1, 10};
 
-    Message msg1{10, status_t::MODIFIED, false,
-                2, "main", "c",
-                100, "/home/denis/Desktop/Folder", user1};
+    Message message;
+    message.user.devise.device_name = "iPhone";
+    message.user.devise.sync_folder = "/dev/null/";
+    message.user.user_name = "Oleg";
+    message.user.email = "astlok@ya.ru";
+    message.user.quota_limit = 228;
+    message.version = 3;
+    message.status = NEW_USER;
+    message.times_modified = 322;
+    message.file_name = "kek";
+    message.file_extension = ".cpp";
+    message.file_size = 1488;
+    message.file_path = "/usr/local/bin/";
+
+    Message message2;
+    message2.user.devise.device_name = "mac";
+    message2.user.devise.sync_folder = "/dev/null/";
+    message2.user.user_name = "Oleg";
+    message2.user.email = "astlok@ya.ru";
+    message2.user.quota_limit = 228;
+    message2.version = 3;
+    message2.status = NEW_DEVISE;
+    message2.times_modified = 322;
+    message2.file_name = "kek";
+    message2.file_extension = ".cpp";
+    message2.file_size = 1488;
+    message2.file_path = "/usr/local/bin/";
+
+    Message message3;
+    message3.user.devise.device_name = "mac";
+    message3.user.devise.sync_folder = "/dev/null/";
+    message3.user.user_name = "Oleg";
+    message3.user.email = "astlok@ya.ru";
+    message3.user.quota_limit = 228;
+    message3.version = 3;
+    message3.status = CREATE;
+    message3.times_modified = 322;
+    message3.file_name = "lul";
+    message3.file_extension = ".html";
+    message3.file_size = 1488;
+    message3.file_path = "/usr/local/bin/";
+
+    Message message4;
+    message4.user.devise.device_name = "iPhone";
+    message4.user.devise.sync_folder = "/dev/null/";
+    message4.user.user_name = "Oleg";
+    message4.user.email = "astlok@ya.ru";
+    message4.user.quota_limit = 228;
+    message4.version = 3;
+    message4.status = DELETE;
+    message4.times_modified = 322;
+    message4.file_name = "kek";
+    message4.file_extension = ".cpp";
+    message4.file_size = 1488;
+    message4.file_path = "/usr/local/bin/";
+
+    Message message5;
+    message5.user.devise.device_name = "mac";
+    message5.user.devise.sync_folder = "/dev/null/";
+    message5.user.user_name = "Oleg";
+    message5.user.email = "astlok@ya.ru";
+    message5.user.quota_limit = 228;
+    message5.version = 3;
+    message5.status = MODIFIED;
+    message5.times_modified = 322;
+    message5.file_name = "lel";
+    message5.file_extension = ".html";
+    message5.file_size = 1488;
+    message5.file_path = "/usr/local/bin/";
+//    Message msg1{10, status_t::MODIFIED, false,
+//                2, "main", "c",
+//                100, "/home/denis/Desktop/Folder", user1};
 
 
-    devise_t device2{"HomePC", "/home/denis/Desktop/Folder"};
-    user_t user2{"Denisqwe", "email@ml.com", device2, 10};
+//    devise_t device2{"HomePC", "/home/denis/Desktop/Folder"};
+//    user_t user2{"Denisqwe", "email@ml.com", device2, 10};
 
-    Message msg2{10, status_t::MODIFIED, false,
-                 2, "main", "c",
-                 100, "/home/denis/Desktop/Folder", user2};
+//    Message msg2{10, status_t::MODIFIED, false,
+//                 2, "main", "c",
+//                 100, "/home/denis/Desktop/Folder", user2};
+
 
     boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 8001);
->>>>>>> development
 
 
     boost::asio::io_context io_context;
@@ -45,14 +114,12 @@ int main() {
     char line[1024];
     while (std::cin.getline(line, 1024))
     {
-<<<<<<< HEAD
-        c.write(msg);
-    }
-
-=======
         if (strcmp(line, "q") == 0) { break; }
-        if (strcmp(line, "1") == 0) { c.write(msg1); }
-        if (strcmp(line, "2") == 0) { c.write(msg2); }
+        if (strcmp(line, "1") == 0) { c.write(message); }
+        if (strcmp(line, "2") == 0) { c.write(message2); }
+        if (strcmp(line, "3") == 0) { c.write(message3); }
+        if (strcmp(line, "4") == 0) { c.write(message4); }
+        if (strcmp(line, "5") == 0) { c.write(message5); }
     }
 
     using namespace std::chrono_literals;
@@ -61,7 +128,6 @@ int main() {
 //    std::this_thread::sleep_for(1000ms);
 //    c.write(msg);
 //    std::this_thread::sleep_for(1000ms);
->>>>>>> development
     c.close();
     t.join();
 

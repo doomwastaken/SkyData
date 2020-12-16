@@ -22,6 +22,13 @@ void QueueManager::push_to_client_queue(const std::string& msg, const std::strin
     clients_queues[id]->push_to_queue(msg);
 }
 
+void QueueManager::create_queue_if_not_exists(const std::string& id) {
+    if (clients_queues.find(id) == clients_queues.end()) {
+        clients_queues[id] = createNewQueue(client_queues_type);
+    }
+}
+
+
 std::string QueueManager::pop_from_syncserv_queue() {
     return sync_service_queue->pop_from_queue();
 }
@@ -34,7 +41,7 @@ bool QueueManager::is_syncserv_queue_empty() {
     return sync_service_queue->is_empty();
 }
 
-bool QueueManager::is_user_queue_empty(std::string id) {
+bool QueueManager::is_user_queue_empty(const std::string& id) {
     return clients_queues[id]->is_empty();
 }
 
@@ -49,4 +56,8 @@ Queue *QueueManager::createNewQueue(engine_types type) {
 
 int QueueManager::get_client_messages_amount(const std::string &id) {
     return clients_queues[id]->get_size();
+}
+
+bool QueueManager::is_user_queue_exists(const std::string &id) {
+    return clients_queues.find(id) != clients_queues.end();
 }

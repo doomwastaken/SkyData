@@ -45,7 +45,7 @@ bool operator==(const User &usr1, const User &usr2) {
 }
 
 bool operator==(const Message &mes1, const Message &mes2) {
-    if (mes1.if_folder == mes2.if_folder)
+    if (mes1.is_folder == mes2.is_folder)
         if (mes1.status == mes2.status)
             if (mes1.file_extension == mes2.file_extension)
                 if (mes1.file_name == mes2.file_name)

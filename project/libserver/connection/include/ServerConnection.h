@@ -2,6 +2,7 @@
 #define ASYNC_CLIENT_QUEUE_SERVER_SERVER_CONNECTION_H
 
 
+#include <MessageStorage.h>
 #include "AbstractConnection.h"
 
 class AbstractServer;
@@ -12,7 +13,6 @@ public:
 
     boost::asio::ip::tcp::socket& socket();
 
-//    'write' 'close' 'handle_connect' 'do_write'
     void start();
 
     void handle_read(const boost::system::error_code& error) override;
@@ -22,6 +22,10 @@ public:
 =======
     void deliver(std::string msg);
 >>>>>>> development:project/connection/server_connection/server_connection.h
+
+    void find_file_and_send(MessageStorage msg);
+  
+    void change_file_on_server(MessageStorage msg);
 
     void handle_write(const boost::system::error_code& error) override;
 
