@@ -3,7 +3,7 @@
 #include "ClientToStorageConnection.h"
 
 
-void MessageUpdater::to_client_send(ClientsConnection &cl_con) {//, ClientToStorageConnection &storage_conn) {
+void MessageUpdater::to_client_send(ClientsConnection &cl_con, ClientToStorageConnection &storage_conn) {
     mtx.lock();
     if (!processed_messages.empty()) {
         while (!processed_messages.empty()) {
@@ -15,13 +15,17 @@ void MessageUpdater::to_client_send(ClientsConnection &cl_con) {//, ClientToStor
             else {
                 sender.send(processed_messages.front().first, cl_con, ClientSender::BOTH);
                 // ZAGLUSHKA
-//                storage_devise_t device2{processed_messages.front().first->user.devise.device_name, processed_messages.front().first->user.devise.sync_folder};
-//                storage_user_t user2{processed_messages.front().first->user.user_name, "email@ml.com", device2, 10};
+//                devise_t device2{processed_messages.front().first->user.devise.device_name, processed_messages.front().first->user.devise.sync_folder};
+//                user_t user2{processed_messages.front().first->user.user_name, "email@ml.com", device2, 10};
 //
-//                MessageStorage msg2{10, storage_status_t::PUSH_FILE, false,
+//                Message msg2{10, status_t::PUSH_FILE,
 //                                    2, processed_messages.front().first->file_name, processed_messages.front().first->file_extension,
-//                                    100, "/home/denis/Desktop/" + processed_messages.front().first->user.user_name, user2};
-//                storage_conn.write(msg2);
+//                                    100, "/home/denis/Desktop/", user2};
+
+                Message msg3 = *processed_messages.front().first;
+                msg3.status = status_t::PUSH_FILE;
+
+                storage_conn.write(msg3);
                 // TODO: Load on server!!
             }
 

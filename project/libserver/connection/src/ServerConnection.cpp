@@ -1,7 +1,7 @@
 #include <fstream>
 #include "ServerConnection.h"
 #include "AbstractServer.h"
-#include "MessageStorage.h"
+#include "Message.h"
 
 // FIXME: remove this
 void print_mes_serv(Message &message) {
@@ -130,17 +130,16 @@ void ServerConnection::handle_write(const boost::system::error_code& error) {
     }
 }
 
-void ServerConnection::find_file_and_send(MessageStorage msg) {;
+void ServerConnection::find_file_and_send(Message msg) {;
     std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
 //    while (file.good()) {
 //        std::cout << file.get() << " ";
 //    }
 //    std::cout << std::endl;
-    MessageStorage msg_to_send;
+    Message msg_to_send;
 
     msg_to_send.version = msg.version;
     msg_to_send.status = msg.status;
-    msg_to_send.if_folder = msg.if_folder;
     msg_to_send.times_modified = msg.times_modified;
     msg_to_send.file_name = msg.file_name;  // "file"
     msg_to_send.file_extension = msg.file_extension;  // ".png"
@@ -190,7 +189,7 @@ void ServerConnection::find_file_and_send(MessageStorage msg) {;
 
 }
 
-void ServerConnection::change_file_on_server(MessageStorage msg) {
+void ServerConnection::change_file_on_server(Message msg) {
 //    std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
 ////
 //

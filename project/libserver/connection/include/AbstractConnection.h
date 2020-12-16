@@ -54,7 +54,7 @@ protected:
 
 protected:
     boost::asio::ip::tcp::socket m_socket;
-    char m_read_msg[1024];
+    char m_read_msg[32768];
     std::deque<std::string> m_write_msgs;
     last_unsuccess_operation operation;
     bool isConnected;

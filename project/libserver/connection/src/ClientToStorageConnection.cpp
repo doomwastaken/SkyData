@@ -15,7 +15,7 @@ ClientToStorageConnection::ClientToStorageConnection(boost::asio::io_context& io
                                        boost::asio::placeholders::error));
 }
 
-void ClientToStorageConnection::write(const MessageStorage& msg) {
+void ClientToStorageConnection::write(const Message& msg) {
     boost::asio::post(m_io_context,
                       boost::bind(&ClientToStorageConnection::do_write, this, msg, false));
 }
@@ -44,7 +44,7 @@ void ClientToStorageConnection::handle_connect(const boost::system::error_code& 
             // This case will happen only if if will get in error while async_write!
         else if (operation == AbstractConnection::last_unsuccess_operation::WRITE) {
             // Just trying to write the same message before the failure in async_write
-            do_write(MessageStorage {}, true);
+            do_write(Message {}, true);
         }
     } else {
         std::cerr << "ERROR: ClientToStorageConnection::handle_connect" << std::endl;
@@ -70,7 +70,7 @@ void ClientToStorageConnection::handle_read(const boost::system::error_code& err
         std::cout << std::endl;
         std::stringstream str(raw_string);
         boost::archive::text_iarchive iarch(str);
-        MessageStorage msg;
+        Message msg;
         iarch >> msg;
 
         std::fstream file(msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
@@ -94,12 +94,13 @@ void ClientToStorageConnection::handle_read(const boost::system::error_code& err
     else { do_close(); }
 }
 
-void ClientToStorageConnection::do_write(MessageStorage msg, bool continue_writing) {
+void ClientToStorageConnection::do_write(Message msg, bool continue_writing) {
     bool write_in_progress = !m_write_msgs.empty();
     // Serialize our Message struct to string
     if (!continue_writing) {
+        msg.RAW_BYTES.clear();
         if (msg.status == PUSH_FILE) {
-            std::fstream file(msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
+            std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
             char c = file.get();
             while(file.good()) {
                 msg.RAW_BYTES.push_back(c);
@@ -109,6 +110,7 @@ void ClientToStorageConnection::do_write(MessageStorage msg, bool continue_writi
         std::stringstream str;
         boost::archive::text_oarchive oarch(str);
         oarch << msg;
+        std::cout << msg;
         // The "\b" is a SEPARATOR FOR MESSAGES!
         m_write_msgs.push_back(str.str() + '\b');
     }

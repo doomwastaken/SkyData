@@ -12,10 +12,10 @@ class MessageListener {
 
 
 public:
-    MessageListener(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoint);//,
-                    //boost::asio::io_context& io_context_storage, const tcp::resolver::results_type& endpoint_storage);
+    MessageListener(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoint,
+                    const tcp::resolver::results_type& endpoint_storage);
     ClientsConnection cl_con;
-    //ClientToStorageConnection storage_connection;
+    ClientToStorageConnection storage_connection;
 
 };
 

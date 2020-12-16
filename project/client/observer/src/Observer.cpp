@@ -30,8 +30,10 @@ void Observer::update_client(const std::string &host, const std::string &port,
                              const std::string& host_storage, const std::string& port_storage) {
     boost::asio::io_context io_context;
     tcp::resolver resolver(io_context);
+    tcp::resolver resolver_storage(io_context);
     tcp::resolver::results_type endpoints = resolver.resolve(host, port);
-    MessageListener listener(io_context, endpoints);
+    tcp::resolver::results_type endpoints_storage = resolver_storage.resolve(host_storage, port_storage);
+    MessageListener listener(io_context, endpoints, endpoints_storage);
     boost::thread t(boost::bind(&boost::asio::io_context::run, &io_context));
 
     devise_t device_1{user.devise.device_name, "/home/denis/Desktop/Folder"};
@@ -51,7 +53,7 @@ void Observer::update_client(const std::string &host, const std::string &port,
         // }
         //std::thread t2(&MessageUpdater::to_client_send, &updater);
         //t2.join();
-        message_updater.to_client_send(listener.cl_con);
+        message_updater.to_client_send(listener.cl_con, listener.storage_connection);
         sleep(4);
         // ToDo поставить таймер
         // break; // не забыть убрать

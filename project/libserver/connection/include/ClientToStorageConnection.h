@@ -6,13 +6,13 @@
 #define ASYNC_CLIENT_QUEUE_SERVER_CLIENTTOSTORAGECONNECTION_H
 
 #include "AbstractConnection.h"
-#include "MessageStorage.h"
+#include "Message.h"
 
 class ClientToStorageConnection : public AbstractConnection{
 public:
     ClientToStorageConnection(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoint);
 
-    void write(const MessageStorage& msg);
+    void write(const Message& msg);
 
     void close();
 
@@ -22,7 +22,7 @@ private:
 
     void handle_read(const boost::system::error_code& error) override;
 
-    void do_write(MessageStorage msg, bool continue_writing = false);
+    void do_write(Message msg, bool continue_writing = false);
 
     void handle_write(const boost::system::error_code& error) override;
 
