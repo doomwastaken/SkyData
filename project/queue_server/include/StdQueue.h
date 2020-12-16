@@ -7,10 +7,10 @@
 
 class StdQueue : public Queue {
 private:
-    std::queue<Message> messages;
+    std::queue<std::string> messages;
 public:
-    void push_to_queue(Message message) override;
-    Message pop_from_queue() override;
+    void push_to_queue(std::string message) override;
+    std::string pop_from_queue() override;
 };
 
 

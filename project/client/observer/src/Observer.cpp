@@ -1,7 +1,6 @@
 #include "Observer.h"
 
 
-
 //void Observer::watch_message_from_server(const std::string& host, const size_t& port) {
 //    boost::asio::io_service io;
 //    boost::asio::io_context io_context;
@@ -30,7 +29,6 @@ int Observer::watch_local() {
 //    }
     return 0;
 }
-
 
 void Observer::update_client(const std::string &host, const std::string &port) {
     boost::asio::io_context io_context;

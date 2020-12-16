@@ -12,6 +12,7 @@
 class Observer {
     //MessageListener mes_list;
     //Downloader<T> downloader;
+
     MessageUpdater message_updater;
     User user;
 

@@ -32,7 +32,7 @@ void ClientsConnection::handle_connect(const boost::system::error_code &error) {
             boost::asio::async_read(m_socket,
                                     boost::asio::buffer(m_read_msg),
                                     [&](const boost::system::error_code &err, size_t bytes) {
-                                        return std::find(m_read_msg, m_read_msg + bytes, '\n') < m_read_msg + bytes;
+                                        return std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes;
                                     },
                                     boost::bind(&ClientsConnection::handle_read,
                                                 this,
@@ -60,7 +60,7 @@ void ClientsConnection::handle_connect(const boost::system::error_code &error) {
 void ClientsConnection::handle_read(const boost::system::error_code &error) {
     if (!error) {
         int i = 0;
-        for (; m_read_msg[i] != '\n'; ++i);
+        for (; m_read_msg[i] != '\b'; ++i);
 
         //  здесь десериализую, потом пушу в очередь
         std::shared_ptr<Message> mes = deserialize(std::string(m_read_msg, i));
@@ -68,7 +68,7 @@ void ClientsConnection::handle_read(const boost::system::error_code &error) {
         boost::asio::async_read(m_socket,
                                 boost::asio::buffer(m_read_msg),
                                 [&](const boost::system::error_code &err, size_t bytes) {
-                                    return std::find(m_read_msg, m_read_msg + bytes, '\n') < m_read_msg + bytes;
+                                    return std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes;
                                 },
                                 boost::bind(
                                         &ClientsConnection::handle_read,
@@ -84,8 +84,8 @@ void ClientsConnection::do_write(const Message &msg, bool continue_writing) {
         std::stringstream str;
         boost::archive::text_oarchive oarch(str);
         oarch << msg;
-        // The "\n" is a SEPARATOR FOR MESSAGES!
-        m_write_msgs.push_back(str.str() + "\n");
+        // The "\b" is a SEPARATOR FOR MESSAGES!
+        m_write_msgs.push_back(str.str() + "\b");
     }
     if (!write_in_progress) {
         boost::asio::async_write(m_socket,

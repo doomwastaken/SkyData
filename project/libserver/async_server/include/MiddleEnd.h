@@ -19,10 +19,20 @@ public:
 
     virtual void deliver_for_all(char* msg) override;
 
+<<<<<<< HEAD:project/libserver/async_server/include/MiddleEnd.h
+=======
+    void send_message_if_connected(const std::string& messageID);
+
+>>>>>>> development:project/server/middle_end/middle_end.h
     virtual void on_readed_message(char* msg) override;
 
     void write_to_backend(char* msg);
 
+<<<<<<< HEAD:project/libserver/async_server/include/MiddleEnd.h
+=======
+    void remove_connection(std::string id);
+
+>>>>>>> development:project/server/middle_end/middle_end.h
     virtual ~MiddleEnd() = default;
 
 private:

@@ -2,7 +2,10 @@
 #define ASYNC_CLIENT_QUEUE_SERVER_CLIENTS_CONNECTION_H
 
 #include "AbstractConnection.h"
+<<<<<<< HEAD:project/libserver/connection/include/ClientsConnection.h
 
+=======
+>>>>>>> development:project/connection/clients_connection/clients_connection.h
 
 class ClientsConnection : public AbstractConnection {
 public:

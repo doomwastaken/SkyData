@@ -38,3 +38,25 @@ void MiddleEnd::on_readed_message(char* msg) {
     write_to_backend(msg);
 }
 
+<<<<<<< HEAD
+=======
+void MiddleEnd::send_message_if_connected(const std::string &messageID) {
+    for(auto& connection: m_connections) {
+        std::cout << "Messages amount for " << connection->id << ": " << QueueManager::queue_manager().get_client_messages_amount(connection->id) << std::endl << std::endl;
+        if (connection->id == messageID) {
+            std::string msg = QueueManager::queue_manager().pop_from_client_queue(messageID);
+//            std::stringstream str;
+//            boost::archive::text_oarchive oarch(str);
+//            oarch << msg;
+//            std::string stringmessage(str.str());
+//            stringmessage += "\n";
+//            char* ptr = new char[1024];
+            // MEMORY LEAK!
+//            strcpy(ptr, stringmessage.c_str());
+            boost::bind(&ServerConnection::deliver, _1, msg)(connection);
+            break;
+        }
+    }
+}
+
+>>>>>>> development

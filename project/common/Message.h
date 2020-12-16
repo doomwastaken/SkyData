@@ -11,7 +11,6 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 
-
 struct devise_t {
     std::string device_name;
     std::string sync_folder;
@@ -54,7 +53,6 @@ enum status_t {
 struct Message {
     size_t version;
     status_t status;
-//    bool is_folder;
     size_t times_modified;
     std::string file_name;  // "file"
     std::string file_extension;  // ".png"
@@ -78,7 +76,6 @@ private:
     {
         ar & version;
         ar & status;
-    //    ar & is_folder;
         ar & times_modified;
         ar & file_name;
         ar & file_extension;
@@ -90,7 +87,5 @@ private:
 
 std::string serialize(Message &message);
 std::shared_ptr<Message> deserialize(const std::string &buf);
-
-
 
 #endif //ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
