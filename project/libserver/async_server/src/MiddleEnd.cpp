@@ -39,12 +39,16 @@ void MiddleEnd::on_readed_message(char* msg) {
 
 void MiddleEnd::send_message_if_connected(const std::string &connectionID) {
     // TODO: Implement more efficient method (std::map?)
-    for(auto& connection: m_connections) {
-        std::cout << "Messages amount for " << connection->id << ": " << QueueManager::queue_manager().get_client_messages_amount(connection->id) << std::endl << std::endl;
-        if (connection->id == connectionID) {
-            std::string msg = QueueManager::queue_manager().pop_from_client_queue(connectionID);
-            boost::bind(&ServerConnection::deliver, _1, msg)(connection);
-            break;
+    try {
+        for(auto& connection: m_connections) {
+            std::cout << "Messages amount for " << connection->id << ": " << QueueManager::queue_manager().get_client_messages_amount(connection->id) << std::endl << std::endl;
+            if (connection->id == connectionID) {
+                std::string msg = QueueManager::queue_manager().pop_from_client_queue(connectionID);
+                boost::bind(&ServerConnection::deliver, _1, msg)(connection);
+                break;
+            }
         }
+    } catch (std::exception &err) {
+        std::cout << err.what();
     }
 }

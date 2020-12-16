@@ -1,5 +1,21 @@
 #include "ClientsConnection.h"
 
+// FIXME: remove this
+void print_mes(Message &message) {
+    std::cout << "user name: " << message.user.user_name << std::endl;
+    std::cout << "user email: " << message.user.email << std::endl;
+    std::cout << "version: " << message.version << std::endl;
+    std::cout << "times modified: " << message.times_modified << std::endl;
+    std::cout << "file name: " << message.file_name << std::endl;
+    std::cout << "file extention: " << message.file_extension<< std::endl;
+    std::cout << "file size: " << message.file_size << std::endl;
+    std::cout << "file path: " << message.file_path << std::endl;
+    std::cout << "devise name: " << message.user.devise.device_name << std::endl;
+    std::cout << "sync folder: " << message.user.devise.sync_folder << std::endl;
+    std::cout << "quota limit: " << message.user.quota_limit << std::endl;
+    std::cout << "status: " << message.status << std::endl;
+}
+
 ClientsConnection::ClientsConnection(
         boost::asio::io_context& io_context,
         const tcp::resolver::results_type& endpoint):
@@ -53,12 +69,15 @@ void ClientsConnection::handle_connect(const boost::system::error_code &error) {
 // TODO: Implement logic of downloading from storage server!
 void ClientsConnection::handle_read(const boost::system::error_code &error) {
     if (!error) {
-        // Just a simple output
-        for (char i : m_read_msg) {
-            if (i == '\b') { break ;}
-            std::cout << i;
-        }
-        std::cout << std::endl;
+        std::string str_mes = m_read_msg;
+        std::stringstream str(str_mes);
+        boost::archive::text_iarchive iarch(str);
+        Message msg;
+        iarch >> msg;
+
+        std::cout << "Client: " << std::endl;
+
+        print_mes(msg);
 
         // async reading again
         boost::asio::async_read(m_socket,

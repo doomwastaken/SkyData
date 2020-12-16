@@ -12,8 +12,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ")
 find_package(GTest  REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
-add_subdirectory(tests/client/indexer)
-add_subdirectory(tests/client/observer)
+#add_subdirectory(tests/client/indexer)
+#add_subdirectory(tests/client/observer)
 enable_testing()
 
 add_subdirectory(project)

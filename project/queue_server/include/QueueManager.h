@@ -37,6 +37,7 @@ public:
     void set_sync_queue_type(engine_types type);
     void set_client_queue_type(engine_types type);
     void push_to_syncserv_queue(std::string msg);
+    void create_queue_if_not_exists(const std::string& id);
     int get_client_messages_amount(const std::string& id);
     void push_to_client_queue(const std::string& msg, const std::string& id);
     std::string pop_from_syncserv_queue();

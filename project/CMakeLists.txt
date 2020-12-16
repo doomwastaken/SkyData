@@ -18,8 +18,8 @@ add_subdirectory(Example/Backend)
 add_subdirectory(synchronization_service)
 add_subdirectory(libserver)
 
-add_subdirectory(Example/Client_To_Storage)
-add_subdirectory(Example/Storage)
+#add_subdirectory(Example/Client_To_Storage)
+#add_subdirectory(Example/Storage)
 
 #add_subdirectory(queue_server)
 

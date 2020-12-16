@@ -15,17 +15,23 @@ public:
 
     std::vector<Message> update(Message &message) override;
 
-    void insert(Message &message);
+    void insert_devise(Message &message);
 
-    pqxx::result select(std::string_view sql_select);
+    void insert_file(Message &message);
 
-    bool commit_sql_query(std::string_view sql_query);
+    pqxx::result select(const std::string& sql_select);
+
+    bool commit_sql_query(const std::string& sql_query);
 
     bool open(std::string& config);
 
-    bool create_users_table();
+    bool create_users_devises_table();
+
+    bool create_users_files_table();
 
     void close();
+
+    void erase(Message &message);
 
 private:
     std::shared_ptr<pqxx::connection> m_connect;
