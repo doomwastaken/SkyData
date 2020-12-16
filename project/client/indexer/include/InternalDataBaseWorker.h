@@ -8,7 +8,7 @@
 
 class InternalDataBaseWorker {
 public:
-    InternalDataBaseWorker() = default;
+    InternalDataBaseWorker();
     int send_meta_data(std::shared_ptr<Message> &message);
 
 private:

@@ -78,9 +78,6 @@ int LocalListener::event_listen(const std::string& path_str_, const std::string&
     while (true) {
         sleep(10000);
     }
-
-
-    return EXIT_SUCCESS;
 }
 
 long LocalListener::get_file_size(std::string filename) {

@@ -36,12 +36,14 @@ void Observer::update_client(const std::string &host, const std::string &port,
     MessageListener listener(io_context, endpoints, endpoints_storage);
     boost::thread t(boost::bind(&boost::asio::io_context::run, &io_context));
 
-    devise_t device_1{user.devise.device_name, "/home/denis/Desktop/Folder"};
-    user_t user_1{user.user_name, "email@ml.com", device_1, 10};
 
-    Message msg{10, status_t::LOGIN,
-                2, "main", "c",
-                100, "/home/denis/Desktop/Folder", user};
+    devise_t device_1{user.devise.device_name, ""};
+    user_t user_1{user.user_name, "", device_1, 10};
+
+    // Hello message
+    Message msg{1, status_t::LOGIN,
+                1, "", "",
+                1, "", user};
 
     listener.cl_con.write(msg);
 
