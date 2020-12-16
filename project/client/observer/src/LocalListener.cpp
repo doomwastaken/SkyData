@@ -89,6 +89,9 @@ long LocalListener::get_file_size(std::string filename) {
 
 void NotificationReceiver::OnFilePathChanged(const gogo::FilePath &path, bool error,
                                              gogo::FilePathWatcher::Event event) {
+    if (path.string().find("/.goutputstream") != std::string::npos) {
+        return;
+    }
     if (error || event == gogo::FilePathWatcher::Event::NO_EVENT) {
         return;
         // TODO: логирвание

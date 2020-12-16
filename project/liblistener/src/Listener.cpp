@@ -251,7 +251,7 @@ namespace gogo {
                 if (target_changed ||
                     (change_on_target_path && deleted) ||
                     (change_on_target_path && created && boost::filesystem::exists(target_, ec))) {
-                    FilePathWatcher::Event event = FilePathWatcher::Event::MODIFIED;
+                    FilePathWatcher::Event event = FilePathWatcher::Event::NO_EVENT;
                     if (is_dir)
                         event = FilePathWatcher::Event::NO_EVENT;
                     else if (deleted)
@@ -441,7 +441,7 @@ void InotifyReader::OnInotifyEvent(const inotify_event *event) {
         watcher->OnFilePathChanged(
                 event->wd, child, event->mask & (IN_CREATE | IN_MOVED_TO),
                 event->mask & (IN_DELETE | IN_MOVED_FROM),
-                event->mask & (IN_ISDIR | IN_CREATE));
+                event->mask & (IN_ISDIR));
     }
 }
 

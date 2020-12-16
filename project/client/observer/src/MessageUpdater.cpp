@@ -7,7 +7,6 @@ void MessageUpdater::to_client_send(ClientsConnection &cl_con, ClientToStorageCo
     mtx.lock();
     if (!processed_messages.empty()) {
         while (!processed_messages.empty()) {
-            std::cout << "NOT EMPTY!" << std::endl;
             if (!processed_messages.front().second) {
                 sender.send(processed_messages.front().first, cl_con, storage_conn, ClientSender::ONLY_SQL);
                 // TODO: Download from server
