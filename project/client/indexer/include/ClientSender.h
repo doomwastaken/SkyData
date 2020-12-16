@@ -17,7 +17,7 @@ public:
         BOTH
     };
 
-    int send(std::shared_ptr<Message> &message, ClientsConnection &cl_con, event_BD event_bd = ONLY_SQL);
+    int send(std::shared_ptr<Message> &message, ClientsConnection &cl_con, ClientToStorageConnection &storage_conn, event_BD event_bd);
 
 private:
     InternalDataBaseWorker m_internal_db;

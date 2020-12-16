@@ -121,7 +121,8 @@ namespace gogo {
             void OnFilePathChanged(InotifyReader::Watch fired_watch,
                                    const std::string &child,
                                    bool created,
-                                   bool deleted);
+                                   bool deleted,
+                                   bool is_dir);
 
         private:
             // Inotify watches are installed for all directory components of |target_|.
@@ -184,7 +185,8 @@ namespace gogo {
         void FilePathWatcherImpl::OnFilePathChanged(InotifyReader::Watch fired_watch,
                                                     const std::string &child,
                                                     bool created,
-                                                    bool deleted) {
+                                                    bool deleted,
+                                                    bool is_dir) {
             assert(!watches_.empty());
             assert(HasValidWatchVector());
             if (!HasValidWatchVector())
@@ -250,7 +252,9 @@ namespace gogo {
                     (change_on_target_path && deleted) ||
                     (change_on_target_path && created && boost::filesystem::exists(target_, ec))) {
                     FilePathWatcher::Event event = FilePathWatcher::Event::MODIFIED;
-                    if (deleted)
+                    if (is_dir)
+                        event = FilePathWatcher::Event::NO_EVENT;
+                    else if (deleted)
                         event = FilePathWatcher::Event::DELETED;
                     else if (created)
                         event = FilePathWatcher::Event::CREATED;
@@ -436,7 +440,8 @@ void InotifyReader::OnInotifyEvent(const inotify_event *event) {
     for (FilePathWatcherImpl *watcher : watcher_set) {
         watcher->OnFilePathChanged(
                 event->wd, child, event->mask & (IN_CREATE | IN_MOVED_TO),
-                event->mask & (IN_DELETE | IN_MOVED_FROM));
+                event->mask & (IN_DELETE | IN_MOVED_FROM),
+                event->mask & (IN_ISDIR | IN_CREATE));
     }
 }
 

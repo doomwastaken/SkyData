@@ -9,24 +9,11 @@ void MessageUpdater::to_client_send(ClientsConnection &cl_con, ClientToStorageCo
         while (!processed_messages.empty()) {
             std::cout << "NOT EMPTY!" << std::endl;
             if (!processed_messages.front().second) {
-                sender.send(processed_messages.front().first, cl_con, ClientSender::ONLY_SQL);
+                sender.send(processed_messages.front().first, cl_con, storage_conn, ClientSender::ONLY_SQL);
                 // TODO: Download from server
             }
             else {
-                sender.send(processed_messages.front().first, cl_con, ClientSender::BOTH);
-                // ZAGLUSHKA
-//                devise_t device2{processed_messages.front().first->user.devise.device_name, processed_messages.front().first->user.devise.sync_folder};
-//                user_t user2{processed_messages.front().first->user.user_name, "email@ml.com", device2, 10};
-//
-//                Message msg2{10, status_t::PUSH_FILE,
-//                                    2, processed_messages.front().first->file_name, processed_messages.front().first->file_extension,
-//                                    100, "/home/denis/Desktop/", user2};
-
-                Message msg3 = *processed_messages.front().first;
-                msg3.status = status_t::PUSH_FILE;
-
-                storage_conn.write(msg3);
-                // TODO: Load on server!!
+                sender.send(processed_messages.front().first, cl_con, storage_conn,  ClientSender::BOTH);
             }
 
             processed_messages.pop();

@@ -89,11 +89,12 @@ long LocalListener::get_file_size(std::string filename) {
 
 void NotificationReceiver::OnFilePathChanged(const gogo::FilePath &path, bool error,
                                              gogo::FilePathWatcher::Event event) {
-    path.string();
+    if (error || event == gogo::FilePathWatcher::Event::NO_EVENT) {
+        return;
+        // TODO: логирвание
+    }
     std::shared_ptr<Message> mes = LocalListener::create_message(path.string(), event);
     if (mes != nullptr) {
         MessageUpdater::push(mes, true);
     }
-    std::cout << path << " PATH\n";
-
 }
