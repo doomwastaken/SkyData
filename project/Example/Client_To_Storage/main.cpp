@@ -1,5 +1,6 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
+#include <fstream>
 
 #include "ClientToStorageConnection.h"
 #include "MessageStorage.h"
@@ -9,7 +10,7 @@ int main() {
     storage_user_t user1{"Denis", "email@ml.com", device1, 10};
 
     MessageStorage msg1{10, storage_status_t::DOWNLOAD_FILE, false,
-                 2, "lores", ".txt",
+                 2, "diamond", ".png",
                  100, "/home/denis/Desktop/Folder", user1};
 
 
@@ -19,6 +20,15 @@ int main() {
     MessageStorage msg2{10, storage_status_t::PUSH_FILE, false,
                  2, "main", ".c",
                  100, "/home/denis/Desktop/Folder", user2};
+
+//    std::fstream file_out(msg2.user.devise.sync_folder + "/" + msg2.file_name + msg2.file_extension, std::ios::out | std::ios::binary);
+//    msg2.RAW_BYTES.push_back('q');
+//    msg2.RAW_BYTES.push_back('w');
+//    msg2.RAW_BYTES.push_back('e');
+//    file_out.write((char*)&msg2.RAW_BYTES[0], msg2.RAW_BYTES.size());
+//    file_out << "QWEASD";
+//    file_out.close();
+//    return 0;
 
 //    boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 8001);
 

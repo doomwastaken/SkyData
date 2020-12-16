@@ -75,8 +75,9 @@ void ClientToStorageConnection::handle_read(const boost::system::error_code& err
 
         std::fstream file(msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
         std::cout << "Size: " << msg.RAW_BYTES.size() << std::endl;
-        std::cout << msg.RAW_BYTES << std::endl;
-        file << msg.RAW_BYTES;
+//        std::cout << msg.RAW_BYTES << std::endl;
+//        file << msg.RAW_BYTES;
+        file.write((char*)&msg.RAW_BYTES[0], msg.RAW_BYTES.size());
         file.close();
 
 
@@ -101,7 +102,7 @@ void ClientToStorageConnection::do_write(MessageStorage msg, bool continue_writi
             std::fstream file(msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
             char c = file.get();
             while(file.good()) {
-                msg.RAW_BYTES += c;
+                msg.RAW_BYTES.push_back(c);
                 c = file.get();
             }
         }

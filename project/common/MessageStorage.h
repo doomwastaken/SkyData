@@ -6,7 +6,9 @@
 #define ASYNC_CLIENT_QUEUE_SERVER_MESSAGESTORAGE_H
 
 #include <iostream>
+#include <vector>
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/vector.hpp>
 
 struct storage_devise_t {
     std::string device_name;
@@ -55,7 +57,7 @@ struct MessageStorage {
     size_t file_size;
     std::string file_path;  // "./dir/dir1/"
     storage_user_t user;
-    std::string RAW_BYTES;  // RAW_BYTES of data
+    std::vector<char> RAW_BYTES;  // RAW_BYTES of data
 
 private:
     friend class boost::serialization::access;
