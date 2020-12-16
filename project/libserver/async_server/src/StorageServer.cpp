@@ -38,8 +38,8 @@ void StorageServer::on_readed_message(char* msg_str) {
         }
     }
     else if (msg.status == storage_status_t::PUSH_FILE) {
-        std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in | std::ios::out);
-        file << msg.RAW_BYTES;
+        std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+        file.write((char*)&msg.RAW_BYTES[0], msg.RAW_BYTES.size());
         file.close();
     }
 }
