@@ -44,6 +44,7 @@ void ServerConnection::start() {
 
 void ServerConnection::handle_read(const boost::system::error_code& error) {
     if (!error) {
+        std::cout << "HANDLE_READ" << std::endl;
         int i = 0;
         for (; m_read_msg[i] != '\b'; i++) {
             std::cout << m_read_msg[i]; }

@@ -26,7 +26,9 @@ class LocalListener : public EventListen{
 
 
 public:
-    int event_listen(const std::string& path_str) override;
+
+    int event_listen(const std::string& path_str, const std::string& user_name,
+                     const std::string&, const std::string&, int, const std::string&) override;
 };
 
 

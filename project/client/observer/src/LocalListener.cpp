@@ -1,6 +1,12 @@
 #include <sys/stat.h>
 #include "LocalListener.h"
 
+std::string path_str;
+std::string user_name;
+std::string email;
+std::string sync_folder;
+int quota_limit;
+std::string device_name;
 
 std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::FilePathWatcher::Event event) {
     std::shared_ptr<Message> message = std::make_shared<Message>();
@@ -34,16 +40,28 @@ std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::F
         message->status = MODIFIED;
     }
 
+    message->file_path = path_str;
+    message->user.user_name = user_name;
+    message->user.email = email;
+    message->user.devise.sync_folder = sync_folder;
+    message->user.quota_limit = quota_limit;
+    message->user.devise.device_name = device_name;
+
     if (event == gogo::FilePathWatcher::Event::NO_EVENT) {
         return nullptr;
     }
 
     return message;
-
-
 }
 
-int LocalListener::event_listen(const std::string& path_str) {
+int LocalListener::event_listen(const std::string& path_str_, const std::string& user_name_,
+                                const std::string& email_, const std::string& sync_folder_, int quota_limit_, const std::string& device_name_) {
+    path_str = path_str_;
+    user_name = user_name_;
+    email = email_;
+    sync_folder = sync_folder_;
+    quota_limit = quota_limit_;
+    device_name = device_name_;
 
     boost::filesystem::path path = path_str;
    // std::cout << "-------------------------------------------------------------------------------------------\n";

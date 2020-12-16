@@ -64,6 +64,7 @@ void ClientsConnection::handle_read(const boost::system::error_code &error) {
 
         //  здесь десериализую, потом пушу в очередь
         std::shared_ptr<Message> mes = deserialize(std::string(m_read_msg, i));
+        std::cout << *mes << std::endl;
         MessageUpdater::push(mes);
         boost::asio::async_read(m_socket,
                                 boost::asio::buffer(m_read_msg),

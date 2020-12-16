@@ -6,6 +6,7 @@
 #include "MessageListener.h"
 #include "MessageUpdater.h"
 #include "LocalListener.h"
+#include "ClientToStorageConnection.h"
 
 
 
@@ -21,7 +22,8 @@ class Observer {
     int watch_local();
 
 public:
-    void update_client(const std::string& host, const std::string& port);
+    void update_client(const std::string& host, const std::string& port,
+                       const std::string& host_storage, const std::string& port_storage);
     Observer(std::string user_name, std::string email, std::string sync_folder);
 
 };

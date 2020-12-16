@@ -24,20 +24,24 @@ int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_
         // TODO: Добавить логирование
         return 1;
     }
+    std::cout << "send_meta_data" << std::endl;
 
     if (event_bd == ONLY_SQL) {
         return EXIT_SUCCESS;
     }
+    std::cout << "send_meta_data" << std::endl;
 
     if (m_cloud_storage.send_to_cloud(message)) {
         // TODO: Добавить логирование
         return 1;
     }
+    std::cout << "send_to_cloud" << std::endl;
 
 //    c.write(*message);
 //    c.close();
 //    t.join();
     cl_con.write(*message);
+    std::cout << "write" << std::endl;
 
     // TODO: Добавить логирование
 

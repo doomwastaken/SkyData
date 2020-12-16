@@ -9,7 +9,8 @@ protected:
 
 
 public:
-    virtual int event_listen(const std::string& path_str) = 0;
+    virtual int event_listen(const std::string& path_str, const std::string& user_name,
+                             const std::string&, const std::string&, int, const std::string&) = 0;
     Message get_message();
 };
 

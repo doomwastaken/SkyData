@@ -6,13 +6,6 @@
 
 int main() {
 
-    devise_t device{"HomePC", "/home/denis/Desktop/Folder"};
-    user_t user{"Denis", "email@ml.com", device, 10};
-
-    Message msg{10, status_t::MODIFIED, false,
-                2, "main", "c",
-                100, "/home/denis/Desktop/Folder", user};
-
   //  boost::asio::ip::tcp::endpoint ep( boost::asio::ip::address::from_string("127.0.0.1"), 8001);
 
     devise_t device1{"HomePC", "/home/denis/Desktop/Folder"};
@@ -25,7 +18,7 @@ int main() {
     message.user.email = "astlok@ya.ru";
     message.user.quota_limit = 228;
     message.version = 3;
-    message.status = NEW_USER;
+    message.status = LOGIN;
     message.times_modified = 322;
     message.file_name = "kek";
     message.file_extension = ".cpp";
@@ -39,7 +32,7 @@ int main() {
     message2.user.email = "astlok@ya.ru";
     message2.user.quota_limit = 228;
     message2.version = 3;
-    message2.status = NEW_DEVISE;
+    message2.status = LOGIN;
     message2.times_modified = 322;
     message2.file_name = "kek";
     message2.file_extension = ".cpp";

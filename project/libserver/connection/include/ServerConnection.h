@@ -17,11 +17,7 @@ public:
 
     void handle_read(const boost::system::error_code& error) override;
 
-<<<<<<< HEAD:project/libserver/connection/include/ServerConnection.h
-    void deliver(char* msg);
-=======
     void deliver(std::string msg);
->>>>>>> development:project/connection/server_connection/server_connection.h
 
     void find_file_and_send(MessageStorage msg);
   

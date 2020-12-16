@@ -157,14 +157,54 @@ std::vector<Message> PostgressDB::update(Message &message) {
     pqxx::result result;
     std::vector<std::string> vec_str;
     switch(message.status) {
-        case NEW_USER:
+        case LOGIN:
+            result = select("SELECT * from USERS_DEVISES "
+                            "WHERE name = " + quote + message.user.user_name + quote);
+            if (!result.empty()) {
+                result = select("SELECT * FROM users_files "
+                                "WHERE name = " + quote + message.user.user_name + quote);
+                for (const auto &row: result) {
+                    for (const auto &field: row) {
+                        vec_str.push_back(field.as<std::string>());
+                    }
+                }
+                for (int i = 0; i < vec_str.size(); i = i + 10) {
+                    Message new_message;
+                    new_message.user.user_name = vec_str[i];
+                    new_message.user.email = vec_str[i + 1];
+                    new_message.version = std::stoi(vec_str[i + 2]);
+                    new_message.times_modified = std::stoi(vec_str[i + 3]);
+                    new_message.file_name = vec_str[i + 4];
+                    new_message.file_extension = vec_str[i + 5];
+                    new_message.file_size = std::stoi(vec_str[i + 6]);
+                    new_message.file_path = vec_str[i + 7];
+                    new_message.user.devise.device_name = message.user.devise.device_name;
+                    // FIXME: remove this
+//                new_message.user.devise.device_name = "iPhone";
+
+                    new_message.user.devise.sync_folder = vec_str[i + 8];
+                    new_message.user.quota_limit = std::stoi(vec_str[i + 9]);
+                    new_message.status = LOGIN;
+                    messages.push_back(new_message);
+                    print_mes_db(new_message);
+                }
+            }
             insert_devise(message);
-            insert_file(message);
             return messages;
         case CREATE:
+            result = select("SELECT * FROM users_files "
+                            "WHERE file_name = " + quote + message.file_name + quote + " "
+                            "AND file_extension = " + quote + message.file_extension + quote + " "
+                            "AND name = " + quote + message.user.user_name + quote);
+
+            if (!result.empty()) {
+                std::cout << "EMPTY!" << std::endl;
+                return messages;
+            }
+
             result = select("SELECT device_name FROM users_devises "
-                                            "WHERE name = " + quote + message.user.user_name + quote + " "
-                                            "AND device_name != " +  quote + message.user.devise.device_name + quote);
+                            "WHERE name = " + quote + message.user.user_name + quote + " "
+                                                                                       "AND device_name != " +  quote + message.user.devise.device_name + quote);
             for (const auto &row: result) {
                 for (const auto &field: row) {
                     vec_str.push_back(field.as<std::string>());
@@ -212,36 +252,6 @@ std::vector<Message> PostgressDB::update(Message &message) {
                 messages.push_back(new_message);
                 print_mes_db(new_message);
             }
-            return messages;
-        case NEW_DEVISE:
-            result = select("SELECT * FROM users_files "
-                            "WHERE name = " + quote + message.user.user_name + quote);
-            for (const auto &row: result) {
-                for (const auto &field: row) {
-                    vec_str.push_back(field.as<std::string>());
-                }
-            }
-            for (int i = 0; i < vec_str.size(); i = i + 10) {
-                Message new_message;
-                new_message.user.user_name = vec_str[i];
-                new_message.user.email = vec_str[i + 1];
-                new_message.version = std::stoi(vec_str[i + 2]);
-                new_message.times_modified = std::stoi(vec_str[i + 3]);
-                new_message.file_name = vec_str[i + 4];
-                new_message.file_extension = vec_str[i + 5];
-                new_message.file_size = std::stoi(vec_str[i + 6]);
-                new_message.file_path = vec_str[i + 7];
-                new_message.user.devise.device_name = message.user.devise.device_name;
-                // FIXME: remove this
-//                new_message.user.devise.device_name = "iPhone";
-
-                new_message.user.devise.sync_folder = vec_str[i + 8];
-                new_message.user.quota_limit = std::stoi(vec_str[i + 9]);
-                new_message.status = NEW_DEVISE;
-                messages.push_back(new_message);
-                print_mes_db(new_message);
-            }
-            insert_devise(message);
             return messages;
     }
     return messages;

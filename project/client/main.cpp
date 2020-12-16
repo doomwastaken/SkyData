@@ -22,7 +22,7 @@ std::mutex MessageUpdater::mtx_stat;
 
 int main() {
     Observer observer("Mr_white", "yorn", "/home/denis/Desktop/client_test");
-    observer.update_client("127.0.0.1", "7777");
+    observer.update_client("127.0.0.1", "7777", "127.0.0.1", "7779");
     //std::this_thread::sleep_for(100);
 //}
 }

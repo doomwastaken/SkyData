@@ -12,7 +12,8 @@ set(SOURCE_FILES
         connection/src/ClientsConnection.cpp
         connection/src/ServerConnection.cpp
         connection/src/ClientToStorageConnection.cpp
-        connection/src/ToBackendConnection.cpp)
+        connection/src/ToBackendConnection.cpp
+        ../common/Message.cpp)
 
 set (QUEUE_SRC
         ../queue_server/src/StdQueue.cpp

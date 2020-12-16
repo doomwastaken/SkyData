@@ -32,6 +32,7 @@ public:
     void handle_accept(boost::shared_ptr<ServerConnection> session,
                        const boost::system::error_code& error) {
         if (!error) {
+            std::cout << "USER CONNECTED" << std::endl;
             int32_t accept_server_socket = session->socket().native_handle();
             int32_t timeout = 2;
             int32_t cnt = 2;

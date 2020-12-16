@@ -1,52 +1,64 @@
-#include "MiddleEnd.h"
+#ifndef ASYNC_CLIENT_QUEUE_SERVER_ABSTRACT_CONNECTION_H
+#define ASYNC_CLIENT_QUEUE_SERVER_ABSTRACT_CONNECTION_H
 
-#include <utility>
+#include <cstdlib>
+#include <deque>
+#include <iostream>
+#include <chrono>
+#include <boost/bind.hpp>
+#include <boost/asio.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
-MiddleEnd::MiddleEnd(boost::asio::io_context& io_context,
-                     const boost::asio::ip::tcp::endpoint& endpoint)
-: AbstractServer(io_context, endpoint) {
-    // NOTE: Start accept in main code!
-    // start_accept();
-}
+#include "Message.h"
 
-void MiddleEnd::set_client_for_backend(std::shared_ptr<ToBackendConnection> client) {
-    m_backend = std::move(client);
-}
+using boost::asio::ip::tcp;
+typedef std::deque<std::string> chat_message_queue;
 
-void MiddleEnd::start_accept() {
-    boost::shared_ptr<ServerConnection> new_connect(new ServerConnection(m_io_context,
-                                                                         std::shared_ptr<AbstractServer>(this)));
-    m_acceptor.async_accept(new_connect->socket(),
-                            boost::bind(
-                                        &MiddleEnd::handle_accept,
-                                        this,
-                                        new_connect,
-                                        boost::asio::placeholders::error));
-}
+class AbstractConnection
+{
+public:
+    AbstractConnection(boost::asio::io_context& io_context) : m_socket(io_context), operation(READ), id("") { ; }
 
-void MiddleEnd::deliver_for_all(char* msg) {
-    std::for_each(m_connections.begin(), m_connections.end(),
-                  boost::bind(&ServerConnection::deliver, _1, boost::ref(msg)));
-}
+//    virtual void write(const std::string& msg) = 0;
 
-void MiddleEnd::write_to_backend(char* msg) {
-    m_backend->write(msg);
-}
+//    virtual void close() = 0;
+
+    std::string id;
+
+    std::string last_success_message_sended;
+
+protected:
+
+    virtual void handle_read(const boost::system::error_code& error) = 0;
+
+    virtual void handle_write(const boost::system::error_code& error) = 0;
+
+    virtual void do_close() {
+        boost::system::error_code err;
+        m_socket.close(err);
+    };
+
+//    virtual void handle_connect(const boost::system::error_code& error) = 0;
+
+//    virtual void do_write(std::string msg) = 0;
 
 
-void MiddleEnd::on_readed_message(char* msg) {
-    write_to_backend(msg);
-}
+    // Identifier for message sending
 
-void MiddleEnd::send_message_if_connected(const std::string &connectionID) {
-    // TODO: Implement more efficient method (std::map?)
-    for(auto& connection: m_connections) {
-        std::cout << "Messages amount for " << connection->id << ": " << QueueManager::queue_manager().get_client_messages_amount(connection->id) << std::endl << std::endl;
-        if (connection->id == connectionID) {
-            std::string msg = QueueManager::queue_manager().pop_from_client_queue(connectionID);
-            boost::bind(&ServerConnection::deliver, _1, msg)(connection);
-            break;
-        }
-    }
-}
+    enum last_unsuccess_operation {
+        READ,
+        WRITE,
+    };
 
+protected:
+    boost::asio::ip::tcp::socket m_socket;
+    char m_read_msg[1024];
+    std::deque<std::string> m_write_msgs;
+    last_unsuccess_operation operation;
+    bool isConnected;
+};
+
+
+#endif //ASYNC_CLIENT_QUEUE_SERVER_ABSTRACT_CONNECTION_H

@@ -17,7 +17,7 @@ public:
 
     virtual void start_accept() override;
 
-    virtual void deliver_for_all(char* msg) override;
+    virtual void deliver_for_all(std::string msg) override;
 
     void send_message_if_connected(const std::string& messageID) override;
 

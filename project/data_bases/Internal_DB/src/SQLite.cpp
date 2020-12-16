@@ -30,6 +30,7 @@ SQLite::~SQLite() {
 
 int SQLite::create_table_messages() {
     // TODO: DELETE ME!
+
     std::string sql = "DROP TABLE IF EXISTS MESSAGES;";
     sqlite3_exec(m_data_base, sql.c_str(), callback, nullptr, nullptr);
 

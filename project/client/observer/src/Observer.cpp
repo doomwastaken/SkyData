@@ -21,16 +21,13 @@
 
 int Observer::watch_local() {
     LocalListener local_list;
-    local_list.event_listen(user.devise.sync_folder);
-    std::cout << "FUUUUUUUUUUUUUUUUUUUUUUUCK\n";
-//    while (true) {
-//
-//        sleep(10);
-//    }
+    local_list.event_listen(user.devise.sync_folder, user.user_name, user.email,
+    user.devise.sync_folder, user.quota_limit, user.devise.device_name);
     return 0;
 }
 
-void Observer::update_client(const std::string &host, const std::string &port) {
+void Observer::update_client(const std::string &host, const std::string &port,
+                             const std::string& host_storage, const std::string& port_storage) {
     boost::asio::io_context io_context;
     tcp::resolver resolver(io_context);
     tcp::resolver::results_type endpoints = resolver.resolve(host, port);
@@ -57,7 +54,7 @@ void Observer::update_client(const std::string &host, const std::string &port) {
         message_updater.to_client_send(listener.cl_con);
         sleep(4);
         // ToDo поставить таймер
-       // break; // не забыть убрать
+        // break; // не забыть убрать
 
     }
 
@@ -69,5 +66,5 @@ Observer::Observer(std::string user_name, std::string email, std::string sync_fo
     user.email = email;
     user.devise.sync_folder = sync_folder;
     user.quota_limit = 10;
-    user.devise.device_name = "BAOBAB";
+    user.devise.device_name = "NE YARIK";
 }
