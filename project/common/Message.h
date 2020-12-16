@@ -44,7 +44,6 @@ enum status_t {
     DELETE,     // файл удален
     MODIFIED,   // файл изменен
     NEW_DEVISE,
-    RETURN_MES
 };
 
 struct Message {

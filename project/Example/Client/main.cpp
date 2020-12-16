@@ -52,7 +52,7 @@ int main() {
     message3.file_path = "/usr/local/bin/";
 
     Message message4;
-    message4.user.devise.device_name = "mac";
+    message4.user.devise.device_name = "iPhone";
     message4.user.devise.sync_folder = "/dev/null/";
     message4.user.user_name = "Oleg";
     message4.user.email = "astlok@ya.ru";
@@ -64,6 +64,20 @@ int main() {
     message4.file_extension = ".cpp";
     message4.file_size = 1488;
     message4.file_path = "/usr/local/bin/";
+
+    Message message5;
+    message5.user.devise.device_name = "mac";
+    message5.user.devise.sync_folder = "/dev/null/";
+    message5.user.user_name = "Oleg";
+    message5.user.email = "astlok@ya.ru";
+    message5.user.quota_limit = 228;
+    message5.version = 3;
+    message5.status = MODIFIED;
+    message5.times_modified = 322;
+    message5.file_name = "lel";
+    message5.file_extension = ".html";
+    message5.file_size = 1488;
+    message5.file_path = "/usr/local/bin/";
 //    Message msg1{10, status_t::MODIFIED, false,
 //                2, "main", "c",
 //                100, "/home/denis/Desktop/Folder", user1};
@@ -95,11 +109,9 @@ int main() {
         if (strcmp(line, "q") == 0) { break; }
         if (strcmp(line, "1") == 0) { c.write(message); }
         if (strcmp(line, "2") == 0) { c.write(message2); }
-        if (strcmp(line, "3") == 0) {
-            c.write(message3); }
-        if (strcmp(line, "4") == 0) {
-            std::cout << "4 write" << std::endl;
-            c.write(message4); }
+        if (strcmp(line, "3") == 0) { c.write(message3); }
+        if (strcmp(line, "4") == 0) { c.write(message4); }
+        if (strcmp(line, "5") == 0) { c.write(message5); }
     }
 
     using namespace std::chrono_literals;

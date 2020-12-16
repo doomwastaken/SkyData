@@ -15,7 +15,9 @@ public:
 
     std::vector<Message> update(Message &message) override;
 
-    void insert(Message &message);
+    void insert_devise(Message &message);
+
+    void insert_file(Message &message);
 
     pqxx::result select(const std::string& sql_select);
 
@@ -23,7 +25,9 @@ public:
 
     bool open(std::string& config);
 
-    bool create_users_table();
+    bool create_users_devises_table();
+
+    bool create_users_files_table();
 
     void close();
 

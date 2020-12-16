@@ -13,6 +13,7 @@ void print_mes(Message &message) {
     std::cout << "devise name: " << message.user.devise.device_name << std::endl;
     std::cout << "sync folder: " << message.user.devise.sync_folder << std::endl;
     std::cout << "quota limit: " << message.user.quota_limit << std::endl;
+    std::cout << "status: " << message.status << std::endl;
 }
 
 ClientsConnection::ClientsConnection(
