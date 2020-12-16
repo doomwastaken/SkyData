@@ -29,7 +29,11 @@ SQLite::~SQLite() {
 }
 
 int SQLite::create_table_messages() {
-    std::string sql = "CREATE TABLE MESSAGES("
+    // TODO: DELETE ME!
+    std::string sql = "DROP TABLE IF EXISTS MESSAGES;";
+    sqlite3_exec(m_data_base, sql.c_str(), callback, nullptr, nullptr);
+
+    sql = "CREATE TABLE MESSAGES("
                       "version        INT        NOT NULL,"
                       "times_modified INT        NOT NULL,"
                       "file_name      TEXT PRIMARY KEY,"

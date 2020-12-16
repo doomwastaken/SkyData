@@ -39,6 +39,14 @@ void Observer::update_client(const std::string &host, const std::string &port) {
     MessageListener listener(io_context, endpoints);
     boost::thread t(boost::bind(&boost::asio::io_context::run, &io_context));
 
+    devise_t device_1{user.devise.device_name, "/home/denis/Desktop/Folder"};
+    user_t user_1{user.user_name, "email@ml.com", device_1, 10};
+
+    Message msg{10, status_t::LOGIN,
+                2, "main", "c",
+                100, "/home/denis/Desktop/Folder", user};
+
+    listener.cl_con.write(msg);
 
     MessageUpdater updater;
     std::thread t1(&Observer::watch_local, this);
