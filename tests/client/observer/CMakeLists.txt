@@ -1,5 +1,5 @@
 include_directories(../../../project/client/observer/include)
-include_directories("../../../project/messages")
+include_directories("../../../project/common")
 include_directories(./project/client/observer)
 include_directories(../../../project/client/indexer/include)
 include_directories(../../../project/data_bases/Cloud_Storage/include)

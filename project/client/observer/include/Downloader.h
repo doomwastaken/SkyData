@@ -6,7 +6,7 @@
 #include <CloudStorageDB.h>
 #include "CloudStorage.h"
 
-
+template<class T>
 class Downloader {
     std::vector<Message> messages;
     CloudStorageDB cloud_storage;

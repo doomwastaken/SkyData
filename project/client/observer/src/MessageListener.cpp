@@ -1,10 +1,11 @@
 #include "MessageListener.h"
+#include "ClientsConnection.h"
 
-void MessageListener::to_listen_message() {
+
+MessageListener::MessageListener(boost::asio::io_context &io_context,
+                                 const boost::asio::ip::basic_resolver<tcp, boost::asio::executor>::results_type &endpoint) :
+                                 cl_con(io_context, endpoint) {
 
 }
 
-int MessageListener::event() {
-    return 0;
-}
 

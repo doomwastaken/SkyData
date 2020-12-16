@@ -1,14 +1,17 @@
 #include "Downloader.h"
 
-int Downloader::downloader_files_from_cloud(Message message) {
+template<class T>
+int Downloader<T>::downloader_files_from_cloud(Message message) {
     return 0;
 }
 
-Message Downloader::push() {
+template<class T>
+Message Downloader<T>::push() {
     return messages[0];
 }
 
-Message Downloader::pop() {
+template<class T>
+Message Downloader<T>::pop() {
     return messages[0];
 }
 

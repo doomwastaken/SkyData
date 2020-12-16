@@ -1,4 +1,4 @@
-#ifndef PROJECT_UTILS_H
+#ifndef PROJECT_MESSAGE_H
 #define PROJECT_UTILS_H
 
 #include "iostream"
@@ -8,4 +8,4 @@ Message create_message();
 bool operator==(const User &usr1, const User &usr2);
 bool operator==(const Message &mes1, const Message &mes2);
 
-#endif //PROJECT_UTILS_H
+#endif //PROJECT_MESSAGE_H

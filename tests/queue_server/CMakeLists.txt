@@ -13,7 +13,7 @@ include_directories(/usr/src/googletest/googlemock/include/gmock/)
 LINK_DIRECTORIES(/usr/src/googletest/googlemock/lib)
 
 include_directories(../../project/libserver/include
-                    ../../project/messages
+        ../../project/common
                     ../../project/queue_server/include
                     ../../project/common)
 

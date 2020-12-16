@@ -2,15 +2,24 @@
 #define PROJECT_MESSAGEUPDATER_H
 #include <iostream>
 #include "Message.h"
-#include "vector"
+#include "queue"
+#include <memory>
+#include "ClientSender.h"
+#include <mutex>
 
 
 class MessageUpdater {
-    std::vector<Message> processed_messages;
-    //Client_Sender sender;
+private:
+
+    std::mutex mtx;
 public:
-    void to_client_send();
-    void push();
+    static std::mutex mtx_stat;
+    ClientSender sender;
+    MessageUpdater();
+public:
+    static std::queue<std::pair<std::shared_ptr<Message>, bool>> processed_messages;
+    void to_client_send(ClientsConnection &cl_con);
+    static void push(const std::shared_ptr<Message>& message, bool is_from_queue = false);
 };
 
 #endif //PROJECT_MESSAGEUPDATER_H

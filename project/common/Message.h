@@ -2,7 +2,10 @@
 #define ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
 
 #include <iostream>
+#include <string>
 #include <boost/serialization/access.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
 struct devise_t {
     std::string device_name;
@@ -39,11 +42,10 @@ private:
 } typedef User;
 
 enum status_t {
-    NEW_USER,
+    LOGIN,
     CREATE,     // новый файл
     DELETE,     // файл удален
     MODIFIED,   // файл изменен
-    NEW_DEVISE,
 };
 
 struct Message {
@@ -55,6 +57,15 @@ struct Message {
     size_t file_size;
     std::string file_path;  // "./dir/dir1/"
     user_t user;
+
+    friend std::ostream& operator << (std::ostream &out, const Message &message) {
+        out << "Message(" << message.version << ", " << message.status << ", "
+            << message.times_modified << ", " << message.file_name << ", " << message.file_extension << ", "
+            << message.file_size << ", " << message.file_path << ", "
+            << message.user.email << ", " << message.user.user_name << ")";
+
+        return out;
+    }
 
 private:
     friend class boost::serialization::access;
@@ -72,4 +83,6 @@ private:
     }
 } typedef Message;
 
+std::string serialize(Message &message);
+std::shared_ptr<Message> deserialize(const std::string &buf);
 #endif //ASYNC_CLIENT_QUEUE_SERVER_MESSAGE_H
