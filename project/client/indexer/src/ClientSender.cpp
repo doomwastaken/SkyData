@@ -8,7 +8,8 @@
 
 using boost::asio::ip::tcp;
 
-int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_con, ClientToStorageConnection &storage_conn, event_BD event_bd) {
+int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_con,
+                       ClientToStorageConnection &storage_conn, event_BD event_bd, std::string &proverka) {
     if (m_internal_db.send_meta_data(message)) {
         // TODO: Добавить логирование
         return 1;
@@ -24,7 +25,12 @@ int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_
         // TODO: Добавить логирование
         return 1;
     }
+    std::cout << message->status << " MES_STATUS\n";
     std::cout << "send_to_cloud" << std::endl;
+    if (message->status == DOWNLOAD_FILE) {
+        proverka = message->file_name;
+        std::cout << "AAAAAAAADSADSADDSAS\n";
+    }
 
     cl_con.write(*message);
     std::cout << "write" << std::endl;

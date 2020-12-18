@@ -17,7 +17,8 @@ public:
         BOTH
     };
 
-    int send(std::shared_ptr<Message> &message, ClientsConnection &cl_con, ClientToStorageConnection &storage_conn, event_BD event_bd);
+    int send(std::shared_ptr<Message> &message, ClientsConnection &cl_con,
+             ClientToStorageConnection &storage_conn, event_BD event_bd, std::string &proverka);
 
 private:
     InternalDataBaseWorker m_internal_db;

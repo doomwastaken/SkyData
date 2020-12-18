@@ -131,7 +131,7 @@ void ServerConnection::handle_write(const boost::system::error_code& error) {
 }
 
 void ServerConnection::find_file_and_send(Message msg) {;
-    std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
+    std::fstream file("/home/yaroslav/Techno_park/1_sem/notify/Storage" + msg.user.user_name + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
 //    while (file.good()) {
 //        std::cout << file.get() << " ";
 //    }
@@ -148,9 +148,9 @@ void ServerConnection::find_file_and_send(Message msg) {;
     msg_to_send.user = msg.user;
 
 
-    file.close();
-
-    file.open(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
+//    file.close();
+//
+//    file.open(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
 //
     char c = file.get();
     while (file.good()) {

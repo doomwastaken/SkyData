@@ -44,12 +44,12 @@ private:
 } typedef User;
 
 enum status_t {
-    LOGIN,
+    LOGIN,      // логин
     CREATE,     // новый файл
     DELETE,     // файл удален
     MODIFIED,   // файл изменен
-    DOWNLOAD_FILE,
-    PUSH_FILE,
+    DOWNLOAD_FILE, // файл загрузили
+    PUSH_FILE, // файл добавили
 };
 
 struct Message {

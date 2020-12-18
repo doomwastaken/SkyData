@@ -13,6 +13,7 @@ class MessageUpdater {
 private:
 
     std::mutex mtx;
+    std::string file_double_mes;
 public:
     static std::mutex mtx_stat;
     ClientSender sender;
