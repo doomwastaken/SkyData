@@ -73,8 +73,12 @@ bool SQLite::insert(Message &message) {
 
     int rc = sqlite3_exec(m_data_base, sql.c_str(), callback, nullptr, nullptr);
     if( rc != SQLITE_OK ) {
-        std::cout << "Insert error" << std::endl;
-        return false;
+        std::string sql = "UPDATE MESSAGES SET file_size = " +
+                std::to_string(message.file_size) + " WHERE file_name = " + quotes + message.file_name + quotes + ";";
+//        std::cout << "Insert error" << std::endl;
+        rc = sqlite3_exec(m_data_base, sql.c_str(), callback, nullptr, nullptr);
+        return true;
+//        return false;
     }
     return true;
 }

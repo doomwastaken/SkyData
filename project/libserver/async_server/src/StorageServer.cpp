@@ -5,6 +5,8 @@
 #include <fstream>
 #include "StorageServer.h"
 #include "Message.h"
+#include <sys/stat.h>
+#include <filesystem>
 
 void StorageServer::start_accept() {
     boost::shared_ptr<ServerConnection> new_connect(new ServerConnection(m_io_context,
@@ -38,7 +40,12 @@ void StorageServer::on_readed_message(char* msg_str) {
         }
     }
     else if (msg.status == status_t::PUSH_FILE) {
-        std::fstream file(msg.file_path + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+        // Check if directory exists
+        if (!std::filesystem::exists("/home/denis/Desktop/" + msg.user.user_name)) {
+            std::filesystem::create_directories("/home/denis/Desktop/" + msg.user.user_name);
+        }
+        std::fstream file("/home/denis/Desktop/" + msg.user.user_name + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+//        std::fstream file(msg.file_path + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
 //        std::fstream file("/home/aleksey/Storage/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
 
         file.write((char*)&msg.RAW_BYTES[0], msg.RAW_BYTES.size());

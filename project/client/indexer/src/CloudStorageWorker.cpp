@@ -7,5 +7,16 @@ int CloudStorageWorker::send_to_cloud(std::shared_ptr<Message> &message, ClientT
     storage_conn.write(*message);
     message->status = t;
 
-    return 1;
+//    return 1;
+    return 0;
+}
+
+int CloudStorageWorker::download_from_cloud(std::shared_ptr<Message> &message, ClientToStorageConnection &storage_conn) {
+    status_t t = message->status;
+    message->status = status_t::DOWNLOAD_FILE;
+    storage_conn.write(*message);
+    message->status = t;
+
+//    return 1;
+    return 0;
 }

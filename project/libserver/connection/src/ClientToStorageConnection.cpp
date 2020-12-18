@@ -73,7 +73,8 @@ void ClientToStorageConnection::handle_read(const boost::system::error_code& err
         Message msg;
         iarch >> msg;
 
-        std::fstream file(msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+        // HARDCODED!!!!!!
+        std::fstream file((std::string)"/home/denis/Desktop/user2" + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
         std::cout << "Size: " << msg.RAW_BYTES.size() << std::endl;
 //        std::cout << msg.RAW_BYTES << std::endl;
 //        file << msg.RAW_BYTES;

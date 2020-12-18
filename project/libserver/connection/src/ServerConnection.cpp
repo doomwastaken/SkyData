@@ -167,9 +167,9 @@ void ServerConnection::find_file_and_send(Message msg) {;
     // The "\b" is a SEPARATOR FOR MESSAGES!
 
 
-    std::fstream file_check(msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
-    file_check.write((char*)&msg_to_send.RAW_BYTES[0], msg_to_send.RAW_BYTES.size());
-    file_check.close();
+//    std::fstream file_check(msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+//    file_check.write((char*)&msg_to_send.RAW_BYTES[0], msg_to_send.RAW_BYTES.size());
+//    file_check.close();
 
     std::cout << str.str() << std::endl;
     boost::asio::write(m_socket,

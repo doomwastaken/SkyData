@@ -70,5 +70,5 @@ Observer::Observer(std::string user_name, std::string email, std::string sync_fo
     user.email = email;
     user.devise.sync_folder = sync_folder;
     user.quota_limit = 10;
-    user.devise.device_name = "NE YARIK";
+    user.devise.device_name = "user2";
 }

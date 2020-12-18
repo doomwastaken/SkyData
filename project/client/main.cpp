@@ -21,7 +21,7 @@ std::mutex MessageUpdater::mtx_stat;
 //Observer::Observer(std::string user_name, std::string email, std::string sync_folder)
 
 int main() {
-    Observer observer("Mr_white", "yorn", "/home/aleksey/Lab");
+    Observer observer("Mr_white", "yorn", "/home/denis/Desktop/user2");
     observer.update_client("127.0.0.1", "7777", "127.0.0.1", "7779");
     //std::this_thread::sleep_for(100);
 //}

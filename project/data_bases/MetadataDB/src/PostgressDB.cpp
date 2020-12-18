@@ -156,6 +156,7 @@ std::vector<Message> PostgressDB::update(Message &message) {
     std::cout << "mes status: " << message.status << std::endl;
     pqxx::result result;
     std::vector<std::string> vec_str;
+    bool not_create = false;
     switch(message.status) {
         case LOGIN:
             result = select("SELECT * from USERS_DEVISES "
@@ -199,7 +200,8 @@ std::vector<Message> PostgressDB::update(Message &message) {
 
             if (!result.empty()) {
                 std::cout << "EMPTY!" << std::endl;
-                return messages;
+                not_create = true;
+//                return messages;
             }
 
             result = select("SELECT device_name FROM users_devises "
@@ -216,6 +218,8 @@ std::vector<Message> PostgressDB::update(Message &message) {
                 new_message.user.devise.device_name = i;
                 messages.push_back(new_message);
             }
+            if (not_create) { return messages; }
+
             print_mes_db(message);
             insert_file(message);
             return messages;

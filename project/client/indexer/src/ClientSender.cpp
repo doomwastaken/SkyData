@@ -16,8 +16,10 @@ int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_
     std::cout << "send_meta_data" << std::endl;
 
     if (event_bd == ONLY_SQL) {
+        m_cloud_storage.download_from_cloud(message, storage_conn);
         return EXIT_SUCCESS;
     }
+
     if (m_cloud_storage.send_to_cloud(message, storage_conn)) {
         // TODO: Добавить логирование
         return 1;
