@@ -21,6 +21,8 @@ public:
 
     pqxx::result select(const std::string& sql_select);
 
+    bool modified(Message &message);
+
     bool commit_sql_query(const std::string& sql_query);
 
     bool open(std::string& config);

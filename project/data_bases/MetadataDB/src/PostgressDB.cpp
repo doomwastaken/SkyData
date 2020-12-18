@@ -91,44 +91,7 @@ void PostgressDB::erase(Message &message) {
     commit_sql_query(sql);
 }
 
-//bool PostgressDB::create_users_table() {
-//    std::string  sql;
-//
-//    try {
-////        if (m_connect->is_open()) {
-////            std::cout << "Opened database successfully: " << m_connect->dbname() << std::endl;
-////        } else {
-////            std::cout << "Can't open database\n";
-////            return false;
-////        }
-//
-//
-///* Create SQL statement */
-//        sql = "DROP TABLE IF EXISTS USERS_INFO;";
-//        commit_sql_query(sql);
-//
-//        /* Create SQL statement */
-//        sql = "CREATE TABLE USERS_INFO(" \
-//        "NAME           TEXT    NOT NULL," \
-//        "EMAIL          TEXT    NOT NULL," \
-//        "VERSION        INT," \
-//        "TIMES_MODIFIED INT," \
-//        "FILE_NAME      TEXT," \
-//        "FILE_EXTENSION TEXT," \
-//        "FILE_SIZE      INT," \
-//        "FILE_PATH      TEXT," \
-//        "DEVICE_NAME    TEXT," \
-//        "SYNC_FOLDER    TEXT," \
-//        "QUOTA_LIMIT    INT);";
-//
-//        commit_sql_query(sql);
-//        std::cout << "Table created successfully" << std::endl;
-//    } catch (const std::exception &e) {
-//        std::cerr << e.what() << std::endl;
-//        return false;
-//    }
-//    return true;
-//}
+
 
 pqxx::result PostgressDB::select(const std::string& sql_select) {
     pqxx::nontransaction nontransaction(*m_connect);
@@ -241,6 +204,7 @@ std::vector<Message> PostgressDB::update(Message &message) {
             erase(message);
             return messages;
         case MODIFIED:
+            modified(message);
             result = select("SELECT device_name FROM users_devises "
                             "WHERE name = " + quote + message.user.user_name + quote + " " +
                             "AND device_name != " +  quote + message.user.devise.device_name + quote);
@@ -310,6 +274,16 @@ bool PostgressDB::create_users_files_table() {
         return false;
     }
     return true;
+}
+
+bool PostgressDB::modified(Message &message) {
+    std::string quote = "'";
+    std::string sql = "UPDATE users_files set file_size = " + std::to_string(message.file_size) +
+            "WHERE file_name = " + quote + message.file_name + quote + " "
+            "AND file_extension = " + quote + message.file_extension + quote + " "
+            "AND name = " + quote + message.user.user_name + quote;
+    commit_sql_query(sql);
+    return false;
 }
 
 
