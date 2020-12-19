@@ -16,8 +16,10 @@ int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_
     }
     std::cout << "send_meta_data" << std::endl;
 
+
     if (event_bd == ONLY_SQL) {
         m_cloud_storage.download_from_cloud(message, storage_conn);
+        proverka = message->file_name;
         return EXIT_SUCCESS;
     }
 
@@ -27,10 +29,7 @@ int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_
     }
     std::cout << message->status << " MES_STATUS\n";
     std::cout << "send_to_cloud" << std::endl;
-    if (message->status == DOWNLOAD_FILE) {
-        proverka = message->file_name;
-        std::cout << "AAAAAAAADSADSADDSAS\n";
-    }
+
 
     cl_con.write(*message);
     std::cout << "write" << std::endl;

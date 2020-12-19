@@ -9,7 +9,7 @@
 #include "Observer.h"
 #include "ClientSender.h"
 #include "MessageListener.h"
-using namespace std;
+
 
 
 
@@ -22,7 +22,7 @@ std::mutex MessageUpdater::mtx_stat;
 
 int main(int argc, char** argv) {
     if (argc < 4) {
-        std::cout << "Вы ввели хуйню\n";  //ToDO не забыть поменять
+        std::cout << "Вы ввели неправильные данные!\n";  //ToDO не забыть поменять
     }
 //    Observer observer("Mr_white", "yorn", "/home/yaroslav/Techno_park/1_sem/notify/Test");
     Observer observer(argv[1], argv[2], argv[3]);

@@ -66,8 +66,9 @@ struct Message {
     friend std::ostream& operator << (std::ostream &out, const Message &message) {
         out << "Message(" << message.version << ", " << message.status << ", "
             << message.times_modified << ", " << message.file_name << ", " << message.file_extension << ", "
-            << message.file_size << ", " << message.file_path << ", "
-            << message.user.email << ", " << message.user.user_name << ")" << std::endl << "RAW_BYTES: ";
+            << message.file_size << ", File_path:" << message.file_path << ", "
+            << message.user.email << ", " << message.user.user_name << ", " << message.user.devise.device_name <<
+            ", Sync_folder:" << message.user.devise.sync_folder << ")" << std::endl << "RAW_BYTES: ";
         for (const auto& byte : message.RAW_BYTES) {
             out << byte;
         }

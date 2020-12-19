@@ -124,8 +124,8 @@ std::vector<Message> PostgressDB::update(Message &message) {
     switch(message.status) {
         case LOGIN:
             result = select("SELECT * from USERS_DEVISES "
-                            "WHERE name = " + quote + message.user.user_name + quote);
-            if (!result.empty()) {
+                            "WHERE device_name = " + quote + message.user.devise.device_name + quote);
+            if (result.empty()) {
                 result = select("SELECT * FROM users_files "
                                 "WHERE name = " + quote + message.user.user_name + quote);
                 for (const auto &row: result) {
@@ -147,14 +147,16 @@ std::vector<Message> PostgressDB::update(Message &message) {
                     // FIXME: remove this
 //                new_message.user.devise.device_name = "iPhone";
 
-                    new_message.user.devise.sync_folder = vec_str[i + 8];
+                    new_message.user.devise.sync_folder = message.user.devise.sync_folder;
                     new_message.user.quota_limit = std::stoi(vec_str[i + 9]);
-                    new_message.status = LOGIN;
+                    new_message.status = CREATE;
                     messages.push_back(new_message);
                     print_mes_db(new_message);
                 }
+                std::cout << "HELLO INSERT_DEVISE\n";
+                insert_devise(message);
             }
-            insert_devise(message);
+
             return messages;
         case CREATE:
             result = select("SELECT * FROM users_files "
