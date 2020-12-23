@@ -26,7 +26,6 @@ int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_
     }
     std::cout << "send_to_cloud" << std::endl;
 
-
     cl_con.write(*message);
     std::cout << "write" << std::endl;
     // TODO: Добавить логировани

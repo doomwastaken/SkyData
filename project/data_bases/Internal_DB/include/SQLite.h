@@ -22,6 +22,7 @@ private:
     int create_table_messages();
     bool insert(Message &message);
     bool del(Message &message);
+    bool find(Message &message);
 
 };
 
