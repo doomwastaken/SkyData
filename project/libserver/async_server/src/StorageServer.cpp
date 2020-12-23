@@ -41,10 +41,10 @@ void StorageServer::on_readed_message(char* msg_str) {
     }
     else if (msg.status == status_t::PUSH_FILE) {
         // Check if directory exists
-        if (!std::filesystem::exists("/home/yaroslav/Techno_park/1_sem/notify/Storage" + msg.user.user_name)) {
-            std::filesystem::create_directories("/home/yaroslav/Techno_park/1_sem/notify/Storage" + msg.user.user_name);
+        if (!std::filesystem::exists("/home/denis/Desktop/storage" + msg.user.user_name)) {
+            std::filesystem::create_directories("/home/denis/Desktop/storage" + msg.user.user_name);
         }
-        std::fstream file("/home/yaroslav/Techno_park/1_sem/notify/Storage" + msg.user.user_name + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+        std::fstream file("/home/denis/Desktop/storage" + msg.user.user_name + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
 //        std::fstream file(msg.file_path + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
 //        std::fstream file("/home/aleksey/Storage/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
 

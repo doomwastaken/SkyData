@@ -10,6 +10,8 @@
 #include "ClientSender.h"
 #include "MessageListener.h"
 
+#include <QtWidgets>
+#include "MainWidget.h"
 
 
 
@@ -21,11 +23,18 @@ std::mutex MessageUpdater::mtx_stat;
 //Observer::Observer(std::string user_name, std::string email, std::string sync_folder)
 
 int main(int argc, char** argv) {
-    if (argc < 4) {
-        std::cout << "Вы ввели неправильные данные!\n";  //ToDO не забыть поменять
-    }
+    std::string name;
+    std::string device;
+    std::string sync_folder;
+    QApplication a(argc, argv);
+    MainWidget w(name, device, sync_folder);
+    w.show();
+
+    while(a.exec()) { ; }
+    std::cout << name << " " << device << " " << sync_folder << std::endl;
+
 //    Observer observer("Mr_white", "yorn", "/home/yaroslav/Techno_park/1_sem/notify/Test");
-    Observer observer(argv[1], argv[2], argv[3]);
+    Observer observer(name, device, sync_folder);
     observer.update_client("127.0.0.1", "7777", "127.0.0.1", "7779");
     //std::this_thread::sleep_for(100);
 //}
