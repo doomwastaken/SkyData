@@ -62,6 +62,7 @@ void ServerConnection::handle_read(const boost::system::error_code& error) {
         print_mes_serv(msg);
 
         if (this->id.empty()) {
+            m_server_ptr->remove_connection(msg.user.user_name + msg.user.devise.device_name);
             this->id = msg.user.user_name + msg.user.devise.device_name;
             QueueManager::queue_manager().create_queue_if_not_exists(this->id);
             // Do we have messages for user in queue?

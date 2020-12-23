@@ -73,6 +73,15 @@ public:
         }
     }
 
+    void remove_connection(const std::string& id) {
+        for (auto& connection : m_connections) {
+            if (connection->id == id) {
+                m_connections.erase(connection);
+                break;
+            }
+        }
+    }
+
 
     virtual void send_message_if_connected(const std::string &connectionID) { ; }
 
