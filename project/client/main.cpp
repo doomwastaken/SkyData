@@ -26,12 +26,23 @@ int main(int argc, char** argv) {
     std::string name;
     std::string device;
     std::string sync_folder;
-    QApplication a(argc, argv);
-    MainWidget w(name, device, sync_folder);
-    w.show();
 
-    while(a.exec()) { ; }
-    std::cout << name << " " << device << " " << sync_folder << std::endl;
+    std::ifstream fin;
+    fin.open("config.txt");
+    if (fin.is_open()) {
+        fin >> name >> device >> sync_folder;
+    }
+
+    if (!fin.is_open() || name.empty() || device.empty() || sync_folder.empty()) {
+        QApplication a(argc, argv);
+        MainWidget w(name, device, sync_folder);
+        w.show();
+
+        while (a.exec()) {}
+
+        std::ofstream fout("config.txt");
+        fout << name << std::endl << device << std::endl << sync_folder;
+    };
 
 //    Observer observer("Mr_white", "yorn", "/home/yaroslav/Techno_park/1_sem/notify/Test");
     Observer observer(name, device, sync_folder);
