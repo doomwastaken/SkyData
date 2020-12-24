@@ -10,7 +10,7 @@ void print_mes_serv(Message &message) {
     std::cout << "version: " << message.version << std::endl;
     std::cout << "times modified: " << message.times_modified << std::endl;
     std::cout << "file name: " << message.file_name << std::endl;
-    std::cout << "file extention: " << message.file_extension<< std::endl;
+    std::cout << "file extention: " << message.file_extension << std::endl;
     std::cout << "file size: " << message.file_size << std::endl;
     std::cout << "file path: " << message.file_path << std::endl;
     std::cout << "devise name: " << message.user.devise.device_name << std::endl;
@@ -19,35 +19,35 @@ void print_mes_serv(Message &message) {
     std::cout << "status: " << message.status << std::endl;
 }
 
-ServerConnection::ServerConnection(boost::asio::io_context& io_context,
-                                   std::shared_ptr<AbstractServer> srvr):
-    AbstractConnection(io_context),
-    m_server_ptr(srvr)
-    {}
+ServerConnection::ServerConnection(boost::asio::io_context &io_context,
+                                   std::shared_ptr<AbstractServer> srvr) :
+        AbstractConnection(io_context),
+        m_server_ptr(srvr) {}
 
-boost::asio::ip::tcp::socket& ServerConnection::socket() {
+boost::asio::ip::tcp::socket &ServerConnection::socket() {
     return m_socket;
 }
 
 void ServerConnection::start() {
     boost::asio::async_read(m_socket,
                             boost::asio::buffer(m_read_msg),
-                            [&] (const boost::system::error_code & err, size_t bytes)
-
-                            { return (std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes ||
-                                      std::find(m_read_msg, m_read_msg + bytes, EOF) < m_read_msg + bytes); },
+                            [&](const boost::system::error_code &err, size_t bytes) {
+                                return (std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes ||
+                                        std::find(m_read_msg, m_read_msg + bytes, EOF) < m_read_msg + bytes);
+                            },
                             boost::bind(
                                     &ServerConnection::handle_read,
                                     shared_from_this(),
                                     boost::asio::placeholders::error));
 }
 
-void ServerConnection::handle_read(const boost::system::error_code& error) {
+void ServerConnection::handle_read(const boost::system::error_code &error) {
     if (!error) {
         std::cout << "HANDLE_READ" << std::endl;
         int i = 0;
         for (; m_read_msg[i] != '\b'; i++) {
-            std::cout << m_read_msg[i]; }
+            std::cout << m_read_msg[i];
+        }
         std::cout << std::endl;
 
 
@@ -67,7 +67,7 @@ void ServerConnection::handle_read(const boost::system::error_code& error) {
             QueueManager::queue_manager().create_queue_if_not_exists(this->id);
             // Do we have messages for user in queue?
             while (QueueManager::queue_manager().is_user_queue_exists(this->id) &&
-                  !QueueManager::queue_manager().is_user_queue_empty(this->id)) {
+                   !QueueManager::queue_manager().is_user_queue_empty(this->id)) {
                 m_server_ptr->send_message_if_connected(this->id);
             }
         }
@@ -76,13 +76,14 @@ void ServerConnection::handle_read(const boost::system::error_code& error) {
 
         boost::asio::async_read(m_socket,
                                 boost::asio::buffer(m_read_msg),
-                                [&] (const boost::system::error_code & err, size_t bytes)
-                                { return (std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes); },// ||
+                                [&](const boost::system::error_code &err, size_t bytes) {
+                                    return (std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes);
+                                },// ||
 //                                           std::find(m_read_msg, m_read_msg + bytes, EOF) < m_read_msg + bytes); },
                                 boost::bind(
-                                            &ServerConnection::handle_read,
-                                            shared_from_this(),
-                                            boost::asio::placeholders::error));
+                                        &ServerConnection::handle_read,
+                                        shared_from_this(),
+                                        boost::asio::placeholders::error));
     } else {
         std::cerr << "Fault";
     }
@@ -97,13 +98,13 @@ void ServerConnection::deliver(std::string msg) {
                                  boost::asio::buffer(m_write_msgs.front().data(),
                                                      m_write_msgs.front().length()),
                                  boost::bind(
-                                            &ServerConnection::handle_write,
-                                            shared_from_this(),
-                                            boost::asio::placeholders::error));
+                                         &ServerConnection::handle_write,
+                                         shared_from_this(),
+                                         boost::asio::placeholders::error));
     }
 }
 
-void ServerConnection::handle_write(const boost::system::error_code& error) {
+void ServerConnection::handle_write(const boost::system::error_code &error) {
     if (!error) {
         m_write_msgs.pop_front();
         if (!m_write_msgs.empty()) {
@@ -111,9 +112,9 @@ void ServerConnection::handle_write(const boost::system::error_code& error) {
                                      boost::asio::buffer(m_write_msgs.front().data(),
                                                          m_write_msgs.front().length()),
                                      boost::bind(
-                                                &ServerConnection::handle_write,
-                                                shared_from_this(),
-                                                boost::asio::placeholders::error));
+                                             &ServerConnection::handle_write,
+                                             shared_from_this(),
+                                             boost::asio::placeholders::error));
         }
     } else {
         m_server_ptr->remove_connection(this->id, m_write_msgs.front());
@@ -131,8 +132,10 @@ void ServerConnection::handle_write(const boost::system::error_code& error) {
     }
 }
 
-void ServerConnection::find_file_and_send(Message msg) {;
-    std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
+void ServerConnection::find_file_and_send(Message msg) {
+    ;
+    std::fstream file("/home/denis/Desktop/storage" + msg.user.user_name + "/" + msg.file_name +
+                      msg.file_extension, std::ios::binary | std::ios::in);
 //    while (file.good()) {
 //        std::cout << file.get() << " ";
 //    }
@@ -149,9 +152,9 @@ void ServerConnection::find_file_and_send(Message msg) {;
     msg_to_send.user = msg.user;
 
 
-    file.close();
-
-    file.open(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
+//    file.close();
+//
+//    file.open(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
 //
     char c = file.get();
     while (file.good()) {
@@ -174,8 +177,8 @@ void ServerConnection::find_file_and_send(Message msg) {;
 
     std::cout << str.str() << std::endl;
     boost::asio::write(m_socket,
-                             boost::asio::buffer(str.str(),
-                                                 str.str().size()));
+                       boost::asio::buffer(str.str(),
+                                           str.str().size()));
 
 //    std::size_t size = file.rdbuf()->pubseekoff(0, file.end, file.in);
 //    boost::asio::write(m_socket,

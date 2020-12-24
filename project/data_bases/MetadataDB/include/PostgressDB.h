@@ -9,7 +9,7 @@
 
 class PostgressDB: public DataBase {
 public:
-     PostgressDB();
+    PostgressDB();
 
     ~PostgressDB() override;
 
@@ -20,6 +20,8 @@ public:
     void insert_file(Message &message);
 
     pqxx::result select(const std::string& sql_select);
+
+    bool modified(Message &message);
 
     bool commit_sql_query(const std::string& sql_query);
 

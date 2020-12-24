@@ -18,13 +18,14 @@ class Observer {
     User user;
 
 
+
    // void watch_message_from_server(const std::string& host, const size_t& port);
     int watch_local();
 
 public:
     void update_client(const std::string& host, const std::string& port,
                        const std::string& host_storage, const std::string& port_storage);
-    Observer(std::string user_name, std::string email, std::string sync_folder);
+    Observer(std::string user_name, std::string device, std::string sync_folder);
 
 };
 

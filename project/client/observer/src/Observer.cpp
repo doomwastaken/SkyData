@@ -65,10 +65,10 @@ void Observer::update_client(const std::string &host, const std::string &port,
 
 }
 
-Observer::Observer(std::string user_name, std::string email, std::string sync_folder) {
+Observer::Observer(std::string user_name, std::string device, std::string sync_folder) {
     user.user_name = user_name;
-    user.email = email;
+    user.email = "email@";
     user.devise.sync_folder = sync_folder;
     user.quota_limit = 10;
-    user.devise.device_name = "user2";
+    user.devise.device_name = device;
 }
