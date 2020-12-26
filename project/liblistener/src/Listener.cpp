@@ -1,5 +1,3 @@
-//#include "files/file_path_watcher.hpp"
-
 #include <cassert>
 #include <cerrno>
 #include <cstddef>
@@ -20,8 +18,6 @@
 #include <unistd.h>
 
 #include "Listener.h"
-//#include "common/eintr_wrapper.hpp"
-//#include "files/file_util.hpp"
 
 namespace gogo {
     namespace {
@@ -125,6 +121,8 @@ namespace gogo {
                                    bool is_dir);
 
         private:
+            FilePath main_path_;
+
             // Inotify watches are installed for all directory components of |target_|.
             // A WatchEntry instance holds:
             // - |watch|: the watch descriptor for a component.
@@ -156,6 +154,8 @@ namespace gogo {
             // Reconfigure to watch for the most specific parent directory of |target_|
             // that exists.
             void UpdateWatches();
+
+            void RecurciveUpdateWatches(boost::filesystem::path path, WatchEntry watch_entry);
 
             // |path| is a symlink to a non-existent target. Attempt to add a watch to
             // the link target's parent directory. Update |watch_entry| on success.
@@ -201,6 +201,15 @@ namespace gogo {
                 if (fired_watch != watch_entry.watch)
                     continue;
 
+                if (is_dir && created && watch_entry.full_path.string().rfind(main_path_.string()) != std::string::npos) {
+                    watches_.pop_back();
+                    auto path = watch_entry.full_path / child;
+                    auto index_of_file_begin = path.string().rfind('/');
+                    auto ii = WatchEntry(path.string().substr(index_of_file_begin + 1));
+                    RecurciveUpdateWatches(path, ii);
+                    watches_.push_back(WatchEntry(std::string()));
+                }
+
                 // Check whether a path component of |target_| changed.
                 bool change_on_target_path =
                         child.empty() ||
@@ -209,7 +218,7 @@ namespace gogo {
 
                 // Check if the change references |target_| or a direct child of |target_|.
                 bool target_changed = false;
-                if (watch_entry.subdir.empty()) {
+                if (!is_dir) {
                     // The fired watch is for a WatchEntry without a subdir. Thus for a given
                     // |target_| = "/path/to/foo", this is for "foo". Here, check either:
                     // - the target has no symlink: it is the target and it changed.
@@ -230,15 +239,18 @@ namespace gogo {
                     } else {
                         // The current |watch_entry| is not for "/path/to", so the next entry
                         // cannot be "foo". Thus |target_| has not changed.
-                        target_changed = false;
+                        if (watch_entry.full_path.string().rfind(main_path_.string()) != std::string::npos)
+                            target_changed = true;
+                        else
+                            target_changed = false;
                     }
                 }
 
                 // Update watches if a directory component of the |target_| path (dis)appears.
-                if (change_on_target_path && (created || deleted) && !updated) {
-                    UpdateWatches();
-                    updated = true;
-                }
+//                if (change_on_target_path && (created || deleted) && !updated) {
+//                    UpdateWatches();
+//                    updated = true;
+//                }
 
                 // Report the following events:
                 //  - The target or a direct child of the target got changed (in case the
@@ -273,6 +285,7 @@ namespace gogo {
 
             std::unique_lock<std::recursive_mutex> lock(InotifyReader::Get().GetMutex());
 
+            main_path_ = path;
             callback_ = callback;
             target_ = path.is_relative() ? boost::filesystem::absolute(path) : path;
 
@@ -310,9 +323,34 @@ namespace gogo {
             target_.clear();
         }
 
+        void FilePathWatcherImpl::RecurciveUpdateWatches(boost::filesystem::path path, WatchEntry watch_entry) {
+            InotifyReader::Watch old_watch = watch_entry.watch;
+            watch_entry.watch = InotifyReader::INVALID_WATCH;
+            watch_entry.linkname.clear();
+            watch_entry.full_path = path;
+            watch_entry.watch = InotifyReader::Get().AddWatch(path, this);
+            watches_.push_back(watch_entry);
+            if (watch_entry.watch == InotifyReader::INVALID_WATCH) {
+                // Ignore the error code (beyond symlink handling) to attempt to add
+                // watches on accessible children of unreadable directories. Note that
+                // we may not catch events in this scenario.
+                if (boost::filesystem::symbolic_link_exists(path))
+                    AddWatchForBrokenSymlink(path, &watch_entry);
+            }
+            for (auto i = boost::filesystem::directory_iterator(path);
+                 i != boost::filesystem::directory_iterator(); ++i) {
+                if (boost::filesystem::is_directory(i->path())) {
+                    auto index_of_file_begin = i->path().string().rfind('/');
+                    auto ii = WatchEntry(i->path().string().substr(index_of_file_begin + 1));
+                    RecurciveUpdateWatches(i->path(), ii);
+                }
+            }
+
+        }
+
         void FilePathWatcherImpl::UpdateWatches() {
             assert(HasValidWatchVector());
-
+            watches_.pop_back();
             // Walk the list of watches and update them as we go.
             FilePath path("/");
             for (WatchEntry &watch_entry : watches_) {
@@ -332,6 +370,18 @@ namespace gogo {
                     InotifyReader::Get().RemoveWatch(old_watch, this);
                 path = path / watch_entry.subdir;
             }
+            auto index_of_file_begin = path.string().rfind('/');
+            auto ii = WatchEntry(path.string().substr(index_of_file_begin + 1));
+            RecurciveUpdateWatches(path, ii);
+            for (auto i = boost::filesystem::directory_iterator(path);
+                 i != boost::filesystem::directory_iterator(); ++i) {
+                if (boost::filesystem::is_directory(i->path())) {
+                    auto index_of_file_begin = i->path().string().rfind('/');
+                    auto ii = WatchEntry(i->path().string().substr(index_of_file_begin + 1));
+                    RecurciveUpdateWatches(i->path(), ii);
+                }
+            }
+            watches_.push_back(WatchEntry(std::string()));
         }
 
         InotifyReader::InotifyReader() :
@@ -399,7 +449,7 @@ namespace gogo {
             const Watch watch = inotify_add_watch(inotify_fd_, path.c_str(),
                                                   IN_CREATE | IN_DELETE |
                                                   IN_CLOSE_WRITE | IN_MOVE | IN_ONLYDIR);
-
+            std::cout << "#################----" << watch << "---------" << path.string() << std::endl;
             watchers_[watch].insert(watcher);
 
             return watch;

@@ -9,6 +9,7 @@ int quota_limit;
 std::string device_name;
 
 std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::FilePathWatcher::Event event) {
+    std::cout << path << std::endl;
     std::shared_ptr<Message> message = std::make_shared<Message>();
     auto index_of_file_begin = path.rfind('/');
     if (index_of_file_begin == std::string::npos) {
@@ -16,6 +17,7 @@ std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::F
     }
     // ToDo добавить логирование
     message->file_path = path.substr(0, index_of_file_begin);
+    std::cout << message->file_path;
     auto index_of_dote = path.rfind('.');
 
     if (index_of_dote == std::string::npos) {
@@ -40,7 +42,6 @@ std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::F
         message->status = MODIFIED;
     }
 
-    message->file_path = path_str;
     message->user.user_name = user_name;
     message->user.email = email;
     message->user.devise.sync_folder = sync_folder;
