@@ -19,5 +19,5 @@ include_directories(${Boost_INCLUDE_DIR})
 #add_subdirectory(tests/client/observer)
 enable_testing()
 
-add_subdirectory(project)
-#add_subdirectory(tests)
+#add_subdirectory(project)
+add_subdirectory(tests)

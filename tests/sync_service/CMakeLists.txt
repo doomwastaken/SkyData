@@ -10,7 +10,7 @@ include_directories(../../project/synchronization_service/include)
 include_directories(../../project/libserver/include)
 
 
-add_executable(tests tests.cpp ${PROJECT_SOURCE_FILES} metadata_db_test.cpp sync_service_test.cpp)
+add_executable(tests tests.cpp ${PROJECT_SOURCE_FILES})
 
 target_link_libraries(tests ${GTEST_LIBRARIES} pthread)
 
