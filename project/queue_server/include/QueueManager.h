@@ -4,7 +4,6 @@
 #include <map>
 #include "Queue.h"
 #include "StdQueue.h"
-#include "OnDiskSaverQueue.h"
 
 const std::string DEFAULT_DIR_STRING = "./";
 

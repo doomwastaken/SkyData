@@ -4,7 +4,6 @@ project(server_middle)
 set(CMAKE_CXX_STANDARD 17)
 set (QUEUE_SRC
         ../../queue_server/src/StdQueue.cpp
-        ../../queue_server/src/OnDiskSaverQueue.cpp
         ../../queue_server/src/QueueManager.cpp
         )
 

@@ -49,8 +49,7 @@ Queue *QueueManager::createNewQueue(engine_types type) {
     switch (type) {
         case STD_QUEUE:
             return new StdQueue();
-        case ON_DISK_QUEUE:
-            return new OnDiskSaverQueue(DEFAULT_DIR_STRING);
+            break;
     }
 }
 
