@@ -13,11 +13,12 @@ std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::F
     std::shared_ptr<Message> message = std::make_shared<Message>();
     auto index_of_file_begin = path.rfind('/');
     if (index_of_file_begin == std::string::npos) {
+        std::cout << "BAGAGAGAGGAGA" << std::endl;
         return nullptr; // Todo добавить обработку исключений
     }
     // ToDo добавить логирование
     message->file_path = path.substr(0, index_of_file_begin);
-    std::cout << message->file_path;
+    std::cout << message->file_path << std::endl;
     auto index_of_dote = path.rfind('.');
 
     if (index_of_dote == std::string::npos) {
@@ -49,9 +50,10 @@ std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::F
     message->user.devise.device_name = device_name;
 
     if (event == gogo::FilePathWatcher::Event::NO_EVENT) {
+        std::cout << "53 strochka" << std::endl;
         return nullptr;
     }
-
+    std::cout << "56 strochka" << std::endl;
     return message;
 }
 

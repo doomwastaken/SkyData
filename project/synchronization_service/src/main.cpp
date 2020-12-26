@@ -11,7 +11,7 @@ void run_context(boost::asio::io_context& io_context) {
 }
 
 int main() {
-    std::string conf = "dbname = postgres user = postgres password = admin hostaddr = 127.0.0.1 port = 5432";
+    std::string conf = "dbname = postgres user = postgres password = Bars hostaddr = 127.0.0.1 port = 5432";
     auto db = std::make_shared<PostgressDB>();
     db->open(conf);
     db->create_users_devises_table();

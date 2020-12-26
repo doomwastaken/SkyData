@@ -9,7 +9,7 @@
 using boost::asio::ip::tcp;
 
 int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_con,
-                       ClientToStorageConnection &storage_conn, event_BD event_bd, std::string &proverka) {
+                       ClientToStorageConnection &storage_conn, event_BD event_bd) {
     if (m_internal_db.send_meta_data(message)) {
         // TODO: Добавить логирование
         return 1;
@@ -19,7 +19,6 @@ int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_
 
     if (event_bd == ONLY_SQL) {
         m_cloud_storage.download_from_cloud(message, storage_conn);
-        proverka = message->file_name;
         return EXIT_SUCCESS;
     }
 

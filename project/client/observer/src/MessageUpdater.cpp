@@ -7,24 +7,18 @@ void MessageUpdater::to_client_send(ClientsConnection &cl_con, ClientToStorageCo
     mtx.lock();
     if (!processed_messages.empty()) {
         while (!processed_messages.empty()) {
-            if (processed_messages.front().first->file_name == file_double_mes) {
-                file_double_mes = "";
-                processed_messages.pop();
-                continue;
-            }
 
             if (!processed_messages.front().second) {
-                sender.send(processed_messages.front().first, cl_con, storage_conn, ClientSender::ONLY_SQL,
-                            file_double_mes);
+                sender.send(processed_messages.front().first, cl_con, storage_conn, ClientSender::ONLY_SQL);
                 // TODO: Download from server
             } else {
-                sender.send(processed_messages.front().first, cl_con, storage_conn, ClientSender::BOTH,
-                            file_double_mes);
+                sender.send(processed_messages.front().first, cl_con, storage_conn, ClientSender::BOTH);
             }
 
             processed_messages.pop();
         }
     }
+    std::cout << "29 strochka" << std::endl;
     mtx.unlock();
 
 }
@@ -37,6 +31,6 @@ void MessageUpdater::push(const std::shared_ptr<Message> &message, bool is_from_
     mtx_stat.unlock();
 }
 
-MessageUpdater::MessageUpdater() : file_double_mes("") {
+MessageUpdater::MessageUpdater() {
 
 }

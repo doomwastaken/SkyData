@@ -134,7 +134,7 @@ void ServerConnection::handle_write(const boost::system::error_code &error) {
 
 void ServerConnection::find_file_and_send(Message msg) {
     ;
-    std::fstream file("/home/denis/Desktop/storage" + msg.user.user_name + "/" + msg.file_name +
+    std::fstream file("/home/yaroslav/Techno_park/1_sem/Test/" + msg.user.user_name + "/" + msg.file_name +
                       msg.file_extension, std::ios::binary | std::ios::in);
 //    while (file.good()) {
 //        std::cout << file.get() << " ";
