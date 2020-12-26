@@ -14,7 +14,7 @@ public:
 
     virtual void start_accept() override;
 
-    virtual void on_readed_message(char* msg) override;
+    virtual void on_read_message(char* msg) override;
 
     virtual ~BackendServer() = default;
 
@@ -24,9 +24,7 @@ public:
 
 private:
     virtual void deliver_for_all(std::string msg) override;
-
     std::shared_ptr<DataBase> m_data_base;
-
 };
 
 

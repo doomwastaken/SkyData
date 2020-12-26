@@ -21,7 +21,7 @@ public:
 
     void send_message_if_connected(const std::string& messageID) override;
 
-    virtual void on_readed_message(char* msg) override;
+    virtual void on_read_message(char* msg) override;
 
     void write_to_backend(char* msg);
 

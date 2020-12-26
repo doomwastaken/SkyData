@@ -14,7 +14,7 @@ public:
 
     void start_accept() override;
     void deliver_for_all(std::string msg) override;
-    void on_readed_message(char* msg) override;
+    void on_read_message(char* msg) override;
 };
 
 #endif //ASYNC_CLIENT_QUEUE_SERVER_STORAGESERVER_H

@@ -1,7 +1,3 @@
-//
-// Created by denis on 10.12.2020.
-//
-
 #include <fstream>
 #include "ClientToStorageConnection.h"
 
@@ -30,22 +26,14 @@ void ClientToStorageConnection::close() {
 
 void ClientToStorageConnection::handle_connect(const boost::system::error_code& error) {
     if (!error) {
-        // By default just trying to read
-        if (operation == AbstractConnection::last_unsuccess_operation::READ) {
-            boost::asio::async_read(m_socket,
-                                    boost::asio::buffer(m_read_msg),
-                                    [&](const boost::system::error_code &err, size_t bytes) {
-                                        return std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes;
-                                    },
-                                    boost::bind(&ClientToStorageConnection::handle_read,
-                                                this,
-                                                boost::asio::placeholders::error));
-        }
-            // This case will happen only if if will get in error while async_write!
-        else if (operation == AbstractConnection::last_unsuccess_operation::WRITE) {
-            // Just trying to write the same message before the failure in async_write
-            do_write(Message {}, true);
-        }
+        boost::asio::async_read(m_socket,
+                                boost::asio::buffer(m_read_msg),
+                                [&](const boost::system::error_code &err, size_t bytes) {
+                                    return std::find(m_read_msg, m_read_msg + bytes, '\b') < m_read_msg + bytes;
+                                },
+                                boost::bind(&ClientToStorageConnection::handle_read,
+                                            this,
+                                            boost::asio::placeholders::error));
     } else {
         std::cerr << "ERROR: ClientToStorageConnection::handle_connect" << std::endl;
         using namespace std::chrono_literals;
@@ -61,27 +49,16 @@ void ClientToStorageConnection::handle_connect(const boost::system::error_code& 
 
 void ClientToStorageConnection::handle_read(const boost::system::error_code& error) {
     if (!error) {
-        std::string raw_string;
-        int i = 0;
-        while (m_read_msg[i] != '\b') {
-            raw_string += m_read_msg[i];
-            i++;
-        }
-        std::cout << std::endl;
+        long offset = static_cast<char *>(memchr(m_read_msg, '\b', BUFFER_SIZE)) - m_read_msg;
+        std::string raw_string(m_read_msg, offset);
         std::stringstream str(raw_string);
         boost::archive::text_iarchive iarch(str);
         Message msg;
         iarch >> msg;
 
-        // HARDCODED!!!!!!
         std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
-        std::cout << "Size: " << msg.RAW_BYTES.size() << std::endl;
-//        std::cout << msg.RAW_BYTES << std::endl;
-//        file << msg.RAW_BYTES;
         file.write((char*)&msg.RAW_BYTES[0], msg.RAW_BYTES.size());
         file.close();
-
-
 
         boost::asio::async_read(m_socket,
                                 boost::asio::buffer(m_read_msg),
@@ -92,7 +69,16 @@ void ClientToStorageConnection::handle_read(const boost::system::error_code& err
                                         this,
                                         boost::asio::placeholders::error));
     }
-    else { do_close(); }
+    else {
+        do_close();
+        std::cerr << "ERROR: ClientToStorageConnection::handle_write" << std::endl;
+        std::cerr << "Trying to reconnect!" << std::endl;
+        boost::asio::async_connect(m_socket, endpoint,
+                                   boost::bind(
+                                           &ClientToStorageConnection::handle_connect,
+                                           this,
+                                           boost::asio::placeholders::error));
+    }
 }
 
 void ClientToStorageConnection::do_write(Message msg, bool continue_writing) {
@@ -117,7 +103,8 @@ void ClientToStorageConnection::do_write(Message msg, bool continue_writing) {
     }
     if (!write_in_progress) {
         boost::asio::async_write(m_socket,
-                                 boost::asio::buffer(m_write_msgs.front().data(), m_write_msgs.front().length()),
+                                 boost::asio::buffer(m_write_msgs.front().data(),
+                                                      m_write_msgs.front().length()),
                                  boost::bind(&ClientToStorageConnection::handle_write, this,
                                              boost::asio::placeholders::error));
     }
@@ -125,23 +112,22 @@ void ClientToStorageConnection::do_write(Message msg, bool continue_writing) {
 
 void ClientToStorageConnection::handle_write(const boost::system::error_code& error) {
     if (!error) {
-    m_write_msgs.pop_front();
-    if (!m_write_msgs.empty()) {
-    boost::asio::async_write(m_socket,
-            boost::asio::buffer(m_write_msgs.front().data(),
-                                m_write_msgs.front().length()),
-            boost::bind(&ClientToStorageConnection::handle_write, this,
-                        boost::asio::placeholders::error));
-    }
-    }
-    else {
-    std::cerr << "ERROR: ClientToStorageConnection::handle_write" << std::endl;
-    std::cerr << "Trying to reconnect!" << std::endl;
-    operation = AbstractConnection::last_unsuccess_operation::WRITE;
-    boost::asio::async_connect(m_socket, endpoint,
-            boost::bind(
-            &ClientToStorageConnection::handle_connect,
-            this,
-            boost::asio::placeholders::error));
+        m_write_msgs.pop_front();
+        if (!m_write_msgs.empty()) {
+        boost::asio::async_write(m_socket,
+                boost::asio::buffer(m_write_msgs.front().data(),
+                                    m_write_msgs.front().length()),
+                boost::bind(&ClientToStorageConnection::handle_write, this,
+                            boost::asio::placeholders::error));
+        }
+    } else {
+        do_close();
+        std::cerr << "ERROR: ClientToStorageConnection::handle_write" << std::endl;
+        std::cerr << "Trying to reconnect!" << std::endl;
+        boost::asio::async_connect(m_socket, endpoint,
+                boost::bind(
+                &ClientToStorageConnection::handle_connect,
+                this,
+                boost::asio::placeholders::error));
     }
 }
