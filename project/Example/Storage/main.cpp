@@ -5,10 +5,11 @@ void run_context(boost::asio::io_context& io_context) {
     io_context.run();
 }
 
-int main() {
+int main(int argc, char** argv) {
     boost::asio::io_context io_context;
     boost::asio::ip::tcp::tcp::endpoint endpoint(boost::asio::ip::tcp::v4(), 7779);
     StorageServer server(io_context, endpoint);
+    server.set_storage_directory(argv[1]);
     server.start_accept();
 
     boost::thread_group tg;
@@ -17,13 +18,7 @@ int main() {
         tg.add_thread(th);
     }
 
-    char line[1024];
-    while (std::cin.getline(line, 1024))
-    {
-        using namespace std; // For strlen and memcpy.
-        std::string msg(line);
-        msg += "\n";
-    }
+    while (true) { ; }
 
     tg.join_all();
     return EXIT_SUCCESS;

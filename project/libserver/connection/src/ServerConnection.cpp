@@ -118,14 +118,9 @@ void ServerConnection::handle_write(const boost::system::error_code &error) {
     }
 }
 
-void ServerConnection::find_file_and_send(Message msg) {
-    ;
-    std::fstream file("/home/denis/Desktop/test/storage/" + msg.user.user_name + "/" + msg.file_name +
+void ServerConnection::find_file_and_send(const std::string& directory, Message msg) {
+    std::fstream file(directory + msg.user.user_name + "/" + msg.file_name +
                       msg.file_extension, std::ios::binary | std::ios::in);
-//    while (file.good()) {
-//        std::cout << file.get() << " ";
-//    }
-//    std::cout << std::endl;
     Message msg_to_send;
 
     msg_to_send.version = msg.version;
@@ -137,44 +132,21 @@ void ServerConnection::find_file_and_send(Message msg) {
     msg_to_send.file_path = msg.file_path;  // "./dir/dir1/"
     msg_to_send.user = msg.user;
 
-
-//    file.close();
-//
-//    file.open(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
-//
     char c = file.get();
     while (file.good()) {
         msg_to_send.RAW_BYTES.push_back(c);
         c = file.get();
     }
     file.close();
-    std::cout << "SIZE: " << msg_to_send.RAW_BYTES.size() << std::endl;
-//    std::cout <<  "RAW BYTES: " << msg_to_send.RAW_BYTES << std::endl;
 
     std::stringstream str;
     boost::archive::text_oarchive oarch(str);
     oarch << msg_to_send;
-    // The "\b" is a SEPARATOR FOR MESSAGES!
+    str << "\b";
 
-
-//    std::fstream file_check(msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
-//    file_check.write((char*)&msg_to_send.RAW_BYTES[0], msg_to_send.RAW_BYTES.size());
-//    file_check.close();
 
     std::cout << str.str() << std::endl;
     boost::asio::write(m_socket,
                        boost::asio::buffer(str.str(),
                                            str.str().size()));
-
-//    std::size_t size = file.rdbuf()->pubseekoff(0, file.end, file.in);
-//    boost::asio::write(m_socket,
-//                       boost::asio::buffer(file.rdbuf(),
-//                                           size),
-//                       [&] (const boost::system::error_code & err, size_t bytes) { return !file.good(); });
-
-    std::string backB = "\b";
-    boost::asio::write(m_socket,
-                       boost::asio::buffer(backB,
-                                           backB.size()));
-
 }

@@ -15,6 +15,9 @@ void StorageServer::start_accept() {
                                     boost::asio::placeholders::error));
 }
 
+void StorageServer::set_storage_directory(std::string directory) {
+    storage_directory = directory;
+}
 
 void StorageServer::deliver_for_all(std::string msg) {
     std::for_each(m_connections.begin(), m_connections.end(),
@@ -29,17 +32,17 @@ void StorageServer::on_read_message(char* msg_str) {
     if (msg.status == status_t::DOWNLOAD_FILE) {
         for (auto &connection: m_connections) {
             if (connection->id == msg.user.user_name + msg.user.devise.device_name) {
-                boost::bind(&ServerConnection::find_file_and_send, _1, msg)(connection);
+                boost::bind(&ServerConnection::find_file_and_send, _1, storage_directory, msg)(connection);
                 break;
             }
         }
     }
     else if (msg.status == status_t::PUSH_FILE) {
         // Check if directory exists
-        if (!std::filesystem::exists("/home/denis/Desktop/test/storage/" + msg.user.user_name)) {
-            std::filesystem::create_directories("/home/denis/Desktop/test/storage/" +  msg.user.user_name);
+        if (!std::filesystem::exists(storage_directory + msg.user.user_name)) {
+            std::filesystem::create_directories(storage_directory +  msg.user.user_name);
         }
-        std::fstream file("/home/denis/Desktop/test/storage/" + msg.user.user_name + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+        std::fstream file(storage_directory + msg.user.user_name + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
 
         file.write((char*)&msg.RAW_BYTES[0], msg.RAW_BYTES.size());
         file.close();
