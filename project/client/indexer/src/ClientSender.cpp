@@ -1,6 +1,7 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
+#include <filesystem>
 
 #include "ClientToStorageConnection.h"
 #include "ClientSender.h"
@@ -16,13 +17,22 @@ int ClientSender::send(std::shared_ptr<Message> &message, ClientsConnection &cl_
     }
     std::cout << "send_meta_data" << std::endl;
 
-
     if (event_bd == ONLY_SQL) {
-        m_cloud_storage.download_from_cloud(message, storage_conn);
+        if (message->status != DELETE) {
+            m_cloud_storage.download_from_cloud(message, storage_conn);
+        } else {
+            std::cout << "TRYING TO DELETE: " << message->user.devise.sync_folder + "/" +
+                                                 message->file_path + "/" + message->file_name +
+                                                 message->file_extension << std::endl;
+            std::filesystem::remove(message->user.devise.sync_folder + "/" +
+                                       message->file_path + "/" + message->file_name +
+                                       message->file_extension);
+        }
         return EXIT_SUCCESS;
+    } else if (message->status == DELETE) {
+        m_cloud_storage.remove_from_cloud(message, storage_conn);
     }
-
-    if (m_cloud_storage.send_to_cloud(message, storage_conn)) {
+    else if (m_cloud_storage.send_to_cloud(message, storage_conn)) {
         // TODO: Добавить логирование
         return 1;
     }

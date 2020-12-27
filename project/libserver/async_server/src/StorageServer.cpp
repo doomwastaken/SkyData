@@ -32,7 +32,8 @@ void StorageServer::on_read_message(char* msg_str) {
     if (msg.status == status_t::DOWNLOAD_FILE) {
         for (auto &connection: m_connections) {
             if (connection->id == msg.user.user_name + msg.user.devise.device_name) {
-                boost::bind(&ServerConnection::find_file_and_send, _1, storage_directory, msg)(connection);
+                using namespace std::chrono_literals;
+                boost::bind(&ServerConnection::find_file_and_send, _1, storage_directory, msg, storage_directory)(connection);
                 break;
             }
         }
@@ -42,10 +43,46 @@ void StorageServer::on_read_message(char* msg_str) {
         if (!std::filesystem::exists(storage_directory + msg.user.user_name)) {
             std::filesystem::create_directories(storage_directory +  msg.user.user_name);
         }
-        std::fstream file(storage_directory + msg.user.user_name + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+        if (!std::filesystem::exists(storage_directory + msg.user.user_name + "/" + msg.file_path)) {
+            std::filesystem::create_directories(storage_directory +  msg.user.user_name + "/" + msg.file_path);
+        }
 
+        std::fstream file;
+        if (!msg.file_path.empty()) {
+            file.open(
+                    storage_directory +
+                    msg.user.user_name + "/" +
+                    msg.file_path + "/" +
+                    msg.file_name + msg.file_extension,
+                    std::ios::binary | std::ios::out);
+        } else {
+            file.open(
+                    storage_directory +
+                    msg.user.user_name + "/" +
+                    msg.file_name + msg.file_extension,
+                    std::ios::binary | std::ios::out);
+        }
+        std::cout << "RAW BYTES: ";
+        for (const auto chr : msg.RAW_BYTES) {
+            std::cout << chr;
+        }
+        std::cout << std::endl;
         file.write((char*)&msg.RAW_BYTES[0], msg.RAW_BYTES.size());
         file.close();
+    }
+    else if (msg.status == status_t::DELETE) {
+        if (!msg.file_path.empty()) {
+            std::filesystem::remove(
+                    storage_directory +
+                    msg.user.user_name + "/" +
+                    msg.file_path + "/" +
+                    msg.file_name + msg.file_extension);
+        } else {
+            std::filesystem::remove(
+                    storage_directory +
+                    msg.user.user_name + "/" +
+                    msg.file_name + msg.file_extension);
+        }
     }
 }
 

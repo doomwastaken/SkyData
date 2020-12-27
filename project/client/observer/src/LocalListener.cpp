@@ -17,7 +17,14 @@ std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::F
         return nullptr; // Todo добавить обработку исключений
     }
     // ToDo добавить логирование
-    message->file_path = path.substr(0, index_of_file_begin);
+    std::string path1 = path;
+    message->file_path = path1.erase(0, sync_folder.length() + 1);
+    auto file_name_begin = message->file_path.rfind('/');
+    if (file_name_begin == std::string::npos) {
+        message->file_path = "";
+    } else {
+        message->file_path = message->file_path.substr(0, file_name_begin);
+    }
     std::cout << message->file_path << std::endl;
     auto index_of_dote = path.rfind('.');
 

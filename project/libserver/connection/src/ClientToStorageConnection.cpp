@@ -1,4 +1,5 @@
 #include <fstream>
+#include <filesystem>
 #include "ClientToStorageConnection.h"
 
 ClientToStorageConnection::ClientToStorageConnection(boost::asio::io_context& io_context, const tcp::resolver::results_type& endpoint)
@@ -56,7 +57,23 @@ void ClientToStorageConnection::handle_read(const boost::system::error_code& err
         Message msg;
         iarch >> msg;
 
-        std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+        if (!std::filesystem::exists(msg.user.devise.sync_folder + "/" + msg.file_path)) {
+            std::filesystem::create_directories(msg.user.devise.sync_folder + "/" + msg.file_path);
+        }
+
+        std::fstream file;
+        if (!msg.file_path.empty()) {
+            file.open(
+                    msg.user.devise.sync_folder + "/" +
+                    msg.file_path + "/" +
+                    msg.file_name + msg.file_extension,
+                    std::ios::binary | std::ios::out);
+        } else {
+            file.open(
+                    msg.user.devise.sync_folder + "/" +
+                    msg.file_name + msg.file_extension,
+                    std::ios::binary | std::ios::out);
+        }
         file.write((char*)&msg.RAW_BYTES[0], msg.RAW_BYTES.size());
         file.close();
 
@@ -87,7 +104,12 @@ void ClientToStorageConnection::do_write(Message msg, bool continue_writing) {
     if (!continue_writing) {
         msg.RAW_BYTES.clear();
         if (msg.status == PUSH_FILE) {
-            std::fstream file(msg.user.devise.sync_folder + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::in);
+            std::fstream file;
+            file.open(
+                    msg.user.devise.sync_folder + "/" +
+                    msg.file_path + "/" +
+                    msg.file_name + msg.file_extension,
+                    std::ios::binary | std::ios::in);
             char c = file.get();
             while(file.good()) {
                 msg.RAW_BYTES.push_back(c);

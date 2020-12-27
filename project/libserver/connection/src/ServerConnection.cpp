@@ -118,9 +118,22 @@ void ServerConnection::handle_write(const boost::system::error_code &error) {
     }
 }
 
-void ServerConnection::find_file_and_send(const std::string& directory, Message msg) {
-    std::fstream file(directory + msg.user.user_name + "/" + msg.file_name +
-                      msg.file_extension, std::ios::binary | std::ios::in);
+void ServerConnection::find_file_and_send(const std::string& directory, Message msg, const std::string& storage_directory) {
+    std::fstream file;
+    if (!msg.file_path.empty()) {
+        file.open(
+                storage_directory +
+                msg.user.user_name + "/" +
+                msg.file_path + "/" +
+                msg.file_name + msg.file_extension,
+                std::ios::binary | std::ios::in);
+    } else {
+        file.open(
+                storage_directory +
+                msg.user.user_name + "/" +
+                msg.file_name + msg.file_extension,
+                std::ios::binary | std::ios::in);
+    }
     Message msg_to_send;
 
     msg_to_send.version = msg.version;

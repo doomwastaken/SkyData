@@ -16,7 +16,7 @@ public:
     void start();
     void handle_read(const boost::system::error_code& error) override;
     void deliver(std::string msg);
-    void find_file_and_send(const std::string& directory, Message msg);
+    void find_file_and_send(const std::string& directory, Message msg, const std::string& storage_directory);
     void handle_write(const boost::system::error_code& error) override;
 
 private:
