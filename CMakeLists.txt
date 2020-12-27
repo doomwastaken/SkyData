@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ")
 
-#add_compile_optioкуафns("--coverage")
+#add_compile_options("--coverage")
 #add_link_options("--coverage")
 
 find_package(GTest  REQUIRED)
