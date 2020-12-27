@@ -63,6 +63,7 @@ struct Message {
     user_t user;
     std::vector<char> RAW_BYTES;  // RAW_BYTES of data
 
+
     friend std::ostream& operator << (std::ostream &out, const Message &message) {
         out << "Message(" << message.version << ", " << message.status << ", "
             << message.times_modified << ", " << message.file_name << ", " << message.file_extension << ", "

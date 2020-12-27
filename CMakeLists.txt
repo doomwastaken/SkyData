@@ -20,4 +20,4 @@ include_directories(${Boost_INCLUDE_DIR})
 enable_testing()
 
 add_subdirectory(project)
-#add_subdirectory(tests)
+add_subdirectory(tests)

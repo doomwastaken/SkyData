@@ -61,6 +61,7 @@ std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::F
         return nullptr;
     }
     std::cout << "56 strochka" << std::endl;
+    std:: cout << *message;
     return message;
 }
 
