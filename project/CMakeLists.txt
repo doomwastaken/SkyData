@@ -21,15 +21,11 @@ include_directories(data_bases/MetadataDB/include)
 
 include_directories(queue_server/include)
 
-add_subdirectory(Example/Client)
 add_subdirectory(client)
-add_subdirectory(Example/Middle)
-#add_subdirectory(Example/Backend)
 add_subdirectory(synchronization_service)
+add_subdirectory(storage)
+add_subdirectory(queue_server)
 add_subdirectory(libserver)
 add_subdirectory(liblistener)
-
-#add_subdirectory(Example/Client_To_Storage)
-add_subdirectory(Example/Storage)
 
 #add_subdirectory(queue_server)
