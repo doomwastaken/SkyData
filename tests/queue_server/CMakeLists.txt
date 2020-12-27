@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(queue_tests)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 set(GTEST_ROOT /usr/src/googletest/googletest)
 
@@ -16,7 +16,9 @@ include_directories(../../project/libserver/include
                     ../../project/queue_server/include
                     ../../project/common)
 
-set(TEST_SRC ./src/test.cpp)
+set(TEST_SRC src/QueueTests.cpp
+             src/ManagerTests.cpp)
+
 set(QUEUE_SRC ../../project/queue_server/src/QueueManager.cpp
               ../../project/queue_server/src/StdQueue.cpp)
 
