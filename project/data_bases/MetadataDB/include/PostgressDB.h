@@ -13,8 +13,13 @@ public:
 
     ~PostgressDB() override;
 
-    std::vector<Message> update(Message &message) override;
+    virtual std::vector<Message> update(Message &message) override;
 
+    virtual bool open(std::string& config) override;
+
+    virtual void close() override;
+
+private:
     void insert_devise(Message &message);
 
     void insert_file(Message &message);
@@ -25,19 +30,14 @@ public:
 
     bool commit_sql_query(const std::string& sql_query);
 
-    bool open(std::string& config);
-
     bool create_users_devises_table();
 
     bool create_users_files_table();
-
-    void close();
 
     void erase(Message &message);
 
 private:
     std::shared_ptr<pqxx::connection> m_connect;
-
 };
 
 #endif //PROJECT_POSTGRESSDB_H

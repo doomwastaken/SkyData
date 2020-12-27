@@ -3,11 +3,12 @@
 #include <sstream>
 #include <random>
 #include <queue>
+#include <pqxx/pqxx>
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "PostgressDB.h"
-#include "Sync_Service.h"
+#include "DataBase.h"
 
 using ::testing::_;
 using ::testing::AtLeast;
@@ -15,35 +16,29 @@ using ::testing::DoAll;
 using ::testing::Return;
 using ::testing::SetArgReferee;
 
-class MockDatabaseWorker: public DataBaseWorker {
-    MOCK_METHOD(void, run, (), ());
-    MOCK_METHOD(void, take_task, (), ());
-    MOCK_METHOD(void, do_task, (), ());
+class MockDatabase: public PostgressDB {
+public:
+    MOCK_METHOD(std::string, select, (const std::string str));
 };
 
 TEST(test_worker, test1) {
-    PostgressDB data_base;
-    std::queue<Event> m_clients_have_work;
-    std::shared_ptr<std::mutex> m_have_work_mutex;
-    MockDatabaseWorker worker(data_base, m_clients_have_work, m_have_work_mutex);
-    EXPECT_CALL(worker, run())
-            .Times(1);
-}
+    MockDatabase db;
+    Message message;
+    message.status = LOGIN;
+    message.user.user_name = "Oleg";
+    db.update(message);
+    std::string quote = "'";
 
-TEST(test_worker, test2) {
-    PostgressDB data_base;
-    std::queue<Event> m_clients_have_work;
-    std::shared_ptr<std::mutex> m_have_work_mutex;
-    MockDatabaseWorker worker(data_base, m_clients_have_work, m_have_work_mutex);
-    EXPECT_CALL(worker, take_task())
-            .Times(1);
-}
+    const std::string first_arg = "SELECT * from USERS_DEVISES "
+                    "WHERE device_name = " + quote + message.user.devise.device_name + quote;
 
-TEST(test_worker, test3) {
-    PostgressDB data_base;
-    std::queue<Event> m_clients_have_work;
-    std::shared_ptr<std::mutex> m_have_work_mutex;
-    MockDatabaseWorker worker(data_base, m_clients_have_work, m_have_work_mutex);
-    EXPECT_CALL(worker, do_task())
-            .Times(1);
+    EXPECT_CALL(db, select(first_arg))
+            .Times(1), Return("result");
+
+    std::vector<Message> messages = db.update(message);
+
+    ASSERT_EQ(messages[0].user.user_name, "Oleg");
+    ASSERT_EQ(messages[0].status, LOGIN);
+
+
 }
