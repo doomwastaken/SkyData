@@ -1,0 +1,37 @@
+name: Project_CI
+
+on: [push]
+
+jobs:
+  check:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install_default_libs
+        run: |
+          sudo apt-get install valgrind
+          sudo apt-get install clang-tidy
+          sudo apt-get install cppcheck
+          sudo apt-get install python3-pip
+          sudo apt-get install gcovr
+      - name: install_gtest
+        run: |
+          sudo apt-get install googletest
+          sudo cp -a /usr/src/googletest/googletest/include/gtest /usr/include
+      - name: install_gtest
+        run: |
+          sudo apt-get install google-mock
+          cd /usr/src/googletest/googlemock
+          sudo cmake CMakeLists.txt
+          sudo make
+          sudo cp -a /usr/src/googletest/googlemock/include/gmock /usr/include
+
+      - name: build_and_run
+        run: |
+          mkdir build && cd build
+          sudo cmake ../
+          sudo make
+          cd tests/queue_server/
+          ./queue_tests
