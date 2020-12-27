@@ -36,5 +36,5 @@ jobs:
           ./queue_tests
       - name: valgrind
         run: |
-          cd build/tests
+          cd build/tests/queue_server/
           valgrind --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no --error-exitcode=1  ./queue_tests
