@@ -18,6 +18,7 @@ public:
     void deliver(std::string msg);
     void find_file_and_send(const std::string& directory, Message msg, const std::string& storage_directory);
     void handle_write(const boost::system::error_code& error) override;
+    void do_write(const std::string& msg = "");
 
 private:
     std::shared_ptr<AbstractServer> m_server_ptr;

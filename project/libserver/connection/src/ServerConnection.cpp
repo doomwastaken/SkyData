@@ -120,20 +120,12 @@ void ServerConnection::handle_write(const boost::system::error_code &error) {
 
 void ServerConnection::find_file_and_send(const std::string& directory, Message msg, const std::string& storage_directory) {
     std::fstream file;
-    if (!msg.file_path.empty()) {
-        file.open(
-                storage_directory +
-                msg.user.user_name + "/" +
-                msg.file_path + "/" +
-                msg.file_name + msg.file_extension,
-                std::ios::binary | std::ios::in);
-    } else {
-        file.open(
-                storage_directory +
-                msg.user.user_name + "/" +
-                msg.file_name + msg.file_extension,
-                std::ios::binary | std::ios::in);
-    }
+    file.open(
+            storage_directory +
+            msg.user.user_name + "/" +
+            msg.file_path + "/" +
+            msg.file_name + msg.file_extension,
+            std::ios::binary | std::ios::in);
     Message msg_to_send;
 
     msg_to_send.version = msg.version;
@@ -156,10 +148,19 @@ void ServerConnection::find_file_and_send(const std::string& directory, Message 
     boost::archive::text_oarchive oarch(str);
     oarch << msg_to_send;
     str << "\b";
+    do_write(str.str());
+}
 
-
-    std::cout << str.str() << std::endl;
-    boost::asio::write(m_socket,
-                       boost::asio::buffer(str.str(),
-                                           str.str().size()));
+void ServerConnection::do_write(const std::string &msg) {
+    bool write_in_progress = !m_write_msgs.empty();
+    if (!msg.empty()) { m_write_msgs.push_back(msg); }
+    if (!write_in_progress) {
+        boost::asio::async_write(m_socket,
+                                 boost::asio::buffer(m_write_msgs.front().data(),
+                                                     m_write_msgs.front().length()),
+                                 boost::bind(
+                                         &ServerConnection::handle_write,
+                                         this,
+                                         boost::asio::placeholders::error));
+    }
 }

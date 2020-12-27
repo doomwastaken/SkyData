@@ -53,8 +53,7 @@ public:
     virtual void on_read_message(char* msg) = 0;
 
     void remove_connection(std::string id, std::string message) {
-
-for (auto& connection : m_connections) {
+        for (auto& connection : m_connections) {
             if (connection->id == id) {
                 m_connections.erase(connection);
                 //Pushing message, which was send unsuccessfully
