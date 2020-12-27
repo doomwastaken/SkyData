@@ -18,8 +18,7 @@ set (
 set (
         DATABASE_SRC
         ../data_bases/Cloud_Storage/src/CloudStorageDB.cpp
-        ../data_bases/Internal_DB/src/SQLite.cpp
-        ../queue_server/main.cpp)
+        ../data_bases/Internal_DB/src/SQLite.cpp)
 
 set (
         WIDGETS_SRC
@@ -37,6 +36,5 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 include_directories(${Qt5Widgets_INCLUDES})
 add_definitions(${Qt5Widgets_DEFINITIONS})
 
-add_executable(client_nash main.cpp ${INDEXER_SRC} ${DB_SRC} ${OBSERVER_SRC} ${DATABASE_SRC} ${WIDGETS_SRC} ../common/Message.cpp)
-add_executable(client_nash1 main.cpp ${INDEXER_SRC} ${DB_SRC} ${OBSERVER_SRC} ${DATABASE_SRC} ${WIDGETS_SRC} ../common/Message.cpp)
-target_link_libraries(client_nash ${Boost_LIBRARIES} libserver sqlite3 liblistener Qt5::Widgets)
+add_executable(client main.cpp ${INDEXER_SRC} ${DB_SRC} ${OBSERVER_SRC} ${DATABASE_SRC} ${WIDGETS_SRC} ../common/Message.cpp)
+target_link_libraries(client ${Boost_LIBRARIES} libserver sqlite3 liblistener Qt5::Widgets)
