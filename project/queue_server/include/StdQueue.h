@@ -2,8 +2,9 @@
 #define PROJECT_STDQUEUE_H
 
 
-#include "Queue.h"
 #include <queue>
+#include <exception>
+#include "Queue.h"
 
 class StdQueue : public Queue {
 private:

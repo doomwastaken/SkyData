@@ -8,7 +8,6 @@ include_directories(include)
 
 set (QUEUE_SRC
         src/StdQueue.cpp
-        src/OnDiskSaverQueue.cpp
         src/QueueManager.cpp
         )
 

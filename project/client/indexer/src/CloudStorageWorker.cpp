@@ -20,3 +20,13 @@ int CloudStorageWorker::download_from_cloud(std::shared_ptr<Message> &message, C
 //    return 1;
     return 0;
 }
+
+int CloudStorageWorker::remove_from_cloud(std::shared_ptr<Message> &message, ClientToStorageConnection &storage_conn) {
+    status_t t = message->status;
+    message->status = status_t::DELETE;
+    storage_conn.write(*message);
+    message->status = t;
+
+//    return 1;
+    return 0;
+}

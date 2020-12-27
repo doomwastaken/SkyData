@@ -1,7 +1,3 @@
-//
-// Created by denis on 09.12.2020.
-//
-
 #ifndef ASYNC_CLIENT_QUEUE_SERVER_STORAGESERVER_H
 #define ASYNC_CLIENT_QUEUE_SERVER_STORAGESERVER_H
 
@@ -14,7 +10,10 @@ public:
 
     void start_accept() override;
     void deliver_for_all(std::string msg) override;
-    void on_readed_message(char* msg) override;
+    void on_read_message(char* msg) override;
+    void set_storage_directory(std::string directory);
+
+    std::string storage_directory;
 };
 
 #endif //ASYNC_CLIENT_QUEUE_SERVER_STORAGESERVER_H

@@ -9,6 +9,7 @@ void StdQueue::push_to_queue(std::string message) {
 
 std::string StdQueue::pop_from_queue() {
     mtx.lock();
+    if (messages.empty()) { throw std::exception();}
     std::string msg = messages.front();
     messages.pop();
     size--;

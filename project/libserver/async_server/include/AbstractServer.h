@@ -23,8 +23,7 @@ class AbstractServer{
 public:
     AbstractServer(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& endpoint):
         m_io_context(io_context),
-        m_acceptor(io_context, endpoint)
-        {}
+        m_acceptor(io_context, endpoint) { ; }
 
 
     virtual void start_accept() = 0;
@@ -36,15 +35,13 @@ public:
             int32_t accept_server_socket = session->socket().native_handle();
             int32_t timeout = 2;
             int32_t cnt = 2;
-            int32_t intverval = 2;
-            int32_t tcp_user_timeout = 2000;
+            int32_t interval = 2;
 
             // Adding Keepalive flag
             session->socket().set_option(boost::asio::socket_base::keep_alive(true));
             setsockopt(accept_server_socket, SOL_TCP, TCP_KEEPIDLE, &timeout, sizeof(timeout));
             setsockopt(accept_server_socket, SOL_TCP, TCP_KEEPCNT, &cnt, sizeof(cnt));
-            setsockopt(accept_server_socket, SOL_TCP, TCP_KEEPINTVL, &intverval, sizeof(intverval));
-//            setsockopt(accept_server_socket, SOL_TCP, TCP_USER_TIMEOUT, &tcp_user_timeout, sizeof(tcp_user_timeout));
+            setsockopt(accept_server_socket, SOL_TCP, TCP_KEEPINTVL, &interval, sizeof(interval));
             m_connections.insert(session);
             session->start();
         }
@@ -53,19 +50,18 @@ public:
     }
 
     virtual void deliver_for_all(std::string msg) = 0;
-
-    virtual void on_readed_message(char* msg) = 0;
-
+    virtual void on_read_message(char* msg) = 0;
 
     void remove_connection(std::string id, std::string message) {
-        for (auto& connection : m_connections) {
+
+for (auto& connection : m_connections) {
             if (connection->id == id) {
                 m_connections.erase(connection);
                 //Pushing message, which was send unsuccessfully
                 QueueManager::queue_manager().push_to_client_queue(message, connection->id);
                 //The last success message sended may be not sended at all!
-                if (!connection->last_success_message_sended.empty()) {
-                    QueueManager::queue_manager().push_to_client_queue(connection->last_success_message_sended,
+                if (!connection->last_success_message_send.empty()) {
+                    QueueManager::queue_manager().push_to_client_queue(connection->last_success_message_send,
                                                                        connection->id);
                 }
                 break;
@@ -89,7 +85,6 @@ protected:
     boost::asio::io_context& m_io_context;
     boost::asio::ip::tcp::acceptor m_acceptor;
     std::set<boost::shared_ptr<ServerConnection>> m_connections;
-    std::deque<std::string> m_messages_to_send;
 };
 
 #endif //ASYNC_CLIENT_QUEUE_SERVER_ABSTRACT_SERVER_H

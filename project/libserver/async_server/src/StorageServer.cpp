@@ -1,7 +1,3 @@
-//
-// Created by denis on 09.12.2020.
-//
-
 #include <fstream>
 #include "StorageServer.h"
 #include "Message.h"
@@ -10,7 +6,7 @@
 
 void StorageServer::start_accept() {
     boost::shared_ptr<ServerConnection> new_connect(new ServerConnection(m_io_context,
-                                                                         std::shared_ptr<AbstractServer>(this)));
+                                                      std::shared_ptr<AbstractServer>(this)));
     m_acceptor.async_accept(new_connect->socket(),
                             boost::bind(
                                     &StorageServer::handle_accept,
@@ -19,36 +15,74 @@ void StorageServer::start_accept() {
                                     boost::asio::placeholders::error));
 }
 
+void StorageServer::set_storage_directory(std::string directory) {
+    storage_directory = directory;
+}
 
 void StorageServer::deliver_for_all(std::string msg) {
     std::for_each(m_connections.begin(), m_connections.end(),
                   boost::bind(&ServerConnection::deliver, _1, boost::ref(msg)));
 }
 
-void StorageServer::on_readed_message(char* msg_str) {
+void StorageServer::on_read_message(char* msg_str) {
     std::stringstream str(msg_str);
     boost::archive::text_iarchive iarch(str);
     Message msg;
     iarch >> msg;
     if (msg.status == status_t::DOWNLOAD_FILE) {
         for (auto &connection: m_connections) {
-            //        std::cout << "Messages amount for " << connection->id << ": " << QueueManager::queue_manager().get_client_messages_amount(connection->id) << std::endl << std::endl;
             if (connection->id == msg.user.user_name + msg.user.devise.device_name) {
-                boost::bind(&ServerConnection::find_file_and_send, _1, msg)(connection);
+                using namespace std::chrono_literals;
+                boost::bind(&ServerConnection::find_file_and_send, _1, storage_directory, msg, storage_directory)(connection);
                 break;
             }
         }
     }
     else if (msg.status == status_t::PUSH_FILE) {
         // Check if directory exists
-        if (!std::filesystem::exists("/home/yaroslav/Techno_park/1_sem/Test/" + msg.user.user_name)) {
-            std::filesystem::create_directories("/home/yaroslav/Techno_park/1_sem/Test/" +  msg.user.user_name);
+        if (!std::filesystem::exists(storage_directory + msg.user.user_name)) {
+            std::filesystem::create_directories(storage_directory +  msg.user.user_name);
         }
-        std::fstream file("/home/yaroslav/Techno_park/1_sem/Test/" + msg.user.user_name + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
-//        std::fstream file(msg.file_path + "/" + msg.file_name + msg.file_extension, std::ios::binary | std::ios::out);
+        if (!std::filesystem::exists(storage_directory + msg.user.user_name + "/" + msg.file_path)) {
+            std::filesystem::create_directories(storage_directory +  msg.user.user_name + "/" + msg.file_path);
+        }
 
+        std::fstream file;
+        if (!msg.file_path.empty()) {
+            file.open(
+                    storage_directory +
+                    msg.user.user_name + "/" +
+                    msg.file_path + "/" +
+                    msg.file_name + msg.file_extension,
+                    std::ios::binary | std::ios::out);
+        } else {
+            file.open(
+                    storage_directory +
+                    msg.user.user_name + "/" +
+                    msg.file_name + msg.file_extension,
+                    std::ios::binary | std::ios::out);
+        }
+        std::cout << "RAW BYTES: ";
+        for (const auto chr : msg.RAW_BYTES) {
+            std::cout << chr;
+        }
+        std::cout << std::endl;
         file.write((char*)&msg.RAW_BYTES[0], msg.RAW_BYTES.size());
         file.close();
+    }
+    else if (msg.status == status_t::DELETE) {
+        if (!msg.file_path.empty()) {
+            std::filesystem::remove(
+                    storage_directory +
+                    msg.user.user_name + "/" +
+                    msg.file_path + "/" +
+                    msg.file_name + msg.file_extension);
+        } else {
+            std::filesystem::remove(
+                    storage_directory +
+                    msg.user.user_name + "/" +
+                    msg.file_name + msg.file_extension);
+        }
     }
 }
 
