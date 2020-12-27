@@ -11,6 +11,7 @@ jobs:
 
       - name: install_default_libs
         run: |
+          sudo apt-get update
           sudo apt-get install valgrind
           sudo apt-get install clang-tidy
           sudo apt-get install cppcheck
