@@ -449,7 +449,7 @@ namespace gogo {
             const Watch watch = inotify_add_watch(inotify_fd_, path.c_str(),
                                                   IN_CREATE | IN_DELETE |
                                                   IN_CLOSE_WRITE | IN_MOVE | IN_ONLYDIR);
-            std::cout << "#################----" << watch << "---------" << path.string() << std::endl;
+          //  std::cout << "#################----" << watch << "---------" << path.string() << std::endl;
             watchers_[watch].insert(watcher);
 
             return watch;

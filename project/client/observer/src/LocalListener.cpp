@@ -9,14 +9,12 @@ int quota_limit;
 std::string device_name;
 
 std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::FilePathWatcher::Event event) {
-    std::cout << path << std::endl;
     std::shared_ptr<Message> message = std::make_shared<Message>();
     auto index_of_file_begin = path.rfind('/');
     if (index_of_file_begin == std::string::npos) {
-        std::cout << "BAGAGAGAGGAGA" << std::endl;
-        return nullptr; // Todo добавить обработку исключений
+        return nullptr;
     }
-    // ToDo добавить логирование
+
     std::string path1 = path;
     message->file_path = path1.erase(0, sync_folder.length() + 1);
     auto file_name_begin = message->file_path.rfind('/');
@@ -36,7 +34,7 @@ std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::F
         message->file_extension = path.substr(index_of_dote);
     }
     message->file_size = get_file_size(path);
-    message->times_modified = 0; // ToDo че нить придумать с этим полем
+    message->times_modified = 0;
 
     if (event == gogo::FilePathWatcher::Event::DELETED) {
         message->status = DELETE;
@@ -57,11 +55,9 @@ std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::F
     message->user.devise.device_name = device_name;
 
     if (event == gogo::FilePathWatcher::Event::NO_EVENT) {
-        std::cout << "53 strochka" << std::endl;
         return nullptr;
     }
-    std::cout << "56 strochka" << std::endl;
-    std:: cout << *message;
+
     return message;
 }
 
@@ -75,15 +71,10 @@ int LocalListener::event_listen(const std::string& path_str_, const std::string&
     device_name = device_name_;
 
     boost::filesystem::path path = path_str;
-   // std::cout << "-------------------------------------------------------------------------------------------\n";
     std::shared_ptr<NotificationReceiver> er = std::make_shared<NotificationReceiver>();
-    //std::cout << "-------------------------------------------------------------------------------------------\n";
     const auto callback = std::bind(&NotificationReceiver::OnFilePathChanged,
                                     er->shared_from_this(), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-    //std::cout << "-------------------------------------------------------------------------------------------\n";
     gogo::FilePathWatcher file_path_watcher;
-    // while (true) {
-   // std::cout << "-------------------------------------------------------------------------------------------\n";
     file_path_watcher.Watch(path, callback);
 
     while (true) {
@@ -105,7 +96,6 @@ void NotificationReceiver::OnFilePathChanged(const gogo::FilePath &path, bool er
     }
     if (error || event == gogo::FilePathWatcher::Event::NO_EVENT) {
         return;
-        // TODO: логирвание
     }
     std::shared_ptr<Message> mes = LocalListener::create_message(path.string(), event);
     if (mes != nullptr) {

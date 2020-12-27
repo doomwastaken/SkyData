@@ -18,7 +18,7 @@ bool SQLite::update(Message &message) {
     if (message.status == DELETE) {
         return del(message);
     }
-    if (message.status == MODIFIED || message.status == CREATE) {  // ToDo: Разделить на чанки
+    if (message.status == MODIFIED || message.status == CREATE) {
         return insert(message);
     }
     return false;
@@ -29,8 +29,6 @@ SQLite::~SQLite() {
 }
 
 int SQLite::create_table_messages() {
-    // TODO: DELETE ME!
-
     std::string sql = "DROP TABLE IF EXISTS MESSAGES;";
     sqlite3_exec(m_data_base, sql.c_str(), callback, nullptr, nullptr);
 
@@ -57,7 +55,6 @@ int SQLite::callback(void *is_find, int argc, char **argv, char **azColName) {
 }
 
 bool SQLite::insert(Message &message) {
-//    ToDo: Проверять есть ли уже такая запись.
     std::string comma = ",";
     std::string quotes = "'";
     std::string sql = (std::string) "INSERT INTO MESSAGES(version,times_modified,file_name,"
@@ -82,7 +79,6 @@ bool SQLite::insert(Message &message) {
 }
 
 bool SQLite::del(Message &message) {
-//    Todo: Проверять наличие этой запис
     std::string comma = ",";
     //std::string quotes = " ";
     std::string sql = (std::string) "DELETE FROM MESSAGES WHERE file_name="

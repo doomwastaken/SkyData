@@ -4,7 +4,6 @@ set (
         observer/src/Observer.cpp
         observer/src/MessageListener.cpp
         observer/src/MessageUpdater.cpp
-        observer/src/Downloader.cpp
         observer/src/EventListen.cpp
 )
 

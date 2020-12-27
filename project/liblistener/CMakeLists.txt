@@ -18,3 +18,5 @@ include_directories(${Boost_INCLUDE_DIR})
 
 add_library(liblistener STATIC ${SRC} ${INC})
 target_link_libraries(liblistener ${Boost_LIBRARIES}  -lboost_filesystem)
+
+target_include_directories(liblistener PUBLIC include)

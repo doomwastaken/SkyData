@@ -7,8 +7,7 @@ int CloudStorageWorker::send_to_cloud(std::shared_ptr<Message> &message, ClientT
     storage_conn.write(*message);
     message->status = t;
 
-//    return 1;
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 int CloudStorageWorker::download_from_cloud(std::shared_ptr<Message> &message, ClientToStorageConnection &storage_conn) {
@@ -17,8 +16,7 @@ int CloudStorageWorker::download_from_cloud(std::shared_ptr<Message> &message, C
     storage_conn.write(*message);
     message->status = t;
 
-//    return 1;
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 int CloudStorageWorker::remove_from_cloud(std::shared_ptr<Message> &message, ClientToStorageConnection &storage_conn) {
@@ -27,6 +25,5 @@ int CloudStorageWorker::remove_from_cloud(std::shared_ptr<Message> &message, Cli
     storage_conn.write(*message);
     message->status = t;
 
-//    return 1;
-    return 0;
+    return EXIT_SUCCESS;
 }
