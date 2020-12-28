@@ -1,3 +1,4 @@
+#include <sstream>
 #include "Message.h"
 
 std::string serialize(Message &message) {
@@ -16,3 +17,5 @@ std::shared_ptr<Message> deserialize(const std::string &buf) {
 
     return new_message;
 }
+
+

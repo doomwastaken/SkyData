@@ -28,6 +28,7 @@ void BackendServer::deliver_for_all(std::string msg) {
                   boost::bind(&ServerConnection::deliver, _1, boost::ref(msg)));
 }
 
+
 void BackendServer::on_read_message(char* msg) {
     std::shared_ptr<Message> message;
     message = deserialize(msg);

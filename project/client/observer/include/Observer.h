@@ -1,7 +1,7 @@
 #ifndef PROJECT_OBSERVER_H
 #define PROJECT_OBSERVER_H
 #include <iostream>
-#include "Downloader.h"
+
 #include "EventListen.h"
 #include "MessageListener.h"
 #include "MessageUpdater.h"
@@ -11,15 +11,9 @@
 
 
 class Observer {
-    //MessageListener mes_list;
-    //Downloader<T> downloader;
-
     MessageUpdater message_updater;
     User user;
 
-
-
-   // void watch_message_from_server(const std::string& host, const size_t& port);
     int watch_local();
 
 public:

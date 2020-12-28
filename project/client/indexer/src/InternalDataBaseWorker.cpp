@@ -4,7 +4,6 @@
 
 int InternalDataBaseWorker::send_meta_data(std::shared_ptr<Message> &message) {
     if (!data_base->update(*message)) {
-        // TODO: Добавить логирование
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
@@ -13,5 +12,3 @@ int InternalDataBaseWorker::send_meta_data(std::shared_ptr<Message> &message) {
 InternalDataBaseWorker::InternalDataBaseWorker() {
     data_base = std::make_shared<SQLite>();
 }
-
-//InternalDataBaseWorker::InternalDataBaseWorker() = default;

@@ -10,7 +10,6 @@ void MessageUpdater::to_client_send(ClientsConnection &cl_con, ClientToStorageCo
 
             if (!processed_messages.front().second) {
                 sender.send(processed_messages.front().first, cl_con, storage_conn, ClientSender::ONLY_SQL);
-                // TODO: Download from server
             } else {
                 sender.send(processed_messages.front().first, cl_con, storage_conn, ClientSender::BOTH);
             }
@@ -18,15 +17,12 @@ void MessageUpdater::to_client_send(ClientsConnection &cl_con, ClientToStorageCo
             processed_messages.pop();
         }
     }
-    std::cout << "29 strochka" << std::endl;
     mtx.unlock();
 
 }
 
 void MessageUpdater::push(const std::shared_ptr<Message> &message, bool is_from_queue) {
     mtx_stat.lock();
-    //std::pair<std::shared_ptr<Message>, bool> f;
-    //processed_messages.push(message, boooool);
     processed_messages.push(std::pair<std::shared_ptr<Message>, bool>(message, is_from_queue));
     mtx_stat.unlock();
 }

@@ -1,21 +1,7 @@
-#include "PostgressDB.h"
 #include <pqxx/pqxx>
 #include <algorithm>
 
-// FIXME: remove this
-void print_mes_db(Message &message) {
-    std::cout << "user name: " << message.user.user_name << std::endl;
-    std::cout << "user email: " << message.user.email << std::endl;
-    std::cout << "version: " << message.version << std::endl;
-    std::cout << "times modified: " << message.times_modified << std::endl;
-    std::cout << "file name: " << message.file_name << std::endl;
-    std::cout << "file extention: " << message.file_extension<< std::endl;
-    std::cout << "file size: " << message.file_size << std::endl;
-    std::cout << "file path: " << message.file_path << std::endl;
-    std::cout << "devise name: " << message.user.devise.device_name << std::endl;
-    std::cout << "sync folder: " << message.user.devise.sync_folder << std::endl;
-    std::cout << "quota limit: " << message.user.quota_limit << std::endl;
-}
+#include "PostgressDB.h"
 
 PostgressDB::PostgressDB()= default;;
 
@@ -25,6 +11,8 @@ PostgressDB::~PostgressDB() {
 
 bool PostgressDB::open(std::string& config) {
     m_connect = std::make_shared<pqxx::connection>(config);
+    create_users_files_table();
+    create_users_devises_table();
     return m_connect->is_open();
 }
 
@@ -49,13 +37,8 @@ void PostgressDB::insert_file(Message &message) {
           + quote + message.file_path + quote + ", "
           + quote + message.user.devise.sync_folder + quote + ", "
           + std::to_string(message.user.quota_limit) + ");";
-
-    /* Create a transactional object. */
-    pqxx::work W(*m_connect);
-
-    /* Execute SQL query */
-    W.exec(sql);
-    W.commit();
+  
+    commit_sql_query(sql);
 }
 
 void PostgressDB::insert_devise(Message &message) {
@@ -68,12 +51,7 @@ void PostgressDB::insert_devise(Message &message) {
           + quote + message.user.devise.device_name + quote + ", "
           + quote + message.user.devise.sync_folder +quote + ");";
 
-    /* Create a transactional object. */
-    pqxx::work W(*m_connect);
-
-    /* Execute SQL query */
-    W.exec(sql);
-    W.commit();
+    commit_sql_query(sql);
 }
 
 void PostgressDB::erase(Message &message) {
@@ -88,8 +66,6 @@ void PostgressDB::erase(Message &message) {
 
     commit_sql_query(sql);
 }
-
-
 
 pqxx::result PostgressDB::select(const std::string& sql_select) {
     pqxx::nontransaction nontransaction(*m_connect);
@@ -114,7 +90,6 @@ bool PostgressDB::commit_sql_query(const std::string& sql_query) {
 std::vector<Message> PostgressDB::update(Message &message) {
     std::string quote = "'";
     std::vector<Message> messages;
-    std::cout << "mes status: " << message.status << std::endl;
     pqxx::result result;
     std::vector<std::string> vec_str;
     bool not_create = false;
@@ -141,37 +116,30 @@ std::vector<Message> PostgressDB::update(Message &message) {
                     new_message.file_size = std::stoi(vec_str[i + 6]);
                     new_message.file_path = vec_str[i + 7];
                     new_message.user.devise.device_name = message.user.devise.device_name;
-                    // FIXME: remove this
-//                new_message.user.devise.device_name = "iPhone";
-
                     new_message.user.devise.sync_folder = message.user.devise.sync_folder;
                     new_message.user.quota_limit = std::stoi(vec_str[i + 9]);
                     new_message.status = CREATE;
                     messages.push_back(new_message);
-                    print_mes_db(new_message);
                 }
-                std::cout << "HELLO INSERT_DEVISE\n";
                 insert_devise(message);
             }
-
             return messages;
         case CREATE:
             result = select("SELECT * FROM users_files "
-                            "WHERE file_name = " + quote + message.file_name + quote + " "
-                                                                                       "AND file_extension = " + quote + message.file_extension + quote + " "
-                                                                                                                                                          "AND name = " + quote + message.user.user_name + quote);
+                            "WHERE file_name = " + quote + message.file_name + quote + " " +
+                            "AND file_extension = " + quote + message.file_extension + quote + " "
+                            "AND name = " + quote + message.user.user_name + quote);
 
             if (!result.empty()) {
-                std::cout << "EMPTY!" << std::endl;
                 not_create = true;
-//                return messages;
             }
 
             result = select("SELECT * FROM users_devises "
                             "WHERE name = " + quote + message.user.user_name + quote + " "
-                                                                                       "AND device_name != " +  quote + message.user.devise.device_name + quote);
-            for (const auto &row : result) {
-                for (const auto &field : row) {
+                            "AND device_name != " +  quote + message.user.devise.device_name + quote);
+        
+            for (const auto &row: result) {
+                for (const auto &field: row) {
                     vec_str.push_back(field.as<std::string>());
                 }
             }
@@ -184,10 +152,13 @@ std::vector<Message> PostgressDB::update(Message &message) {
             }
             if (not_create) { return messages; }
 
-            print_mes_db(message);
             insert_file(message);
             return messages;
-        case DELETE:
+
+        case DELETE: case MODIFIED:
+            if (message.status == MODIFIED) {
+                modified(message);
+            }
             result = select("SELECT * FROM users_devises "
                             "WHERE name = " + quote + message.user.user_name + quote + " " +
                             "AND device_name != "  +  quote + message.user.devise.device_name + quote);
@@ -203,24 +174,8 @@ std::vector<Message> PostgressDB::update(Message &message) {
                 new_message.user.devise.sync_folder = vec_str[i + 2];
                 messages.push_back(new_message);
             }
-            erase(message);
-            return messages;
-        case MODIFIED:
-            modified(message);
-            result = select("SELECT * FROM users_devises "
-                            "WHERE name = " + quote + message.user.user_name + quote + " " +
-                            "AND device_name != " +  quote + message.user.devise.device_name + quote);
-            for (const auto &row : result) {
-                for (const auto &field : row) {
-                    vec_str.push_back(field.as<std::string>());
-                }
-            }
-            for (int i = 0; i < vec_str.size(); i = i + 3) {
-                Message new_message;
-                new_message = message;
-                new_message.user.devise.device_name = vec_str[i + 1];
-                new_message.user.devise.sync_folder = vec_str[i + 2];
-                messages.push_back(new_message);
+            if (message.status == DELETE) {
+                erase(message);
             }
             return messages;
     }
@@ -231,11 +186,10 @@ bool PostgressDB::create_users_devises_table() {
     std::string  sql;
 
     try {
-        /* Create SQL statement */
+        //FIXME: For demonstration, delete for release
         sql = "DROP TABLE IF EXISTS USERS_DEVISES;";
         commit_sql_query(sql);
 
-        /* Create SQL statement */
         sql = "CREATE TABLE USERS_DEVISES(" \
         "NAME           TEXT    NOT NULL," \
         "DEVICE_NAME    TEXT    NOT NULL," \
@@ -254,10 +208,10 @@ bool PostgressDB::create_users_files_table() {
     std::string  sql;
 
     try {
+        //FIXME: For demonstration, delete for release
         sql = "DROP TABLE IF EXISTS USERS_FILES;";
         commit_sql_query(sql);
 
-        /* Create SQL statement */
         sql = "CREATE TABLE USERS_FILES(" \
         "NAME           TEXT    NOT NULL," \
         "EMAIL          TEXT    NOT NULL," \
@@ -281,11 +235,10 @@ bool PostgressDB::create_users_files_table() {
 
 bool PostgressDB::modified(Message &message) {
     std::string quote = "'";
-    std::string sql = "UPDATE users_files set file_size = " + std::to_string(message.file_size) +
+    std::string sql = "UPDATE users_files set file_size = " + std::to_string(message.file_size) + " "
                       "WHERE file_name = " + quote + message.file_name + quote + " "
-                                                                                 "AND file_extension = " + quote + message.file_extension + quote + " "
+                      "AND file_extension = " + quote + message.file_extension + quote + " "
                                                                                                                                                     "AND name = " + quote + message.user.user_name + quote;
     commit_sql_query(sql);
     return false;
 }
-
