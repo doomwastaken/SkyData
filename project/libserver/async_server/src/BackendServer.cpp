@@ -36,7 +36,6 @@ void BackendServer::on_read_message(char* msg) {
 
     if (!messages.empty()) {
         std::for_each(messages.begin(), messages.end(), [&](Message &mes) {
-            std::cout << mes.user.devise.device_name << std::endl;
             std::string ser_mes = serialize(mes);
             ser_mes += "\b";
             deliver_for_all(ser_mes);

@@ -184,10 +184,6 @@ bool PostgressDB::create_users_devises_table() {
     std::string  sql;
 
     try {
-        //  FIXME: For demonstration, delete for release
-        sql = "DROP TABLE IF EXISTS USERS_DEVISES;";
-        commit_sql_query(sql);
-
         sql = "CREATE TABLE USERS_DEVISES(" \
         "NAME           TEXT    NOT NULL," \
         "DEVICE_NAME    TEXT    NOT NULL," \
@@ -206,10 +202,6 @@ bool PostgressDB::create_users_files_table() {
     std::string  sql;
 
     try {
-        //  FIXME: For demonstration, delete for release
-        sql = "DROP TABLE IF EXISTS USERS_FILES;";
-        commit_sql_query(sql);
-
         sql = "CREATE TABLE USERS_FILES(" \
         "NAME           TEXT    NOT NULL," \
         "EMAIL          TEXT    NOT NULL," \

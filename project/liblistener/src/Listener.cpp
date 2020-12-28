@@ -22,8 +22,6 @@
 namespace gogo {
     namespace {
 
-// Returns a vector of all of the components of the provided path.
-// "/foo/bar"  ->  [ "/", "foo", "bar" ]
         std::vector<std::string> GetPathComponents(const FilePath &path) {
             std::vector<std::string> ret_val;
             FilePath current = path;
@@ -170,7 +168,6 @@ namespace gogo {
             // The file or directory we're supposed to watch.
             FilePath target_;
 
-            // TODO(i.saneev): Unsupported yet
             bool recursive_ = false;
 
             // The vector of watches and next component names for all path components,
@@ -448,7 +445,6 @@ namespace gogo {
             const Watch watch = inotify_add_watch(inotify_fd_, path.c_str(),
                                                   IN_CREATE | IN_DELETE |
                                                   IN_CLOSE_WRITE | IN_MOVE | IN_ONLYDIR);
-          //  std::cout << "#################----" << watch << "---------" << path.string() << std::endl;
             watchers_[watch].insert(watcher);
 
             return watch;

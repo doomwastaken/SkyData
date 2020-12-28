@@ -23,7 +23,6 @@ std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::F
     } else {
         message->file_path = message->file_path.substr(0, file_name_begin);
     }
-    std::cout << message->file_path << std::endl;
     auto index_of_dote = path.rfind('.');
 
     if (index_of_dote == std::string::npos) {

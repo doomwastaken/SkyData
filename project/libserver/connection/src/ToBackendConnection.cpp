@@ -74,21 +74,13 @@ void ToBackendConnection::handle_read(const boost::system::error_code& error) {
             QueueManager::queue_manager().push_to_client_queue(std::string(m_read_msg),
                                                                std::string(msg.user.user_name
                                                                            + msg.user.devise.device_name));
-//            std::cout << "IN ToBackendConnection::handle_read:: Messages amount for "
-//                      << std::string(msg.user.user_name + msg.user.devise.device_name)
-//                      << ": " << QueueManager::queue_manager().get_client_messages_amount(std::string(msg.user.user_name
-//                                                                                                      +
-//                                                                                                      msg.user.devise.device_name))
-//                      << std::endl << std::endl;
 
             // Then call the send method to server.
-            std::cout << msg.user.user_name << " " << msg.user.devise.device_name << std::endl;
             try {
                 m_server->send_message_if_connected(std::string(msg.user.user_name + msg.user.devise.device_name));
             } catch (std::exception &err) {
                 std::cout << err.what();
             }
-            std::cout << "send " << std::endl;
             // Continue async_reading
             boost::asio::async_read(m_socket,
                                     boost::asio::buffer(m_read_msg),

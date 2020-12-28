@@ -11,8 +11,6 @@
 std::queue<std::pair<std::shared_ptr<Message>, bool>> MessageUpdater::processed_messages = std::queue<std::pair<std::shared_ptr<Message>, bool>> ();
 std::mutex MessageUpdater::mtx_stat;
 
-//std::shared_ptr<Message> LocalListener::create_message(std::string path, gogo::FilePathWatcher::Event event)
-
 TEST(Client, test1) {
     LocalListener loc;
     gogo::FilePathWatcher::Event ev;

@@ -116,7 +116,6 @@ void ClientToStorageConnection::do_write(Message msg, bool continue_writing) {
         std::stringstream str;
         boost::archive::text_oarchive oarch(str);
         oarch << msg;
-        std::cout << msg;
         // The "\b" is a SEPARATOR FOR MESSAGES!
         m_write_msgs.push_back(str.str() + '\b');
     }

@@ -51,7 +51,6 @@ void ClientsConnection::handle_read(const boost::system::error_code &error) {
 
         // Deserialize, then push to queue
         std::shared_ptr<Message> mes = deserialize(std::string(m_read_msg, offset));
-        std::cout << *mes << std::endl;
         MessageUpdater::push(mes);
         boost::asio::async_read(m_socket,
                                 boost::asio::buffer(m_read_msg),

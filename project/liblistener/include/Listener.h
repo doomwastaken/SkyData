@@ -33,26 +33,6 @@ Usage:
 Make sure your callback object will be alive till you watching the provided path.
 One of the ways is to use std::shared_ptr and inheritance from std::enable_shared_from_this.
 
-class NotificationReceiver : public std::enable_shared_from_this<NotificationReceiver>
-{
-public:
-    // Callback
-    void OnFilePathChanged(
-        const gogo::FilePath& path,
-        bool error,
-        gogo::FilePathWatcher::Event event)
-    {
-        // event recevied
-    }
-};
-
-Client code:
-
-std::shared_ptr<NotificationReceiver> er = std::make_shared<NotificationReceiver>();
-const auto callback = std::bind(&NotificationReceiver::OnFilePathChanged,
-                                er->shared_from_this(), _1, _2, _3);
-gogo::FilePathWatcher file_path_watcher;
-file_path_watcher.Watch(path, callback);
 */
 
     class FilePathWatcher : private boost::noncopyable {
