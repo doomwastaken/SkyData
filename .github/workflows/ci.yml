@@ -1,0 +1,48 @@
+name: Project_CI
+
+on: [ push ]
+
+jobs:
+  check:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install_default_libs
+        run: |
+          sudo apt-get update
+          sudo apt install python2
+          sudo apt install cmake
+          sudo apt-get install valgrind
+          sudo apt-get install clang-tidy
+          sudo apt-get install cppcheck
+          sudo apt-get install python3-pip
+          sudo apt-get install libgtest-dev
+          sudo apt-get install libboost-all-dev
+          sudo apt-get install -y libpqxx-dev
+          sudo apt-get install qt5-default
+      - name: build
+        run: |
+          mkdir build && cd build
+          cmake ../
+          make
+      - name: linters
+        run: |
+          ./linters/run.sh --local
+      - name: test_queue
+        run: |
+          cd build/tests/queue_server/
+          ./queue_tests
+
+      - name: test_client
+        run: |
+          cd build/tests/client
+          ./client_test
+
+      - name: valgrind
+        run: |
+          cd build/tests/queue_server/
+          valgrind --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./queue_tests
+          cd ../client/
+          valgrind --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./client_test
