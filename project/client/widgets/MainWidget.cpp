@@ -7,37 +7,46 @@ MainWidget::MainWidget(std::string &name, std::string &device, std::string &sync
         m_device(device),
         m_sync_folder(sync_folder),
         QWidget(parent) {
-    m_button = new QPushButton(tr("Push Me!"));
-//    m_dialog = new QFileDialog();
+    m_main_layout = new QGridLayout;
+    m_button = new QPushButton(tr("Sync"));
+    m_button_dialog = new QPushButton(tr("Chose directory"));
+    m_dialog = new QFileDialog();
 
     m_line_edits.resize(3);
     for (auto &m_line_edit: m_line_edits) {
         m_line_edit = new QLineEdit();
     }
 
-    m_labels.push_back(new QLabel("User name:"));
+    m_labels.push_back(new QLabel("Username:"));
     m_labels.push_back(new QLabel("Device name:"));
     m_labels.push_back(new QLabel("Sync folder:"));
 
-    QGridLayout *mainLayout = new QGridLayout;
-    mainLayout->addWidget(m_button,3,1);
+    m_main_layout->addWidget(m_button,4,1);
+    m_main_layout->addWidget(m_button_dialog,3,1);
     for (size_t i = 0; i < m_line_edits.size(); ++i) {
-        mainLayout->addWidget(m_line_edits[i], i, 1);
+        m_main_layout->addWidget(m_line_edits[i], i, 1);
     }
     for (size_t i = 0; i < m_labels.size(); ++i) {
-        mainLayout->addWidget(m_labels[i], i, 0);
+        m_main_layout->addWidget(m_labels[i], i, 0);
     }
-    setLayout(mainLayout);
+    setLayout(m_main_layout);
     setWindowTitle(tr("SkyData"));
     connect(m_button, SIGNAL(released()), this, SLOT(onButtonReleased()));
+    connect(m_button_dialog, SIGNAL(released()), this, SLOT(onDialogButton()));
+
 }
 
-// Destructor
 MainWidget::~MainWidget()
 {
-//    delete button_;
-//    delete label_;
-//    delete edit_line_;
+    delete m_button;
+    delete m_dialog;
+    delete m_main_layout;
+    for (auto line : m_line_edits) {
+        delete line;
+    }
+    for (auto label: m_labels) {
+        delete label;
+    }
 }
 
 void MainWidget::onButtonReleased() {
@@ -47,4 +56,7 @@ void MainWidget::onButtonReleased() {
     close();
 }
 
-
+void MainWidget::onDialogButton() {
+    m_dialog->show();
+    m_line_edits[2]->setText(QFileDialog::getExistingDirectory());
+}

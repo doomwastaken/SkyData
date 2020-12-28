@@ -1,3 +1,4 @@
+#include <sstream>
 #include "Message.h"
 
 std::string serialize(Message &message) {
