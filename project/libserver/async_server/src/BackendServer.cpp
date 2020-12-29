@@ -42,21 +42,3 @@ void BackendServer::on_read_message(char* msg) {
         });
     }
 }
-
-std::shared_ptr<Message> BackendServer::deserialize(std::string_view buf) {
-    auto new_message = std::make_shared<Message>();
-    std::stringstream stream;
-    stream << buf;
-    boost::archive::text_iarchive iarchive(stream);
-    iarchive >> *new_message;
-
-    return new_message;
-}
-
-std::string BackendServer::serialize(Message &message) {
-    std::stringstream stream;
-    boost::archive::text_oarchive oarchive(stream);
-    oarchive << message;
-    return stream.str();
-}
-
