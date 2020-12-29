@@ -17,8 +17,6 @@ project/client/observer/src/* \
 project/client/widgets/* \
 project/client/main.cpp \
 project/common/* \
-project/data_bases/CloudStorage/include/* \
-project/data_bases/CloudStorage/src/* \
 project/data_bases/InternalDB/include/* \
 project/data_bases/InternalDB/src/* \
 project/data_bases/MetadataDB/include/* \
