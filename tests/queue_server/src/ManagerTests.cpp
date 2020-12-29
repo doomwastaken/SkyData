@@ -6,8 +6,6 @@
 
 #include "QueueManager.h"
 
-using namespace std;
-
 TEST(manager_queue, set_sync_queue_type) {
     std::string push_in_queue = "testing queue value";
     ASSERT_NO_THROW(QueueManager::queue_manager().set_sync_queue_type(STD_QUEUE));
