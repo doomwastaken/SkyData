@@ -20,12 +20,9 @@ class BackendServer : public AbstractServer {
 
     virtual ~BackendServer() = default;
 
-    std::string serialize(Message &message);
-
-    std::shared_ptr<Message> deserialize(std::string_view buf);
-
  private:
     virtual void deliver_for_all(std::string msg) override;
+ 
     std::shared_ptr<DataBase> m_data_base;
 };
 
