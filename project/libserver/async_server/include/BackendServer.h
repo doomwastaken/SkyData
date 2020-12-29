@@ -22,7 +22,7 @@ class BackendServer : public AbstractServer {
 
  private:
     virtual void deliver_for_all(std::string msg) override;
- 
+
     std::shared_ptr<DataBase> m_data_base;
 };
 
